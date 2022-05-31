@@ -39,7 +39,6 @@ Networks from msviper:
 
 
 ## Results
-<<<<<<< HEAD
 
 ### Reactions notes
 
