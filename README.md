@@ -39,6 +39,7 @@ Networks from msviper:
 
 
 ## Results
+<<<<<<< HEAD
 
 ### Reactions notes
 
@@ -48,7 +49,10 @@ Networks from msviper:
   * RES_baseline_reactions.csv [^3]
   * RES_relapse_reactions.csv [^4]
 
-[^1] : Réactions enrichies chez les Non responders vs Respondeur
-[^2] : Réactions enrichies chez les Respondeur vs Non respondeur
-[^3] : Réactions enrichies chez les Respondeur vs Relapse
-[^4] : Réactions enrichies chez les Relapse vs Respondeurs
+[^1]: Réactions enrichies chez les Non responders vs Respondeur  
+
+[^2]: Réactions enrichies chez les Respondeur vs Non respondeur
+[^3]: Réactions enrichies chez les Respondeur vs Relapse
+[^4]: Réactions enrichies chez les Relapse vs Respondeurs
+=======
+>>>>>>> 4f3bc870a80e42b8c0a4e132a2ad18cbbf57f94e
