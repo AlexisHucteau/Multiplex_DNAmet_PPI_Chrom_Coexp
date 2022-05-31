@@ -1,0 +1,322 @@
+,"name","abbreviation","description","formula","subsystem","effect"
+1,"EX_7klitchol.e.","EX_7klitchol_e","Exchange of 7-Ketolithocholate","7klitchol_e ⇌ ","Extracellular exchange",3.749809
+2,"EX_Lcystin.e.","EX_Lcystin_e","Exchange of L-Cystine ","Lcystin[e] <=> ","Extracellular exchange",3.635241
+3,"CYSTSERex","CYSTSERex","L-cystine/glycine exchanger (cystine in)","ser__L_c + cysi__L_e → ser__L_e + cysi__L_c","Transport, extracellular",3.630827
+4,"r0835","r0835","Mitochondrial Carrier (MC) TCDB:2.A.29.2.2","so4_m + HC00319_c ⇌ so4_c + HC00319_m","Transport, mitochondrial",3.601792
+5,"r0836","r0836","Mitochondrial Carrier (MC) TCDB:2.A.29.2.2","so3_m + HC00319_c ⇌ so3_c + HC00319_m","Transport, mitochondrial",3.601792
+6,"r0821","r0821","Mitochondrial Carrier (Mc) Tcdb:2.A.29.2.2","fum[c] + succ[m] <=> fum[m] + succ[c] ","Transport, mitochondrial",3.601741
+7,"r0829","r0829","Mitochondrial Carrier (MC) TCDB:2.A.29.2.2","succ_c + so4_m ⇌ so4_c + succ_m","Transport, mitochondrial",3.601741
+8,"r0830","r0830","Mitochondrial Carrier (MC) TCDB:2.A.29.2.2","succ_c + so3_m ⇌ so3_c + succ_m","Transport, mitochondrial",3.601741
+9,"CYSTALArBATtc","CYSTALArBATtc","Transport of L-Cystine into the cell in exchange for L-Alanine by b0,+AT transporter at the apical surfaces of the membranes of small intestine and renal cells.","ala__L_c + cysi__L_e → ala__L_e + cysi__L_c","Transport, extracellular",3.59203
+10,"FUMSO3tm","FUMSO3tm","Fumarate:sulfite antiport, mitochondrial","fum_c + so3_m ⇌ so3_c + fum_m","Transport, mitochondrial",3.476717
+11,"FUMSO4tm","FUMSO4tm","Fumarate:sulfate antiport, mitochondrial","fum_c + so4_m ⇌ so4_c + fum_m","Transport, mitochondrial",3.476717
+12,"CYSTLEUrBATtc","CYSTLEUrBATtc","Transport of L-Cystine into the cell in exchange for L-Leucine by b0,+AT transporter at the apical surfaces of the membranes of small intestine and renal cells.","leu__L_c + cysi__L_e → leu__L_e + cysi__L_c","Transport, extracellular",3.396096
+13,"12DHCHOLt","12DHCHOLt","12-Dehydrocholic acid transport via bicarbonate countertransport","hco3_c + 12dhchol_e ⇌ hco3_e + 12dhchol_c","Transport, extracellular",3.29017
+14,"12DHCHOLt2","12DHCHOLt2","12-Dehydrocholic acid transport via sodium cotransport","2.0 na1_e + 12dhchol_e → 2.0 na1_c + 12dhchol_c","Transport, extracellular",3.29017
+15,"3DHCDCHOLt","3DHCDCHOLt","3-Dehydrochenodeoxycholic acid transport via bicarbonate countertransport","hco3_c + 3dhcdchol_e ⇌ hco3_e + 3dhcdchol_c","Transport, extracellular",3.29017
+16,"3DHCDCHOLt2","3DHCDCHOLt2","3-Dehydrochenodeoxycholic acid transport via sodium cotransport","2.0 na1_e + 3dhcdchol_e → 2.0 na1_c + 3dhcdchol_c","Transport, extracellular",3.29017
+17,"3DHCHOLt","3DHCHOLt","3-Dehydrocholic acid  transport via bicarbonate countertransport","hco3_c + 3dhchol_e ⇌ hco3_e + 3dhchol_c","Transport, extracellular",3.29017
+18,"3DHCHOLt2","3DHCHOLt2","3-Dehydrocholic acid  transport via sodium cotransport","2.0 na1_e + 3dhchol_e → 2.0 na1_c + 3dhchol_c","Transport, extracellular",3.29017
+19,"3DHDCAt","3DHDCAt","3-dehydro-deoxycholic acid transport via bicarbonate countertransport","hco3_c + 3dhdchol_e ⇌ hco3_e + 3dhdchol_c","Transport, extracellular",3.29017
+20,"3DHDCAt2","3DHDCAt2","3-dehydro-deoxycholic acid transport via sodium cotransport","2.0 na1_e + 3dhdchol_e → 2.0 na1_c + 3dhdchol_c","Transport, extracellular",3.29017
+21,"3DHLCAt","3DHLCAt","3-dehydro-lithocholic acid transport via bicarbonate countertransport","hco3_c + 3dhlchol_e ⇌ hco3_e + 3dhlchol_c","Transport, extracellular",3.29017
+22,"3DHLCAt2","3DHLCAt2","3-dehydro-lithocholic acid transport via sodium cotransport","2.0 na1_e + 3dhlchol_e → 2.0 na1_c + 3dhlchol_c","Transport, extracellular",3.29017
+23,"7DHCDCHOLt","7DHCDCHOLt","7-Dehydrochenodeoxycholic acid transport via bicarbonate countertransport","hco3_c + 7dhcdchol_e ⇌ hco3_e + 7dhcdchol_c","Transport, extracellular",3.29017
+24,"7DHCDCHOLt2","7DHCDCHOLt2","7-Dehydrochenodeoxycholic acid transport via sodium cotransport","2.0 na1_e + 7dhcdchol_e → 2.0 na1_c + 7dhcdchol_c","Transport, extracellular",3.29017
+25,"7DHCHOLt","7DHCHOLt","7-Dehydrocholic acid transport via bicarbonate countertransport","hco3_c + 7dhchol_e ⇌ hco3_e + 7dhchol_c","Transport, extracellular",3.29017
+26,"7DHCHOLt2","7DHCHOLt2","7-Dehydrocholic acid transport via sodium cotransport","2.0 na1_e + 7dhchol_e → 2.0 na1_c + 7dhchol_c","Transport, extracellular",3.29017
+27,"COPROSTt","COPROSTt","Coprostanol transport via bicarbonate countertransport","hco3_c + coprost_e ⇌ hco3_e + coprost_c","Transport, extracellular",3.29017
+28,"COPROSTt2","COPROSTt2","Coprostanol transport via sodium cotransport","2.0 na1_e + coprost_e → 2.0 na1_c + coprost_c","Transport, extracellular",3.29017
+29,"HYOCHOLt","HYOCHOLt","Hyocholic acid transport via bicarbonate countertransport","hco3_c + hyochol_e ⇌ hco3_e + hyochol_c","Transport, extracellular",3.29017
+30,"HYOCHOLt2","HYOCHOLt2","Hyocholic acid transport via sodium cotransport","2.0 na1_e + hyochol_e → 2.0 na1_c + hyochol_c","Transport, extracellular",3.29017
+31,"ICDCHOLt","ICDCHOLt","Isochenodeoxycholic acid transport via bicarbonate countertransport","hco3_c + icdchol_e ⇌ hco3_e + icdchol_c","Transport, extracellular",3.29017
+32,"ICDCHOLt2","ICDCHOLt2","Isochenodeoxycholic acid transport via sodium cotransport","2.0 na1_e + icdchol_e → 2.0 na1_c + icdchol_c","Transport, extracellular",3.29017
+33,"ISOCHOLt","ISOCHOLt","Isocholic acid transport via bicarbonate countertransport","hco3_c + isochol_e ⇌ hco3_e + isochol_c","Transport, extracellular",3.29017
+34,"ISOCHOLt2","ISOCHOLt2","Isocholic acid transport via sodium cotransport","2.0 na1_e + isochol_e → 2.0 na1_c + isochol_c","Transport, extracellular",3.29017
+35,"THYOCHOLt","THYOCHOLt","Taurohyocholic acid transport via bicarbonate countertransport","hco3_c + thyochol_e ⇌ hco3_e + thyochol_c","Transport, extracellular",3.29017
+36,"THYOCHOLt2","THYOCHOLt2","Taurohyocholic acid transport via sodium cotransport","2.0 na1_e + thyochol_e → 2.0 na1_c + thyochol_c","Transport, extracellular",3.29017
+37,"UCHOLt","UCHOLt","Ursocholic acid transport via bicarbonate countertransport","hco3_c + uchol_e ⇌ hco3_e + uchol_c","Transport, extracellular",3.29017
+38,"UCHOLt2","UCHOLt2","Ursocholic acid transport via sodium cotransport","2.0 na1_e + uchol_e → 2.0 na1_c + uchol_c","Transport, extracellular",3.29017
+39,"UDCHOLt","UDCHOLt","Ursodeoxycholic acid transport via bicarbonate countertransport","hco3_c + HC02194_e ⇌ hco3_e + HC02194_c","Transport, extracellular",3.29017
+40,"UDCHOLt2","UDCHOLt2","Ursodeoxycholic acid transport via sodium cotransport","2.0 na1_e + HC02194_e → 2.0 na1_c + HC02194_c","Transport, extracellular",3.29017
+41,"3HPVShc","3HPVShc","Oxidation of pravastatin to 3-hydroxy pravastatin in hepatocytes","h_r + nadph_r + o2_r + pvs_r → h2o_r + nadp_r + 3hpvs_r","Drug metabolism",3.269366
+42,"EX_3hpvs.e.","EX_3hpvs_e","Exchange reaction for 3-hydroxy pravastatin in portal blood","3hpvs_e ⇌ ","Extracellular exchange",3.269366
+43,"3HPVSitr","3HPVSitr","3HPVSitr","3hpvs_r ⇌ 3hpvs_c","Drug metabolism",3.269366
+44,"CDCA6AH","CDCA6AH","Chenodeoxycholic acid 6alpha-hydroxylase","h_c + nadph_c + o2_c + C02528_c → h2o_c + nadp_c + hyochol_c","Bile acid synthesis",3.168079
+45,"EX_hyochol.e.","EX_hyochol_e","EX hyochol(e)","hyochol_e ⇌ ","Extracellular exchange",3.168079
+46,"EX_2hatvlac.e.","EX_2hatvlac_e","Exchange reaction for 2-hydroxy-atorvastatin-lactone in portal blood","2hatvlac_e ⇌ ","Extracellular exchange",3.054063
+47,"EX_g1p.e.","EX_g1p_e","D-Glucose 1-phosphate exchange","g1p_e ⇌ ","Extracellular exchange",2.973476
+48,"EX_udpg.e.","EX_udpg_e","UDPglucose exchange","udpg_e ⇌ ","Extracellular exchange",2.973476
+49,"r0093","r0093","UDPglucose pyrophosphohydrolase Pyrimidine metabolism / Starch and sucrose metabolism EC:3.6.1.45","h2o_e + udpg_e → g1p_e + 2.0 h_e + ump_e","Starch and sucrose metabolism",2.973476
+50,"2HATVACIDOXDhc","2HATVACIDOXDhc","Oxidation of atorvastatin acid to 2-hydroxy-atorvastatin-acid in hepatocytes","h_r + nadph_r + o2_r + atvacid_r → h2o_r + nadp_r + 2hatvacid_r","Drug metabolism",2.926627
+51,"4HATVACIDOXDhc","4HATVACIDOXDhc","Oxidation of atorvastatin acid to 4-hydroxy-atorvastatin-acid in hepatocytes","h_r + nadph_r + o2_r + atvacid_r → h2o_r + nadp_r + 4hatvacid_r","Drug metabolism",2.926627
+52,"4HATVACIDitr","4HATVACIDitr","4HATVACIDitr","4hatvacid_r ⇌ 4hatvacid_c","Drug metabolism",2.926627
+53,"2HATVACIDitr","2HATVACIDitr","2HATVACIDitr","2hatvacid_r ⇌ 2hatvacid_c","Drug metabolism",2.926627
+54,"3DHCDCAS","3DHCDCAS","3-dehydro-chenodehydroxycholic acid formation","h_c + nadph_c + o2_c + C02528_c → 2.0 h2o_c + nadp_c + 3dhcdchol_c","Bile acid synthesis",2.917112
+55,"EX_3dhcdchol.e.","EX_3dhcdchol_e","EX 3dhcdchol(e)","3dhcdchol_e ⇌ ","Extracellular exchange",2.917112
+56,"ASPPROASCT1","ASPPROASCT1","Aspartate intake by system ASCT-1 transporter","pro__L_c + asp__L_e + na1_e → asp__L_c + na1_c + pro__L_e","Transport, extracellular",2.890671
+57,"GLUPROASCT1","GLUPROASCT1","Glutamate intake by system ASCT-1 transporter","pro__L_c + glu__L_e + na1_e → glu__L_c + na1_c + pro__L_e","Transport, extracellular",2.868818
+58,"EX_lca3s.e.","EX_lca3s_e","EX lca3s(e)","lca3s_e ⇌ ","Extracellular exchange",2.833124
+59,"LCA3St","LCA3St","Lithocholic acid 3-sulfate transport via bicarbonate countertransport","hco3_c + lca3s_e ⇌ hco3_e + lca3s_c","Transport, extracellular",2.833124
+60,"LCASULT","LCASULT","Lithocholic acid sulfotransferase","paps_c + HC02191_c → h_c + pap_c + lca3s_c","Bile acid synthesis",2.833124
+61,"EX_ac.e.","EX_ac_e","Acetate exchange","ac_e ⇌ ","Extracellular exchange",2.819856
+62,"CYSTGLUex","CYSTGLUex","L-cystine/L-glutamate exchanger","glu__L_c + cysi__L_e → glu__L_e + cysi__L_c","Transport, extracellular",2.788829
+63,"EX_his_L.e.","EX_his_L_e","Exchange of L-Histidine","his_L[e] <=> ","Extracellular exchange",2.778213
+64,"EX_CE4890.e.","EX_CE4890_e","Exchange of N-Methylsalsolinol","CE4890_e ⇌ ","Extracellular exchange",2.771806
+65,"EX_4hatvlac.e.","EX_4hatvlac_e","Exchange reaction for 4-hydroxy-atorvastatin-lactone in portal blood","4hatvlac_e ⇌ ","Extracellular exchange",2.749022
+66,"C02712te","C02712te","Transport of N-Acetylmethionine, Extracellular","na1_c + C02712_c ⇌ na1_e + C02712_e","Transport, extracellular",2.728608
+67,"EX_C02712.e.","EX_C02712_e","Exchange of N-Acetylmethionine","C02712_e ⇌ ","Extracellular exchange",2.728608
+68,"DOPAMT","DOPAMT","Dopamine:amet O-methyltransferase","amet_c + dopa_c → ahcys_c + h_c + 3moxtyr_c","Tyrosine metabolism",2.71463
+69,"CRVS1M24hc","CRVS1M24hc","Hydroxylation of cerivastatin-M1 to M24 in hepatocytes","h_r + nadph_r + o2_r + crvsm1_r → h2o_r + nadp_r + crvsm24_r","Drug metabolism",2.689823
+70,"CRVSM24tev","CRVSM24tev","Exit of cerivastatin-M24 into hepatic vein","crvsm24_c ⇌ crvsm24_e","Drug metabolism",2.689823
+71,"EX_crvsm24.e.","EX_crvsm24_e","Exchange reaction for cerivastatin-M24 in hepatic vein","crvsm24_e ⇌ ","Extracellular exchange",2.689823
+72,"CRVSM24itr","CRVSM24itr","CRVSM24itr","crvsm24_r ⇌ crvsm24_c","Drug metabolism",2.689823
+73,"CRVSM1hc","CRVSM1hc","Demethylation of cerivastatin to M1 in hepatocytes","2.0 h_r + nadph_r + o2_r + ahcys_r + crvs_r → nadp_r + amet_r + h2o2_r + crvsm1_r","Drug metabolism",2.679881
+74,"P4502F1","P4502F1","Cytochrome P450 2F1","h_c + nadph_c + o2_c + npthl_c → h2o_c + nadp_c + onpthl_c","Cytochrome metabolism",2.679511
+75,"P4503A5","P4503A5","Cytochrome P450 3A5","h_c + nadph_c + o2_c + aflatoxin_c → h2o_c + nadp_c + eaflatoxin_c","Cytochrome metabolism",2.679511
+76,"EX_npthl.e.","EX_npthl_e","Naphthalene exchange","npthl_e ⇌ ","Extracellular exchange",2.679511
+77,"NPTHLte","NPTHLte","Xenobiotic transport","npthl_e ⇌ npthl_c","Transport, extracellular",2.679511
+78,"EX_aflatoxin.e.","EX_aflatoxin_e","Aflatoxin B1 exchange","aflatoxin_e ⇌ ","Extracellular exchange",2.679511
+79,"AFLATOXINte","AFLATOXINte","Xenobiotic transport","aflatoxin_e ⇌ aflatoxin_c","Transport, extracellular",2.679511
+80,"EAFLATOXINte","EAFLATOXINte","Xenobiotic transport","eaflatoxin_e ⇌ eaflatoxin_c","Transport, extracellular",2.679511
+81,"ONPTHLte","ONPTHLte","Xenobiotic transport","onpthl_e ⇌ onpthl_c","Transport, extracellular",2.679511
+82,"EX_eaflatoxin.e.","EX_eaflatoxin_e","8,9 epxoy aflatoxin B1 exchange","eaflatoxin_e ⇌ ","Extracellular exchange",2.679511
+83,"EX_onpthl.e.","EX_onpthl_e","Naphthalene epoxide exchange","onpthl_e ⇌ ","Extracellular exchange",2.679511
+84,"RE1923C","RE1923C","Catechol O-Methyltransferase","amet_c + C09642_c → ahcys_c + h_c + CE4890_c","Tyrosine metabolism",2.678637
+85,"NADPNe","NADPNe","NADP nucleosidase,extracellular","h2o_e + nadp_e → h_e + ncam_e + adprbp_e","NAD metabolism",2.667161
+86,"EX_nad.e.","EX_nad_e","Nicotinamide adenine dinucleotide exchange","nad_e ⇌ ","Extracellular exchange",2.667161
+87,"EX_nadp.e.","EX_nadp_e","Nicotinamide adenine dinucleotide phosphate exchange","nadp_e ⇌ ","Extracellular exchange",2.667161
+88,"CRVS23M24hc","CRVS23M24hc","Demethylation of cerivastatin-M23 to M24 in hepatocytes","2.0 h_r + nadph_r + o2_r + ahcys_r + crvsm23_r → nadp_r + amet_r + h2o2_r + crvsm24_r","Drug metabolism",2.666573
+89,"EX_trp_L.e.","EX_trp_L_e","Exchange of L-Tryptophan","trp_L[e] <=> ","Extracellular exchange",2.66621
+90,"RE1711C","RE1711C","Alcohol Dehydrogenase","nadp_c + CE1918_c ⇌ h_c + nadph_c + 5hoxindact_c","Tryptophan metabolism",2.657596
+91,"3DHLCAS","3DHLCAS","3-dehydro-lithocholic acid formation","h_c + nadph_c + o2_c + HC02191_c → 2.0 h2o_c + nadp_c + 3dhlchol_c","Bile acid synthesis",2.654283
+92,"EX_3dhlchol.e.","EX_3dhlchol_e","EX 3dhlchol(e)","3dhlchol_e ⇌ ","Extracellular exchange",2.654283
+93,"EX_crvs.e.","EX_crvs_e","Exchange reaction for cerivastatin in intestinal lumen","crvs_e ⇌ ","Extracellular exchange",2.642233
+94,"CRVSitr","CRVSitr","CRVSitr","crvs_c ⇌ crvs_r","Drug metabolism",2.642233
+95,"GLCt4","GLCt4","Glucose transport via sodium symport","glc__D_e + na1_e ⇌ glc__D_c + na1_c","Transport, extracellular",2.638515
+96,"GLCGLUT2","GLCGLUT2","Transport of Glucose into the Portal Blood","glc_D[c] -> glc_D[e] ","Transport, extracellular",2.634697
+97,"RE2642C","RE2642C","N-Acyl-Aliphatic-L-Amino Acid Amidohydrolase","CE1554[c] + h2o[c] <=> ac[c] + ala_L[c] ","Alanine and aspartate metabolism",2.632597
+98,"CE1554t","CE1554t","Transport of Acetyl-Alanine","CE1554[c] <=> CE1554[e] ","Transport, extracellular",2.632597
+99,"EX_CE1554.e.","EX_CE1554_e","Exchange of Acetyl-Alanine","CE1554[e] <=> ","Extracellular exchange",2.632597
+100,"RE1919C","RE1919C","RE1919","pyr_c + dopa_c ⇌ h2o_c + CE5626_c","Tyrosine metabolism",2.627964
+101,"RE1921C","RE1921C","Aromatic-L-Amino-Acid Decarboxylase","CE5626_c ⇌ co2_c + 2.0 h_c + CE5629_c","Tyrosine metabolism",2.627964
+102,"CE5629t","CE5629t","Transport of 6, 7-Dihydroxy-1, 2, 3, 4-Tetrahydroisoquinoline","CE5629_c ⇌ CE5629_e","Transport, extracellular",2.627964
+103,"EX_CE5629.e.","EX_CE5629_e","Exchange of 6, 7-Dihydroxy-1, 2, 3, 4-Tetrahydroisoquinoline","CE5629_e ⇌ ","Extracellular exchange",2.627964
+104,"HISSNAT5tc","HISSNAT5tc","Transport of L-Histidine with Symport of Sodium And Antiport of Proton by Snat5 Transporter","h_c + his__L_e + na1_e ⇌ his__L_c + na1_c + h_e","Transport, extracellular",2.626751
+105,"CRVSM23hc","CRVSM23hc","Hydroxylation of cerivastatin to M23 in hepatocytes","h_r + nadph_r + o2_r + crvs_r → h2o_r + nadp_r + crvsm23_r","Drug metabolism",2.620758
+106,"EX_met_L.e.","EX_met_L_e","Exchange of L-Methionine ","met_L[e] <=> ","Extracellular exchange",2.613985
+107,"PHEMEe","PHEMEe","Release of Heme into the Blood","pheme[c] -> pheme[e] ","Transport, extracellular",2.613096
+108,"EX_pheme.e.","EX_pheme_e","Protoheme exchange","pheme_e ⇌ ","Extracellular exchange",2.613096
+109,"3MOXTYRt","3MOXTYRt","Transport of 3-Methoxytyramine, Diffusion","3moxtyr_c ⇌ 3moxtyr_e","Transport, extracellular",2.601694
+110,"EX_3moxtyr.e.","EX_3moxtyr_e","3-Methoxytyramine exchange","3moxtyr_e ⇌ ","Extracellular exchange",2.601694
+111,"RE1925C","RE1925C","RE1925","acald_c + 3moxtyr_c ⇌ h2o_c + CE4890_c","Tyrosine metabolism",2.601469
+112,"RE1918C","RE1918C","RE1918","acald_c + dopa_c ⇌ h2o_c + C09642_c","Tyrosine metabolism",2.59478
+113,"C09642te","C09642te","Facilitated Diffusion Through Uniport Oct2 into Extracellular Space","C09642_c ⇌ C09642_e","Transport, extracellular",2.59455
+114,"EX_C09642.e.","EX_C09642_e","Exchange of (-)-Salsolinol","C09642_e ⇌ ","Extracellular exchange",2.59455
+115,"35DHPVShc","35DHPVShc","Conversion of pravastatin to 3-alpha-5-beta-dihydroxy pravastatin in entercoytes","h_r + 2.0 nadph_r + 2.0 o2_r + pvs_r → 2.0 h2o_r + 2.0 nadp_r + 35dhpvs_r","Drug metabolism",2.591604
+116,"EX_35dhpvs.e.","EX_35dhpvs_e","Exchange reaction for 3-alpha-5-beta-dihydroxy pravastatin in portal blood","35dhpvs_e ⇌ ","Extracellular exchange",2.591604
+117,"35DHPVSitr","35DHPVSitr","35DHPVSitr","35dhpvs_r ⇌ 35dhpvs_c","Drug metabolism",2.591604
+118,"EX_Nacasp.e.","EX_Nacasp_e","Exchange of N-Acetyl-L-Aspartate","Nacasp_e ⇌ ","Extracellular exchange",2.589259
+119,"NACASPt","NACASPt","Transport of N-Acetyl-L-Aspartate","3.0 na1_c + Nacasp_c ⇌ 3.0 na1_e + Nacasp_e","Transport, extracellular",2.589259
+120,"EX_argserser.e.","EX_argserser_e","Exchange of ArgSerSer","argserser_e ⇌ ","Extracellular exchange",2.582939
+121,"ARGSERSERt","ARGSERSERt","Transport of ArgSerSer, Extracellular","h_e + argserser_e ⇌ h_c + argserser_c","Transport, extracellular",2.582939
+122,"ARGSERSERr","ARGSERSERr","Metabolism (Formation/Degradation) of ArgSerSer","2.0 h2o_c + argserser_c ⇌ arg__L_c + 2.0 ser__L_c","Peptide metabolism",2.582939
+123,"EX_udca3s.e.","EX_udca3s_e","EX udca3s(e)","udca3s_e ⇌ ","Extracellular exchange",2.581733
+124,"UDCA3St","UDCA3St","Ursodeoxycholic acid 3-sulfate transport via bicarbonate countertransport","hco3_c + udca3s_e ⇌ hco3_e + udca3s_c","Transport, extracellular",2.581733
+125,"UDCASULT","UDCASULT","Ursodeoxycholic acid sulfotransferase","paps_c + HC02194_c → h_c + pap_c + udca3s_c","Bile acid synthesis",2.581733
+126,"HMR_6790","HMR_6790","Aldehyde Dehydrogenase [NAD (P)+]","4hoxpacd[c] + h2o[c] + nad[c] -> 4hphac[c] + 2.0 h[c] + nadh[c] ","Phenylalanine metabolism",2.571468
+127,"EX_2hatvacid.e.","EX_2hatvacid_e","Exchange reaction for 2-hydroxy-atorvastatin-acid in portal blood","2hatvacid_e ⇌ ","Extracellular exchange",2.565865
+128,"EX_4hatvacid.e.","EX_4hatvacid_e","Exchange reaction for 4-hydroxy-atorvastatin-acid in portal blood","4hatvacid_e ⇌ ","Extracellular exchange",2.565865
+129,"RE1860E","RE1860E","2',3'-Cyclic-Nucleotide 3'-Phosphodiesterase","23cump_e + h2o_e ⇌ 3ump_e + h_e","Miscellaneous",2.547257
+130,"EX_23cump.e.","EX_23cump_e","2',3'-Cyclic UMP exchange","23cump_e ⇌ ","Extracellular exchange",2.547257
+131,"EX_3ump.e.","EX_3ump_e","3'-UMP exchange","3ump_e ⇌ ","Extracellular exchange",2.547257
+132,"EX_HC00955.e.","EX_HC00955_e","L-3-Cyanoalanine exchange","HC00955_e ⇌ ","Extracellular exchange",2.543421
+133,"LEULEUt","LEULEUt","Transport of Leucylleucine, Reversible","leuleu_c ⇌ leuleu_e","Transport, extracellular",2.524628
+134,"SELt4_3","SELt4_3","Selenate Transport via Sodium Symport","3.0 na1[e] + sel[e] <=> 3.0 na1[c] + sel[c] ","Transport, extracellular",2.521544
+135,"r0027","r0027","NADPH:CoA-glutathione oxidoreductase EC:1.8.1.9","2.0 cys__L_c + nadp_c ⇌ h_c + nadph_c + cysi__L_c","Methionine and cysteine metabolism",2.518283
+136,"GTHO","GTHO","Glutathione Oxidoreductase","gthox[c] + h[c] + nadph[c] -> 2.0 gthrd[c] + nadp[c] ","Glutamate metabolism",2.518283
+137,"CYSGLTH","CYSGLTH","Glutathione:cystine oxidoreductase","2.0 gthrd_c + cysi__L_c ⇌ 2.0 cys__L_c + gthox_c","Methionine and cysteine metabolism",2.518283
+138,"GLYAMDTRc","GLYAMDTRc","Glycine amidinotransferase (c)","arg__L_c + gly_c ⇌ orn_c + gudac_c","Urea cycle",2.503827
+139,"PVSHtu","PVSHtu","Uptake of pravastatin by enterocytes via proton coupled mechanism","h_e + pvs_e ⇌ h_c + pvs_c","Drug metabolism",2.500832
+140,"r0819","r0819","Mitochondrial Carrier (MC) TCDB:2.A.29.2.2","akg_c + succ_m ⇌ succ_c + akg_m","Transport, mitochondrial",2.490522
+141,"AKGMALtm","AKGMALtm","Dicarboxylate/tricarboxylate carrier (mal:akg), mitochondrial","mal__L_c + akg_m ⇌ akg_c + mal__L_m","Transport, mitochondrial",2.490522
+142,"4HATVLACOXDhc","4HATVLACOXDhc","Oxidation of atorvastatin lactone to 4-hydroxy-atorvastatin-lactone in hepatocytes","h_r + nadph_r + o2_r + atvlac_r → h2o_r + nadp_r + 4hatvlac_r","Drug metabolism",2.489492
+143,"4HATVLACitr","4HATVLACitr","4HATVLACitr","4hatvlac_r ⇌ 4hatvlac_c","Drug metabolism",2.489492
+144,"ATVLACitr","ATVLACitr","ATVLACitr","atvlac_c ⇌ atvlac_r","Drug metabolism",2.489492
+145,"EX_CE5786.e.","EX_CE5786_e","Kinetensin exchange","CE5786_e ⇌ ","Extracellular exchange",2.486411
+146,"PHYCBOXL","PHYCBOXL","L-Phenylalanine carboxy-lyase","h_c + phe__L_c → co2_c + peamn_c","Phenylalanine metabolism",2.485544
+147,"PEAMNO","PEAMNO","Phenethylamine oxidase","h2o_c + o2_c + peamn_c → h2o2_c + nh4_c + pacald_c","Phenylalanine metabolism",2.485544
+148,"r0547","r0547","Aldehyde:NADP+ Oxidoreductase Phenylalanine Metabolism","h2o[c] + nadp[c] + pacald[c] <=> 2.0 h[c] + nadph[c] + pac[c] ","Phenylalanine metabolism",2.485544
+149,"pac","pac","Transport of Phenylacetate by Diffusion","pac_c ⇌ pac_e","Transport, extracellular",2.485544
+150,"EX_pac.e.","EX_pac_e","Phenylacetic acid exchange","pac_e ⇌ ","Extracellular exchange",2.485544
+151,"EX_glutrpala.e.","EX_glutrpala_e","Exchange of GluTrpAla","glutrpala_e ⇌ ","Extracellular exchange",2.463443
+152,"GLUTRPALAt","GLUTRPALAt","Transport of GluTrpAla, Extracellular","h_e + glutrpala_e ⇌ h_c + glutrpala_c","Transport, extracellular",2.463443
+153,"GLUTRPALAr","GLUTRPALAr","Metabolism (Formation/Degradation) of GluTrpAla","2.0 h2o_c + glutrpala_c ⇌ ala__L_c + glu__L_c + trp__L_c","Peptide metabolism",2.463443
+154,"TYROXDAc","TYROXDAc","Tyramine:oxygen oxidoreductase(deaminating)(flavin-containing) (cytosol)","h2o_c + o2_c + tym_c → h2o2_c + nh4_c + 4hoxpacd_c","Tyrosine metabolism",2.460781
+155,"4HOXPACDOX_NADP_","4HOXPACDOX_NADP_","4-Hydroxyphenylacetaldehyde:NADP+ Oxidoreductase","4hoxpacd[c] + h2o[c] + nadp[c] <=> 4hphac[c] + 2.0 h[c] + nadph[c] ","Tyrosine metabolism",2.460781
+156,"HPACtr","HPACtr","Hydroxyphenylacetate transport via diffusion","4hphac_c ⇌ 4hphac_e","Transport, extracellular",2.460781
+157,"EX_4hphac.e.","EX_4hphac_e","4 hydroxyphenylacetate exchange","4hphac_e ⇌ ","Extracellular exchange",2.460781
+158,"2HIBUP_Rthv","2HIBUP_Rthv","Release of R-2-hydroxy-ibuprofen into hepatic vein","2hibup__R_c ⇌ 2hibup__R_e","Drug metabolism",2.452798
+159,"3HIBUP_Rthv","3HIBUP_Rthv","Release of R-3-hydroxy-ibuprofen into hepatic vein","3hibup__R_c ⇌ 3hibup__R_e","Drug metabolism",2.452798
+160,"EX_2hibup_R.e.","EX_2hibup_R_e","exchange reaction for R-2-hydroxy-ibuprofen in hepatic vein","2hibup_R[e] <=> ","Extracellular exchange",2.452798
+161,"EX_3hibup_R.e.","EX_3hibup_R_e","exchange reaction for R-3-hydroxy-ibuprofen in hepatic vein","3hibup_R[e] <=> ","Extracellular exchange",2.452798
+162,"IBUP_RCYP2hep","IBUP_RCYP2hep","Oxidation of R-ibuprofen to 2-hydroxy-ibuprofen in heaptocytes","h_r + nadph_r + o2_r + ibup__R_r → h2o_r + nadp_r + 2hibup__R_r","Drug metabolism",2.452798
+163,"IBUP_RCYP3hep","IBUP_RCYP3hep","Oxidation of R-ibuprofen to 3-hydroxy-ibuprofen in heaptocytes","h_r + nadph_r + o2_r + ibup__R_r → h2o_r + nadp_r + 3hibup__R_r","Drug metabolism",2.452798
+164,"2HIBUP_Ritr","2HIBUP_Ritr","2HIBUP Ritr","2hibup__R_r ⇌ 2hibup__R_c","Drug metabolism",2.452798
+165,"3HIBUP_Ritr","3HIBUP_Ritr","3HIBUP Ritr","3hibup__R_r ⇌ 3hibup__R_c","Drug metabolism",2.452798
+166,"IBUP_Ritr","IBUP_Ritr","IBUP Ritr","ibup__R_c ⇌ ibup__R_r","Drug metabolism",2.452798
+167,"r2535","r2535","Major Facilitator(MFS) TCDB:2.A.1.44.1","hom__L_e ⇌ hom__L_c","Transport, extracellular",2.444307
+168,"HISTASE","HISTASE","HISTASE","h2o_c + o2_c + hista_c → h2o2_c + nh4_c + im4act_c","Histidine metabolism",2.443424
+169,"IMACTD","IMACTD","Imidazole acetaldeyde dehydrogenase","h2o_c + nad_c + im4act_c → 2.0 h_c + nadh_c + im4ac_c","Histidine metabolism",2.443424
+170,"IM4ACte","IM4ACte","Assumed Passive Diffusion into Extracellular Space","im4ac_e ⇌ im4ac_c","Transport, extracellular",2.443424
+171,"EX_im4ac.e.","EX_im4ac_e","Exchange of Imidazol-4-Ylacetate","im4ac_e ⇌ ","Extracellular exchange",2.443424
+172,"RE2269E","RE2269E","Chymase","2.0 h2o_e + CE5786_e ⇌ leu__L_e + phe__L_e + CE5788_e","Miscellaneous",2.441261
+173,"EX_CE5788.e.","EX_CE5788_e","Kinetensin 1-7 exchange","CE5788_e ⇌ ","Extracellular exchange",2.441261
+174,"2HIBUP_Sthv","2HIBUP_Sthv","Release of S-2-hydroxy-ibuprofen into hepatic vein","2hibup__S_c ⇌ 2hibup__S_e","Drug metabolism",2.434643
+175,"3HIBUP_Sthv","3HIBUP_Sthv","Release of S-3-hydroxy-ibuprofen into hepatic vein","3hibup__S_c ⇌ 3hibup__S_e","Drug metabolism",2.434643
+176,"EX_2hibup_S.e.","EX_2hibup_S_e","exchange reaction for S-2-hydroxy-ibuprofen in hepatic vein","2hibup_S[e] <=> ","Extracellular exchange",2.434643
+177,"EX_3hibup_S.e.","EX_3hibup_S_e","exchange reaction for S-3-hydroxy-ibuprofen in hepatic vein","3hibup_S[e] <=> ","Extracellular exchange",2.434643
+178,"IBUP_SCYP2hep","IBUP_SCYP2hep","Oxidation of S-ibuprofen to 2-hydroxy-ibuprofen in heaptocytes","h_r + nadph_r + o2_r + ibup__S_r → h2o_r + nadp_r + 2hibup__S_r","Drug metabolism",2.434643
+179,"IBUP_SCYP3hep","IBUP_SCYP3hep","Oxidation of S-ibuprofen to 3-hydroxy-ibuprofen in heaptocytes","h_r + nadph_r + o2_r + ibup__S_r → h2o_r + nadp_r + 3hibup__S_r","Drug metabolism",2.434643
+180,"2HIBUP_Sitr","2HIBUP_Sitr","2HIBUP Sitr","2hibup__S_r ⇌ 2hibup__S_c","Drug metabolism",2.434643
+181,"3HIBUP_Sitr","3HIBUP_Sitr","3HIBUP Sitr","3hibup__S_r ⇌ 3hibup__S_c","Drug metabolism",2.434643
+182,"3MHISt2","3MHISt2","Transport of Methyl-Histidine by System L Transport (Lat1)","leu__L_c + 3mhis_e ⇌ leu__L_e + 3mhis_c","Transport, extracellular",2.426581
+183,"EX_retinol.e.","EX_retinol_e","Retinol exchange","retinol_e ⇌ ","Extracellular exchange",2.404648
+184,"HMR_9561","HMR_9561","HMR 9561","h2o_e + M02837_e → hdca_e + retinol_e","Miscellaneous",2.404648
+185,"EX_M02837.e.","EX_M02837_e","EX M02837[e]","M02837_e ⇌ ","Extracellular exchange",2.404648
+186,"EX_trpaspasp.e.","EX_trpaspasp_e","Exchange of TrpAspAsp","trpaspasp_e ⇌ ","Extracellular exchange",2.402464
+187,"TRPASPASPt","TRPASPASPt","Transport of TrpAspAsp, Extracellular","h_e + trpaspasp_e ⇌ h_c + trpaspasp_c","Transport, extracellular",2.402464
+188,"TRPASPASPr","TRPASPASPr","Metabolism (Formation/Degradation) of TrpAspAsp","2.0 h2o_c + trpaspasp_c ⇌ 2.0 asp__L_c + trp__L_c","Peptide metabolism",2.402464
+189,"EX_gluglu.e.","EX_gluglu_e","Exchange of GluGlu","gluglu_e ⇌ ","Extracellular exchange",2.398719
+190,"GLUGLUt","GLUGLUt","Transport of GluGlu, Extracellular","h_e + gluglu_e ⇌ h_c + gluglu_c","Transport, extracellular",2.398719
+191,"GLUGLUr","GLUGLUr","Metabolism (Formation/Degradation) of GluGlu","h2o_c + gluglu_c ⇌ 2.0 glu__L_c","Peptide metabolism",2.398719
+192,"RE2127C","RE2127C","Catechol O-Methyltransferase","amet_c + bgly_c → ahcys_c + h_c + CE2934_c","Miscellaneous",2.396756
+193,"EX_CE2934.e.","EX_CE2934_e","Exchange of O-Methylhippurate","CE2934_e ⇌ ","Extracellular exchange",2.396756
+194,"CE2934t","CE2934t","Transport of O-Methylhippurate, Extracellular","CE2934_c ⇌ CE2934_e","Transport, extracellular",2.396756
+195,"2HATVACIDtep","2HATVACIDtep","Efflux of 2-hydroxy-atorvastatin-acid into portal blood","2hatvacid_c ⇌ 2hatvacid_e","Drug metabolism",2.390117
+196,"2HATVACIDthc","2HATVACIDthc","Uptake of 2-hydroxy-atorvastatin-acid into hepatocytes","hco3_c + 2hatvacid_e ⇌ hco3_e + 2hatvacid_c","Drug metabolism",2.390117
+197,"2HATVLACtep","2HATVLACtep","Efflux of 2-hydroxy-atorvastatin-lactone into portal blood","2hatvlac_c ⇌ 2hatvlac_e","Drug metabolism",2.390117
+198,"2HATVLACthc","2HATVLACthc","Uptake of 2-hydroxy-atorvastatin-lactone into hepatocytes","hco3_c + 2hatvlac_e ⇌ hco3_e + 2hatvlac_c","Drug metabolism",2.390117
+199,"35DHPVStep","35DHPVStep","3-alpha-5-beta-dihydroxy pravastatin exit into portal blood","35dhpvs_c ⇌ 35dhpvs_e","Drug metabolism",2.390117
+200,"35DHPVSthc","35DHPVSthc","Uptake of 3-alpha-5-beta-dihydroxy pravastatin by hepatocytes","hco3_c + 35dhpvs_e ⇌ hco3_e + 35dhpvs_c","Drug metabolism",2.390117
+201,"3HPVStep","3HPVStep","3-hydroxy pravastatin exit into portal blood","3hpvs_c ⇌ 3hpvs_e","Drug metabolism",2.390117
+202,"3HPVSthc","3HPVSthc","Uptake of 3-hydroxy pravastatin by hepatocytes","hco3_c + 3hpvs_e ⇌ hco3_e + 3hpvs_c","Drug metabolism",2.390117
+203,"3ISPVStep","3ISPVStep","3-alpha-iso-pravastatin exit into portal blood","3ispvs_c ⇌ 3ispvs_e","Drug metabolism",2.390117
+204,"3ISPVSthc","3ISPVSthc","Uptake of 3-alpha-iso-pravastatin by hepatocytes","hco3_c + 3ispvs_e ⇌ hco3_e + 3ispvs_c","Drug metabolism",2.390117
+205,"4HATVACIDtep","4HATVACIDtep","Efflux of 4-hydroxy-atorvastatin-acid into portal blood","4hatvacid_c ⇌ 4hatvacid_e","Drug metabolism",2.390117
+206,"4HATVACIDthc","4HATVACIDthc","Uptake of 4-hydroxy-atorvastatin-acid into hepatocytes","hco3_c + 4hatvacid_e ⇌ hco3_e + 4hatvacid_c","Drug metabolism",2.390117
+207,"4HATVLACtep","4HATVLACtep","Efflux of 4-hydroxy-atorvastatin-lactone into portal blood","4hatvlac_c ⇌ 4hatvlac_e","Drug metabolism",2.390117
+208,"4HATVLACthc","4HATVLACthc","Uptake of 4-hydroxy-atorvastatin-lactone into hepatocytes","hco3_c + 4hatvlac_e ⇌ hco3_e + 4hatvlac_c","Drug metabolism",2.390117
+209,"6EPVStep","6EPVStep","6-epi-pravastatin exit into portal blood","6epvs_c ⇌ 6epvs_e","Drug metabolism",2.390117
+210,"6EPVSthc","6EPVSthc","Uptake of 6-epi-pravastatin by hepatocytes","hco3_c + 6epvs_e ⇌ hco3_e + 6epvs_c","Drug metabolism",2.390117
+211,"ATVLACThc","ATVLACThc","Uptake of atorvastatin-lactone into hepatocytes","hco3_c + atvlac_e ⇌ hco3_e + atvlac_c","Drug metabolism",2.390117
+212,"ATVLACtdhc","ATVLACtdhc","Passive diffusion of atorvastatin lactone into hepatocytes","atvlac_e ⇌ atvlac_c","Drug metabolism",2.390117
+213,"CE1918te","CE1918te","Transport by Oat1/Oat3 into Extracellular Space","akg_c + CE1918_e ⇌ akg_e + CE1918_c","Transport, extracellular",2.388349
+214,"EX_CE1918.e.","EX_CE1918_e","Exchange of 5-Hydroxytryptophol","CE1918_e ⇌ ","Extracellular exchange",2.388349
+215,"EX_21hprgnlone.e.","EX_21hprgnlone_e","Exchange of 21-Hydroxypregnenolone","21hprgnlone_e ⇌ ","Extracellular exchange",2.387599
+216,"PROGLYPRO1c","PROGLYPRO1c","Hydrolysis of Glycylproline","h2o[c] + progly[c] <=> gly[c] + pro_L[c] ","Transport, extracellular",2.381949
+217,"EX_progly.e.","EX_progly_e","L-Prolinylglycine exchange","progly_e ⇌ ","Extracellular exchange",2.37746
+218,"EX_glypro.e.","EX_glypro_e","Glycylproline exchange","glypro_e ⇌ ","Extracellular exchange",2.37746
+219,"GLYPROPRO1c","GLYPROPRO1c","Hydrolysis of Prolylglycine in the small intestine for cellular uptake","h2o_c + glypro_c ⇌ gly_c + pro__L_c","Transport, extracellular",2.37746
+220,"7BHGLZhr","7BHGLZhr","Oxidation of gliclazide to 7-beta-OH-gliclazide in hepatocytes","h_r + nadph_r + o2_r + glz_r → h2o_r + nadp_r + 7bhglz_r","Drug metabolism",2.373824
+221,"7BHGLZtev","7BHGLZtev","Excretion of 7-beta-OH-gliclazide into hepatic vein","7bhglz_c ⇌ 7bhglz_e","Drug metabolism",2.373824
+222,"EX_7bhglz.e.","EX_7bhglz_e","Exchange reaction for 7-beta-OH-gliclazide in hepatic vein","7bhglz_e ⇌ ","Extracellular exchange",2.373824
+223,"7BHGLZitr","7BHGLZitr","7BHGLZitr","7bhglz_r ⇌ 7bhglz_c","Drug metabolism",2.373824
+224,"HMR_9652","HMR_9652","HMR 9652","homoval_c → homoval_e","Transport, extracellular",2.368633
+225,"HOMOVALte","HOMOVALte","Transport of Homovanillate by Oat3","akg_e + homoval_c ⇌ akg_c + homoval_e","Transport, extracellular",2.368633
+226,"3OHGLUTACte","3OHGLUTACte","Transport of 3-Hydroxy-Glutarate, Extracellular","3ohglutac_c → 3ohglutac_e","Transport, extracellular",2.368633
+227,"3OHGLUTACOAT3t","3OHGLUTACOAT3t","Transport of 3-Hydroxy-Glutarate, Extracellular, Antiport","akg_e + 3ohglutac_c ⇌ akg_c + 3ohglutac_e","Transport, extracellular",2.368633
+228,"2HYDOGOAT3t","2HYDOGOAT3t","Transport of 2-Hydroxy-Glutarate, Extracellular, Antiport","akg_e + 2hydog_c ⇌ akg_c + 2hydog_e","Transport, extracellular",2.368633
+229,"2HYDOGte","2HYDOGte","Transport of 2-Hydroxy-Glutarate, Extracellular","2hydog_c → 2hydog_e","Transport, extracellular",2.368633
+230,"GLUTAROAT3t","GLUTAROAT3t","Transport of Glutarate, Extracellular, Antiport","akg_e + glutar_c ⇌ akg_c + glutar_e","Transport, extracellular",2.368633
+231,"GLUTARte","GLUTARte","Transport of Glutarate, Extracellular","glutar_c → glutar_e","Transport, extracellular",2.368633
+232,"r0822","r0822","Mitochondrial Carrier (MC) TCDB:2.A.29.2.2","fum_c + mal__L_m ⇌ mal__L_c + fum_m","Transport, mitochondrial",2.36483
+233,"MALSO4tm","MALSO4tm","Malate:sulfate antiport, mitochondrial","mal__L_c + so4_m ⇌ so4_c + mal__L_m","Transport, mitochondrial",2.36483
+234,"MALSO3tm","MALSO3tm","Malate:sulfite antiport, mitochondrial","mal__L_c + so3_m ⇌ so3_c + mal__L_m","Transport, mitochondrial",2.36483
+235,"FUMTSULtm","FUMTSULtm","Fumarate:thiosulfate antiport, mitochondrial","fum_c + tsul_m ⇌ tsul_c + fum_m","Transport, mitochondrial",2.36483
+236,"MALTSULtm","MALTSULtm","Malate:thiosulfate antiport, mitochondrial","mal__L_c + tsul_m ⇌ tsul_c + mal__L_m","Transport, mitochondrial",2.36483
+237,"EX_CE1261.e.","EX_CE1261_e","Exchange of 5-S-Cysteinyldopa","CE1261_e ⇌ ","Extracellular exchange",2.361702
+238,"EX_tudca3s.e.","EX_tudca3s_e","EX tudca3s(e)","tudca3s_e ⇌ ","Extracellular exchange",2.359532
+239,"TUDCA3St","TUDCA3St","Tauroursodeoxycholic acid 3-sulfate transport via bicarbonate countertransport","hco3_c + tudca3s_e ⇌ hco3_e + tudca3s_c","Transport, extracellular",2.359532
+240,"TUDCASULT","TUDCASULT","Tauroursodeoxycholic acid sulfotransferase","paps_c + HC02195_c → h_c + pap_c + tudca3s_c","Bile acid synthesis",2.359532
+241,"CYSB0AT3tc","CYSB0AT3tc","Cysteine Transport by B0At3","cl_e + cys__L_e + na1_e → cl_c + cys__L_c + na1_c","Transport, extracellular",2.357479
+242,"EX_mhglz.e.","EX_mhglz_e","Exchange reaction for Methyl-hydroxy-gliclazide in hepatic vein","mhglz_e ⇌ ","Extracellular exchange",2.355456
+243,"MHGLZhr","MHGLZhr","Oxidation of gliclazide to methyl-hydroxy-gliclazide in hepatocytes","h_r + nadph_r + o2_r + glz_r → h2o_r + nadp_r + mhglz_r","Drug metabolism",2.355456
+244,"MHGLZtev","MHGLZtev","Excretion of Methyl-hydroxy-gliclazide into hepatic vein","mhglz_c ⇌ mhglz_e","Drug metabolism",2.355456
+245,"MHGLZitr","MHGLZitr","MHGLZitr","mhglz_r ⇌ mhglz_c","Drug metabolism",2.355456
+246,"3MHISt1","3MHISt1","Transport of Methyl-Histidine by System N Transport","na1_c + 3mhis_c ⇌ na1_e + 3mhis_e","Transport, extracellular",2.351169
+247,"EX_CE0074.e.","EX_CE0074_e","Alloxan exchange","CE0074_e ⇌ ","Extracellular exchange",2.330996
+248,"EX_urea.e.","EX_urea_e","Urea exchange","urea_e ⇌ ","Extracellular exchange",2.330996
+249,"3MHISt3","3MHISt3","Transport of Methyl-Histidine by System L Transport (Lat2)","phe__L_c + 3mhis_e ⇌ phe__L_e + 3mhis_c","Transport, extracellular",2.330777
+250,"EX_valleuphe.e.","EX_valleuphe_e","Exchange of ValLeuPhe","valleuphe_e ⇌ ","Extracellular exchange",2.328132
+251,"VALLEUPHEt","VALLEUPHEt","Transport of ValLeuPhe, Extracellular","h_e + valleuphe_e ⇌ h_c + valleuphe_c","Transport, extracellular",2.328132
+252,"VALLEUPHEr","VALLEUPHEr","Metabolism (Formation/Degradation) of ValLeuPhe","2.0 h2o_c + valleuphe_c ⇌ leu__L_c + phe__L_c + val__L_c","Peptide metabolism",2.328132
+253,"URATEt","URATEt","Urate export from cytosol","urate_c → urate_e","Transport, extracellular",2.326148
+254,"IBUP_Rtdhep","IBUP_Rtdhep","Uptake of ibuprofen-R into hepatocytes","urate_c + ibup__R_e ⇌ urate_e + ibup__R_c","Drug metabolism",2.326148
+255,"IBUP_Rtdu","IBUP_Rtdu","Passive diffusion of ibuprofen R","ibup__R_e ⇌ ibup__R_c","Drug metabolism",2.326148
+256,"IBUP_Stdhep","IBUP_Stdhep","Uptake of ibuprofen-S into hepatocytes","urate_c + ibup__S_e ⇌ urate_e + ibup__S_c","Drug metabolism",2.326148
+257,"IBUP_Stdu","IBUP_Stdu","Passive diffusion of ibuprofen S","ibup__S_e ⇌ ibup__S_c","Drug metabolism",2.326148
+258,"3ISPVShc","3ISPVShc","Isomerization of pravastatin to 3-alpha-iso-pravastatin in hepatocytes","pvs_c → 3ispvs_c","Drug metabolism",2.316619
+259,"6EPVShc","6EPVShc","Isomerization of pravastatin to 6-epi-pravastatin in hepatocytes","pvs_c → 6epvs_c","Drug metabolism",2.316619
+260,"EX_6epvs.e.","EX_6epvs_e","Exchange reaction for 6-epi-pravastatin in portal blood","6epvs_e ⇌ ","Extracellular exchange",2.316619
+261,"EX_pvs.e.","EX_pvs_e","Exchange reaction for pravastatin in intestinal lumen","pvs_e ⇌ ","Extracellular exchange",2.316619
+262,"EX_aspvalasn.e.","EX_aspvalasn_e","Exchange of AspValAsn","aspvalasn_e ⇌ ","Extracellular exchange",2.314442
+263,"ASPVALASNt","ASPVALASNt","Transport of AspValAsn, Extracellular","h_e + aspvalasn_e ⇌ h_c + aspvalasn_c","Transport, extracellular",2.314442
+264,"ASPVALASNr","ASPVALASNr","Metabolism (Formation/Degradation) of AspValAsn","2.0 h2o_c + aspvalasn_c ⇌ asn__L_c + asp__L_c + val__L_c","Peptide metabolism",2.314442
+265,"RE1915C","RE1915C","RE1915C","cys__L_c + dopaqn_c ⇌ CE1261_c","Tyrosine metabolism",2.314214
+266,"CE1261t","CE1261t","Transport of 5-S-Cysteinyldopa","CE1261_c ⇌ CE1261_e","Transport, extracellular",2.314214
+267,"EX_trpthrglu.e.","EX_trpthrglu_e","Exchange of TrpThrGlu","trpthrglu_e ⇌ ","Extracellular exchange",2.313541
+268,"TRPTHRGLUt","TRPTHRGLUt","Transport of TrpThrGlu, Extracellular","h_e + trpthrglu_e ⇌ h_c + trpthrglu_c","Transport, extracellular",2.313541
+269,"TRPTHRGLUr","TRPTHRGLUr","Metabolism (Formation/Degradation) of TrpThrGlu","2.0 h2o_c + trpthrglu_c ⇌ glu__L_c + thr__L_c + trp__L_c","Peptide metabolism",2.313541
+270,"EX_argleuphe.e.","EX_argleuphe_e","Exchange of ArgLeuPhe","argleuphe_e ⇌ ","Extracellular exchange",2.30969
+271,"ARGLEUPHEt","ARGLEUPHEt","Transport of ArgLeuPhe, Extracellular","h_e + argleuphe_e ⇌ h_c + argleuphe_c","Transport, extracellular",2.30969
+272,"ARGLEUPHEr","ARGLEUPHEr","Metabolism (Formation/Degradation) of ArgLeuPhe","2.0 h2o_c + argleuphe_c ⇌ arg__L_c + leu__L_c + phe__L_c","Peptide metabolism",2.30969
+273,"CARIBUP_Sthv","CARIBUP_Sthv","Release of S-carboxy ibuprofen into hepatic vein","caribup_s_c ⇌ caribup_s_e","Drug metabolism",2.308289
+274,"EX_caribup_s.e.","EX_caribup_s_e","Exchange reaction for S-carboxy ibuprofen in hepatic vein","caribup_s_e ⇌ ","Extracellular exchange",2.308289
+275,"IBUP_SCYPCARhep","IBUP_SCYPCARhep","Oxidation of S-3-hydroxy ibuprofen to S-carboxy ibuprofen","o2_c + 3hibup__S_c → h_c + h2o_c + caribup_s_c","Drug metabolism",2.308289
+276,"HMR_6876","HMR_6876","HMR 6876","2c23dh56dhoxin_c + dopaqn_c ⇌ 34dhphe_c + L_dpchrm_c","Phenylalanine metabolism",2.306684
+277,"EX_CE4633.e.","EX_CE4633_e","Hypochlorous acid exchange","CE4633_e ⇌ ","Extracellular exchange",2.288478
+278,"r0758","r0758","5-Hydroxyindoleacetaldehyde:NAD+ Oxidoreductase","5hoxindact[c] + h2o[c] + nad[c] <=> 5hoxindoa[c] + 2.0 h[c] + nadh[c] ","Tryptophan metabolism",2.273544
+279,"5HOXINDOAtr","5HOXINDOAtr","Transport of 5-Hydroxyindoleacetate ","so4_c + 5hoxindoa_e ⇌ so4_e + 5hoxindoa_c","Transport, extracellular",2.273544
+280,"EX_5hoxindoa.e.","EX_5hoxindoa_e","Exchange of 5-Hydroxyindoleacetate","5hoxindoa_e ⇌ ","Extracellular exchange",2.273544
+281,"EX_3ispvs.e.","EX_3ispvs_e","Exchange reaction for 3-alpha-iso-pravastatin in portal blood","3ispvs_e ⇌ ","Extracellular exchange",2.272256
+282,"FVStep","FVStep","Efflux of fluvastatin from enterocytes into portal blood","fvs_c ⇌ fvs_e","Drug metabolism",2.26309
+283,"FVStu","FVStu","Uptake of fluvastatin by enterocytes","hco3_c + fvs_e ⇌ hco3_e + fvs_c","Drug metabolism",2.26309
+284,"PVStep","PVStep","Pravastatin exit into portal blood","pvs_c ⇌ pvs_e","Drug metabolism",2.26309
+285,"EX_lnlc.e.","EX_lnlc_e","Linoleic acid (all cis C18:2) exchange","lnlc_e ⇌ ","Extracellular exchange",2.261144
+286,"EX_ser_L.e.","EX_ser_L_e","Exchange of L-Serine","ser_L[e] <=> ","Extracellular exchange",2.249267
+287,"56EPPVStev","56EPPVStev","Exit of 5,6-epoxy-3-alpha-iso-pravastatin into hepatic vein","56eppvs_c ⇌ 56eppvs_e","Drug metabolism",2.235197
+288,"7HPVStev","7HPVStev","Exit of 7-hydroxy-3-alpha-iso-pravastatin into hepatic vein","7hpvs_c ⇌ 7hpvs_e","Drug metabolism",2.235197
+289,"PVSOATPtu","PVSOATPtu","Uptake of pravastatin by enterocytes","hco3_c + pvs_e ⇌ hco3_e + pvs_c","Drug metabolism",2.234251
+290,"HMR_8796","HMR_8796","Glycine N-Acyltransferase","gly[c] + phaccoa[c] -> coa[c] + M02723[c","Phenylalanine metabolism",2.230393
+291,"EX_gdca3s.e.","EX_gdca3s_e","EX gdca3s(e)","gdca3s_e ⇌ ","Extracellular exchange",2.223356
+292,"GDCA3St","GDCA3St","Glycodeoxycholic acid 3-sulfate via bicarbonate countertransport","hco3_c + gdca3s_e ⇌ hco3_e + gdca3s_c","Transport, extracellular",2.223356
+293,"GDCASULT","GDCASULT","Glycodeoxycholic acid sulfotransferase","paps_c + M01989_c → h_c + pap_c + gdca3s_c","Bile acid synthesis",2.223356
+294,"PHACGLYc","PHACGLYc","Glycine N-Acyltransferase, Phenylacetate","gly_c + phaccoa_c → coa_c + h_c + phacgly_c","Valine, leucine, and isoleucine metabolism",2.209315
+295,"PHACGLYt","PHACGLYt","Transport of Phenylacetylglycine, Extracellular","phacgly_c ⇌ phacgly_e","Transport, extracellular",2.209315
+296,"EX_phacgly.e.","EX_phacgly_e","Exchange of Phenylacetylglycine","phacgly_e ⇌ ","Extracellular exchange",2.209315
+297,"CARIBUP_Rthv","CARIBUP_Rthv","Release of R-carboxy ibuprofen into hepatic vein","caribup__R_c ⇌ caribup__R_e","Drug metabolism",2.204498
+298,"EX_caribup_R.e.","EX_caribup_R_e","exchange reaction for R-carboxy ibuprofen in hepatic vein","caribup_R[e] <=> ","Extracellular exchange",2.204498
+299,"IBUP_RCYPCARhep","IBUP_RCYPCARhep","Oxidation of R-3-hydroxy ibuprofen to R-carboxy ibuprofen","o2_c + 3hibup__R_c → h_c + h2o_c + caribup__R_c","Drug metabolism",2.204498
+300,"EX_gudca3s.e.","EX_gudca3s_e","EX gudca3s(e)","gudca3s_e ⇌ ","Extracellular exchange",2.197455
+301,"GUDCA3St","GUDCA3St","Glycoursodeoxycholic acid 3-sulfate via bicarbonate countertransport","hco3_c + gudca3s_e ⇌ hco3_e + gudca3s_c","Transport, extracellular",2.197455
+302,"GUDCASULT","GUDCASULT","Glycoursodeoxycholic acid sulfotransferase","paps_c + HC02196_c → h_c + pap_c + gudca3s_c","Bile acid synthesis",2.197455
+303,"HMR_8798","HMR_8798","HMR_8798","M02723[c] <=> M02723[e] ","Transport, extracellular",2.197143
+304,"EX_pheacgly.e.","EX_pheacgly_e","Exchange of Phenylacetylglycine ","pheacgly_e ⇌ ","Extracellular exchange",2.197143
+305,"O2St","O2St","Superoxide anion transport via diffusion (extracellular)","o2s_c ⇌ o2s_e","Transport, extracellular",2.180815
+306,"EX_HC02194.e.","EX_HC02194_e","Ursodeoxycholate exchange","HC02194_e ⇌ ","Extracellular exchange",2.178678
+307,"56EPPVShc","56EPPVShc","Oxidation of 3-alpha-iso-pravastatin to 5,6-epoxy-3-alpha-iso-pravastatin in hepatocytes","h_r + nadph_r + o2_r + 3ispvs_r → h2o_r + nadp_r + 56eppvs_r","Drug metabolism",2.177306
+308,"7HPVShc","7HPVShc","Oxidation of 3-alpha-iso-pravastatin to 7-hydroxy-3-alpha-iso-pravastatin in hepatocytes","h_r + nadph_r + o2_r + 3ispvs_r → h2o_r + nadp_r + 7hpvs_r","Drug metabolism",2.177306
+309,"EX_56eppvs.e.","EX_56eppvs_e","Exchange reaction of 5,6-epoxy-3-alpha-iso-pravastatin in hepatic vein","56eppvs_e ⇌ ","Extracellular exchange",2.177306
+310,"EX_7hpvs.e.","EX_7hpvs_e","Exchange reaction of 7-hydroxy-3-alpha-iso-pravastatin in hepatic vein","7hpvs_e ⇌ ","Extracellular exchange",2.177306
+311,"3ISPVSitr","3ISPVSitr","3ISPVSitr","3ispvs_r ⇌ 3ispvs_c","Drug metabolism",2.177306
+312,"56EPPVSitr","56EPPVSitr","56EPPVSitr","56eppvs_r ⇌ 56eppvs_c","Drug metabolism",2.177306
+313,"7HPVSitr","7HPVSitr","7HPVSitr","7hpvs_r ⇌ 7hpvs_c","Drug metabolism",2.177306
+314,"EX_CE1935.e.","EX_CE1935_e","Spermine monoaldehyde exchange","CE1935_e ⇌ ","Extracellular exchange",2.176652
+315,"EX_CE1940.e.","EX_CE1940_e","Spermidine monoaldehyde 2 exchange","CE1940_e ⇌ ","Extracellular exchange",2.176652
+316,"EX_CE1939.e.","EX_CE1939_e","Spermidine monoaldehyde 1 exchange","CE1939_e ⇌ ","Extracellular exchange",2.176652
+317,"EX_ptrc.e.","EX_ptrc_e","Putrescine exchange","ptrc_e ⇌ ","Extracellular exchange",2.176652
+318,"RE2513E","RE2513E","Peroxidase","cl[e] + h[e] + h2o2[e] <=> CE4633[e] + h2o[e] ","Miscellaneous",2.171379
+319,"RE2644C","RE2644C","Aspartoacylase","h2o_c + CE1556_c ⇌ ac_c + asn__L_c","Urea cycle",2.153537
+320,"CE1556td","CE1556td","Transport of N-Acetyl-L-Asparagine","CE1556_c ⇌ CE1556_e","Transport, extracellular",2.153537
+321,"EX_CE1557.e.","EX_CE1557_e","Exchange of N-Acetyl-L-Asparagine","CE1556[e] <=> ","Extracellular exchange",2.153537

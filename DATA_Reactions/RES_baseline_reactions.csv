@@ -1,0 +1,23 @@
+,"name","abbreviation","description","formula","subsystem","effect"
+"22","2OXOADPTm","2OXOADPTm","2-oxoadipate shuttle (cytosol/mitochondria)","2oxoadp_c + akg_m ⇌ akg_c + 2oxoadp_m","Tryptophan metabolism",3.000675
+"21","AATAi","AATAi","2-Aminoadipate Transaminase, Irreversible","akg[c] + L2aadp[c] <=> 2oxoadp[c] + glu_L[c] ","Lysine metabolism",2.99727
+"20","r0450","r0450","L-2-Aminoadipate:2-oxoglutarate aminotransferase Lysine biosynthesis / Lysine degradation EC:2.6.1.39","akg_m + L2aadp_m ⇌ 2oxoadp_m + glu__L_m","Lysine metabolism",2.995431
+"19","2AMADPTm","2AMADPTm","L-2-aminoadipate shuttle (cytosol/mitochondria)","L2aadp_c + akg_m → akg_c + L2aadp_m","Lysine metabolism",2.994761
+"17","PHETA1m","PHETA1m","L-Phenylalanine:2-oxoglutarate aminotransferase, mitochondria","akg_m + phe__L_m ⇌ glu__L_m + phpyr_m","Phenylalanine metabolism",2.78914
+"18","PHPYRtm","PHPYRtm","Transport of Phenylpyruvate via Proton Symport, Mitochondrial","h_m + phpyr_m ⇌ h_c + phpyr_c","Transport, mitochondrial",2.78914
+"16","PHETA1","PHETA1","Phenylalanine transaminase","akg_c + phe__L_c ⇌ glu__L_c + phpyr_c","Phenylalanine metabolism",2.78776
+"10","RE1233C","RE1233C","Kynurenine-Oxoglutarate Transaminase","akg_c + Lkynr_c ⇌ glu__L_c + h2o_c + kynate_c","Tryptophan metabolism",2.70074
+"11","3HKYNAKGAT","3HKYNAKGAT","3-Hydroxy-L-kynurenine:2-oxoglutarate aminotransferase","akg_c + hLkynr_c → glu__L_c + 42A3HP24DB_c","Tryptophan metabolism",2.70074
+"12","r0647","r0647","Spontaneous reaction","42A3HP24DB_c ⇌ h2o_c + C02470_c","Tryptophan metabolism",2.70074
+"13","RE2349C","RE2349C","Kynurenine-Oxoglutarate Transaminase","akg_c + hLkynr_c ⇌ glu__L_c + h2o_c + C02470_c","Tryptophan metabolism",2.70074
+"14","KYNAKGAT","KYNAKGAT","L-Kynurenine:2-oxoglutarate aminotransferase","akg_c + Lkynr_c → glu__L_c + 4aphdob_c","Tryptophan metabolism",2.70074
+"15","KYNATESYN","KYNATESYN","4-(2-Aminophenyl)-2,4-dioxobutanoate dehydratase","4aphdob_c → h2o_c + kynate_c","Tryptophan metabolism",2.70074
+"9","EX_pchol_hs.e.","EX_pchol_hs_e","Phosphatidylcholine (homo sapiens) exchange","pchol_hs_e ⇌ ","Extracellular exchange",2.53379
+"3","LCYSTAT","LCYSTAT","L-Cysteate:2-oxoglutarate aminotransferase","akg_c + Lcyst_c ⇌ glu__L_c + 3spyr_c","Methionine and cysteine metabolism",2.528481
+"4","LCYSTATm","LCYSTATm","L-Cysteate:2-Oxoglutarate Aminotransferase, Mitochondrial","akg[m] + Lcyst[m] <=> 3spyr[m] + glu_L[m] ","Methionine and cysteine metabolism",2.528481
+"5","SLDx","SLDx","L-sulfolactate dehydrogenase (NAD+)","nad_c + sl__L_c ⇌ h_c + nadh_c + 3spyr_c","Methionine and cysteine metabolism",2.528481
+"6","SLDxm","SLDxm","L-Sulfolactate Dehydrogenase (NAD+), Mitochondrial","nad[m] + sl_L[m] <=> 3spyr[m] + h[m] + nadh[m] ","Methionine and cysteine metabolism",2.528481
+"7","SLDtm","SLDtm","L-Sulfolactate Transport (Cytosol to Mitochondria)","NAsl_L[c] -> sl_L[m] ","Transport, mitochondrial",2.528481
+"8","LCYSTtm","LCYSTtm","Transport of L-Cysteate, Diffusion","Lcyst[c] -> Lcyst[m] ","Transport, mitochondrial",2.528481
+"1","L2AADPtr","L2AADPtr","Transport of L-2-Aminoadipate","L2aadp_e ⇌ L2aadp_c","Transport, extracellular",2.259193
+"2","EX_L2aadp.e.","EX_L2aadp_e","Exchange of L-2-Aminoadipate","L2aadp_e ⇌ ","Extracellular exchange",2.259193

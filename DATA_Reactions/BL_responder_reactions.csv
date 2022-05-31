@@ -1,0 +1,102 @@
+,"name","abbreviation","description","formula","subsystem","effect"
+"1","RETINALt","RETINALt","Transport of Retinal","retinal_c ⇌ retinal_e","Transport, extracellular",4.132713
+"2","EX_retinal.e.","EX_retinal_e","Exchange of Retinal","retinal_e ⇌ ","Extracellular exchange",4.132713
+"3","RADH","RADH","Retinal dehydrogenase","h2o_c + nad_c + retinal_c → 2.0 h_c + nadh_c + retn_c","Vitamin A metabolism",4.007906
+"4","RADH3","RADH3","Retinal dehydrogenase","h2o_c + nad_c + retinal_cis_13_c → 2.0 h_c + nadh_c + 13_cis_retn_c","Vitamin A metabolism",4.007906
+"5","RADH2","RADH2","Retinal dehydrogenase (NADPH)","h2o_c + nadp_c + retinal_c → 2.0 h_c + nadph_c + retn_c","Vitamin A metabolism",4.007906
+"6","RADH4","RADH4","Retinal dehydrogenase (NADPH)","h2o_c + nadp_c + retinal_cis_13_c → 2.0 h_c + nadph_c + 13_cis_retn_c","Vitamin A metabolism",4.007906
+"7","HMR_6647","HMR_6647","Retinal:NAD+ Oxidoreductase","h2o_r + nad_r + retinal_r → 2.0 h_r + nadh_r + retn_r","Vitamin A metabolism",3.926423
+"8","RE2659R","RE2659R","RE2659","retn_r ⇌ 13_cis_retn_r","Vitamin A metabolism",3.926423
+"9","RE2655R","RE2655R","RE2655","retinal_r ⇌ retinal_cis_13_r","Vitamin A metabolism",3.926423
+"10","RE3050R","RE3050R","Retinal Dehydrogenase","h2o_r + nad_r + retinal_cis_13_r ⇌ 2.0 h_r + nadh_r + retn_r","Vitamin A metabolism",3.926423
+"11","RE1903R","RE1903R","Retinal Dehydrogenase","h2o_r + nad_r + retinal_cis_13_r ⇌ 2.0 h_r + nadh_r + 13_cis_retn_r","Vitamin A metabolism",3.926423
+"12","EX_lneldc.e.","EX_lneldc_e","Linoelaidic acid exchange","lneldc_e ⇌ ","Extracellular exchange",3.721601
+"13","EX_hdca.e.","EX_hdca_e","Hexadecanoate (n-C16:0) exchange","hdca_e ⇌ ","Extracellular exchange",3.493368
+"14","EX_ocdca.e.","EX_ocdca_e","Octadecanoate (n-C18:0) exchange","ocdca_e ⇌ ","Extracellular exchange",3.482021
+"15","C100CPT1","C100CPT1","Production of Decanoylcarnitine","crn_c + dcacoa_c ⇌ coa_c + c10crn_c","Fatty acid oxidation",3.482021
+"16","EX_c10crn.e.","EX_c10crn_e","Exchange of Decanoyl Carnitine","c10crn_e ⇌ ","Extracellular exchange",3.482021
+"17","EX_c6crn.e.","EX_c6crn_e","Exchange of Hexanoyl Carnitine","c6crn_e ⇌ ","Extracellular exchange",3.482021
+"18","EX_c8crn.e.","EX_c8crn_e","Exchange reaction for octanoyl carnitine","c8crn_e ⇌ ","Extracellular exchange",3.482021
+"19","EX_smv.e.","EX_smv_e","Exchange reaction for simvastatin in intestinal lumen","smv_e ⇌ ","Extracellular exchange",3.234592
+"20","EX_smvacid.e.","EX_smvacid_e","Exchange reaction for simvastatin dihydroxy acid form in hepatic vein","smvacid_e ⇌ ","Extracellular exchange",3.234592
+"21","EX_ddca.e.","EX_ddca_e","Dodecanoate (n-C12:0) exchange","ddca_e ⇌ ","Extracellular exchange",2.934842
+"22","EX_ttdcea.e.","EX_ttdcea_e","Tetradecenoate (n-C14:1) exchange","ttdcea_e ⇌ ","Extracellular exchange",2.934842
+"23","EX_M01197.e.","EX_M01197_e","EX M01197[e]","M01197_e ⇌ ","Extracellular exchange",2.934842
+"24","EX_c4crn.e.","EX_c4crn_e","Exchange reaction for butyryl carnitine","c4crn_e ⇌ ","Extracellular exchange",2.741278
+"25","EX_elaid.e.","EX_elaid_e","Elaidic acid exchange","elaid_e ⇌ ","Extracellular exchange",2.626481
+"26","C160CPT1","C160CPT1","Carnitine O-palmitoyltransferase","crn_c + pmtcoa_c ⇌ coa_c + pmtcrn_c","Fatty acid oxidation",2.47286
+"27","r0998","r0998","Facilitated diffusion","crn_c + pmtcrn_r ⇌ pmtcrn_c + crn_r","Transport, endoplasmic reticular",2.47286
+"28","r0434","r0434","Palmitoyl-CoA:L-carnitine O-palmitoyltransferase Fatty acid metabolism EC:2.3.1.21","crn_r + pmtcoa_r ⇌ coa_r + pmtcrn_r","Fatty acid oxidation",2.47286
+"29","COAtr","COAtr","COA transporter, endoplasmic reticulum","coa_c ⇌ coa_r","Transport, endoplasmic reticular",2.47286
+"30","HDCEAtr","HDCEAtr","Fatty Acid Transport via Diffusion","hdcea[e] <=> hdcea[c] ","Transport, extracellular",2.467275
+"31","r2514e","r2514e","Transport of Hexadecenoate (N-C16:1) via Carnitine Antiport","hdcea_c + crn_e ⇌ crn_c + hdcea_e","Transport, extracellular",2.467275
+"32","EX_M00008.e.","EX_M00008_e","EX M00008[e]","M00008_e ⇌ ","Extracellular exchange",2.446459
+"33","ADPACtd","ADPACtd","Transport of Adipic Acid, Diffusion","adpac_c ⇌ adpac_e","Transport, extracellular",2.349112
+"34","EX_adpac.e.","EX_adpac_e","Exchange of Adipic Acid","adpac_e ⇌ ","Extracellular exchange",2.349112
+"35","EX_dodecanac.e.","EX_dodecanac_e","Exchange of Dodecanedioic Acid","dodecanac_e ⇌ ","Extracellular exchange",2.349112
+"36","EX_sebacid.e.","EX_sebacid_e","Exchange of Sebacic Acid","sebacid_e ⇌ ","Extracellular exchange",2.349112
+"37","EX_subeac.e.","EX_subeac_e","Exchange of Suberic Acid","subeac_e ⇌ ","Extracellular exchange",2.349112
+"38","SEBACIDtd","SEBACIDtd","Transport of Sebacic Acid by Diffusion","sebacid_c ⇌ sebacid_e","Transport, extracellular",2.349112
+"39","SUBEACtd","SUBEACtd","Transport of Suberic Acid by Diffusion","subeac_c ⇌ subeac_e","Transport, extracellular",2.349112
+"40","HMR_0156","HMR_0156","Carboxylic Acid:Coa Ligase (AMP-Forming)","atp_c + but_c + coa_c → amp_c + btcoa_c + ppi_c","Fatty acid synthesis",2.348896
+"41","HMR_0180","HMR_0180","Butyrate Coenzyme A Ligase","atp_c + coa_c + dca_c → amp_c + dcacoa_c + ppi_c","Fatty acid synthesis",2.348896
+"42","EX_but.e.","EX_but_e","Butyrate (n-C4:0) exchange","but_e ⇌ ","Extracellular exchange",2.3473
+"43","EX_dca.e.","EX_dca_e","Decanoate (n-C10:0) exchange","dca_e ⇌ ","Extracellular exchange",2.3473
+"44","EX_ocdcea.e.","EX_ocdcea_e","Octadecenoate (n-C18:1) exchange","ocdcea_e ⇌ ","Extracellular exchange",2.271629
+"45","EX_f1a.e.","EX_f1a_e","Exchange of F1Alpha (Mucin O-Glycan) ","f1a_e ⇌ ","Extracellular exchange",2.229274
+"46","ATP2ter","ATP2ter","AMP/ATP transporter, endoplasmic reticulum","atp_c + amp_r ⇌ amp_c + atp_r","Transport, endoplasmic reticular",2.196289
+"47","EX_ppa.e.","EX_ppa_e","Propionate exchange","ppa_e ⇌ ","Extracellular exchange",2.186179
+"48","FACOAL160i","FACOAL160i","C160 Fatty Acid Activation","atp[c] + coa[c] + hdca[c] -> amp[c] + pmtcoa[c] + ppi[c] ","Fatty acid oxidation",2.178564
+"49","FACOAL161","FACOAL161","Fatty acid  CoA ligase  hexadecenoate ","atp_c + coa_c + hdcea_c → amp_c + hdcoa_c + ppi_c","Fatty acid oxidation",2.178564
+"50","DOCOSACT","DOCOSACT","Activation of docosanoic acid for transport","atp_c + coa_c + docosac_c → amp_c + ppi_c + docoscoa_c","Fatty acid oxidation",2.178564
+"51","FACOAL1832","FACOAL1832","Alpha-Linolenic acid:CoA ligase (AMP-forming)","atp_c + coa_c + lnlnca_c → amp_c + ppi_c + lnlncacoa_c","Fatty acid oxidation",2.178564
+"52","FACOAL184","FACOAL184","Fatty-acid--CoA ligase","atp_c + coa_c + strdnc_c → amp_c + ppi_c + strdnccoa_c","Fatty acid oxidation",2.178564
+"53","FACOAL205","FACOAL205","Fatty-acid--CoA ligase","atp_c + coa_c + tmndnc_c → amp_c + ppi_c + tmndnccoa_c","Fatty acid oxidation",2.178564
+"54","FACOAL1821","FACOAL1821","Linoleic acid:CoA ligase (AMP-forming)","atp_c + coa_c + lnlc_c → amp_c + ppi_c + lnlccoa_c","Fatty acid oxidation",2.178564
+"55","FACOAL1831","FACOAL1831","Gamma-Linolenic acid:CoA ligase (AMP-forming)","atp_c + coa_c + lnlncg_c → amp_c + ppi_c + lnlncgcoa_c","Fatty acid oxidation",2.178564
+"56","FACOAL203","FACOAL203","Fatty-acid--CoA ligase","atp_c + coa_c + dlnlcg_c → amp_c + ppi_c + dlnlcgcoa_c","Fatty acid oxidation",2.178564
+"57","FACOAL204","FACOAL204","Fatty-acid--CoA ligase","atp_c + coa_c + arachd_c → amp_c + ppi_c + arachdcoa_c","Fatty acid oxidation",2.178564
+"58","r2508","r2508","Utilized transport","hdca_c + crn_r ⇌ crn_c + hdca_r","Transport, endoplasmic reticular",2.178564
+"59","r2510","r2510","Utilized transport","strdnc_c + crn_r ⇌ crn_c + strdnc_r","Transport, endoplasmic reticular",2.178564
+"60","r2511","r2511","Utilized transport","lnlc_c + crn_r ⇌ crn_c + lnlc_r","Transport, endoplasmic reticular",2.178564
+"61","r2512","r2512","Utilized transport","crn_c + lnlncg_r → lnlncg_c + crn_r","Transport, endoplasmic reticular",2.178564
+"62","r2513","r2513","Utilized transport","crn_c + lnlnca_r → lnlnca_c + crn_r","Transport, endoplasmic reticular",2.178564
+"63","r2514","r2514","Utilized transport","hdcea_c + crn_r ⇌ crn_c + hdcea_r","Transport, endoplasmic reticular",2.178564
+"64","r2515","r2515","Utilized transport","crn_c + dlnlcg_r → dlnlcg_c + crn_r","Transport, endoplasmic reticular",2.178564
+"65","HMR_2569","HMR_2569","HMR 2569","tmndnc_c ⇌ tmndnc_r","Transport, endoplasmic reticular",2.178564
+"66","HMR_2702","HMR_2702","Carnitine O-Palmitoyltransferase","coa_c + M01724_c ⇌ crn_c + docoscoa_c","Fatty acid oxidation",2.178564
+"67","STRDNCCPT1","STRDNCCPT1","Carnitine O-palmitoyltransferase","crn_c + strdnccoa_c ⇌ coa_c + strdnccrn_c","Fatty acid oxidation",2.178564
+"68","TMNDNCCPT1","TMNDNCCPT1","Carnitine O-palmitoyltransferase","crn_c + tmndnccoa_c ⇌ coa_c + tmndnccrn_c","Fatty acid oxidation",2.178564
+"69","C204CPT1","C204CPT1","Carnitine C20:4 transferase","crn_c + arachdcoa_c ⇌ coa_c + arachdcrn_c","Fatty acid oxidation",2.178564
+"70","r1000","r1000","Facilitated diffusion","crn_c + hdcecrn_r → hdcecrn_c + crn_r","Transport, endoplasmic reticular",2.178564
+"71","r0444","r0444","Palmitoyl-CoA:L-carnitine O-palmitoyltransferase Fatty acid metabolism EC:2.3.1.21","crn_r + hdcoa_r → coa_r + hdcecrn_r","Fatty acid oxidation",2.178564
+"72","HMR_2851","HMR_2851","HMR 2851","crn_c + M01724_r ⇌ crn_r + M01724_c","Transport, endoplasmic reticular",2.178564
+"73","HMR_2852","HMR_2852","Carnitine O-Acetyltransferase","coa_r + M01724_r ⇌ crn_r + docoscoa_r","Transport, endoplasmic reticular",2.178564
+"74","HMR_2857","HMR_2857","HMR 2857","crn_c + M02637_r ⇌ crn_r + M02637_c","Transport, endoplasmic reticular",2.178564
+"75","HMR_2859","HMR_2859","Carnitine O-Acetyltransferase","coa_r + M02637_r ⇌ crn_r + lnlncacoa_r","Transport, endoplasmic reticular",2.178564
+"76","HMR_2861","HMR_2861","HMR 2861","strdnccrn_c + crn_r ⇌ crn_c + strdnccrn_r","Transport, endoplasmic reticular",2.178564
+"77","HMR_2862","HMR_2862","Carnitine O-Acetyltransferase","crn_r + strdnccoa_r ⇌ coa_r + strdnccrn_r","Transport, endoplasmic reticular",2.178564
+"78","HMR_2865","HMR_2865","HMR 2865","tmndnccrn_c + crn_r ⇌ crn_c + tmndnccrn_r","Transport, endoplasmic reticular",2.178564
+"79","HMR_2866","HMR_2866","Carnitine O-Acetyltransferase","crn_r + tmndnccoa_r ⇌ coa_r + tmndnccrn_r","Transport, endoplasmic reticular",2.178564
+"80","r1007","r1007","Facilitated diffusion","crn_c + arachdcrn_r ⇌ arachdcrn_c + crn_r","Transport, peroxisomal",2.178564
+"81","r0441","r0441","Palmitoyl-CoA:L-carnitine O-palmitoyltransferase Fatty acid metabolism EC:2.3.1.21","crn_r + arachdcoa_r ⇌ coa_r + arachdcrn_r","Fatty acid oxidation",2.178564
+"82","r0311","r0311","Palmitate:CoA ligase (AMP-forming) Fatty acid metabolism EC:6.2.1.3","coa_r + atp_r + hdca_r → amp_r + ppi_r + pmtcoa_r","Fatty acid oxidation",2.178564
+"83","r1487","r1487","EC:6.2.1.3","coa_r + atp_r + hdcea_r → amp_r + ppi_r + hdcoa_r","Fatty acid oxidation",2.178564
+"84","HMR_2973","HMR_2973","Long-Chain-Fatty-Acid Coenzyme A Ligase","coa_r + atp_r + docosac_r → amp_r + ppi_r + docoscoa_r","Fatty acid synthesis",2.178564
+"85","RE3114R","RE3114R","Long-Chain-Fatty-Acid- Coenzyme A Ligase","coa_r + atp_r + lnlnca_r → amp_r + ppi_r + lnlncacoa_r","Fatty acid oxidation",2.178564
+"86","HMR_2982","HMR_2982","Long-Chain-Fatty-Acid Coenzyme A Ligase","coa_r + atp_r + strdnc_r → amp_r + ppi_r + strdnccoa_r","Fatty acid synthesis",2.178564
+"87","RE3132R","RE3132R","Long-Chain-Fatty-Acid- Coenzyme A Ligase","coa_r + atp_r + tmndnc_r → amp_r + ppi_r + tmndnccoa_r","Fatty acid oxidation",2.178564
+"88","r1257","r1257","EC:6.2.1.3","coa_r + atp_r + lnlc_r → amp_r + ppi_r + lnlccoa_r","Fatty acid oxidation",2.178564
+"89","r1260","r1260","EC:6.2.1.3","coa_r + atp_r + lnlncg_r → amp_r + ppi_r + lnlncgcoa_r","Fatty acid oxidation",2.178564
+"90","HMR_2994","HMR_2994","Long-Chain-Fatty-Acid Coenzyme A Ligase","coa_r + atp_r + dlnlcg_r → amp_r + ppi_r + dlnlcgcoa_r","Fatty acid synthesis",2.178564
+"91","r1262","r1262","EC:6.2.1.3","coa_r + arachd_r + atp_r → amp_r + ppi_r + arachdcoa_r","Fatty acid oxidation",2.178564
+"92","DOCOSACTDr","DOCOSACTDr","Transport of Docosanoic Acid by Diffusion","docosac_c ⇌ docosac_r","Fatty acid oxidation",2.178564
+"93","PHETA1m","PHETA1m","L-Phenylalanine:2-oxoglutarate aminotransferase, mitochondria","akg_m + phe__L_m ⇌ glu__L_m + phpyr_m","Phenylalanine metabolism",2.162181
+"94","PHPYRtm","PHPYRtm","Transport of Phenylpyruvate via Proton Symport, Mitochondrial","h_m + phpyr_m ⇌ h_c + phpyr_c","Transport, mitochondrial",2.162181
+"95","ACALDt","ACALDt","Acetaldehyde reversible transport","acald_e ⇌ acald_c","Transport, extracellular",2.161212
+"96","EX_acald.e.","EX_acald_e","Acetaldehyde exchange","acald_e ⇌ ","Extracellular exchange",2.161212
+"97","PHETA1","PHETA1","Phenylalanine transaminase","akg_c + phe__L_c ⇌ glu__L_c + phpyr_c","Phenylalanine metabolism",2.152482
+"98","2OXOADPTm","2OXOADPTm","2-oxoadipate shuttle (cytosol/mitochondria)","2oxoadp_c + akg_m ⇌ akg_c + 2oxoadp_m","Tryptophan metabolism",2.08184
+"99","AATAi","AATAi","2-Aminoadipate Transaminase, Irreversible","akg[c] + L2aadp[c] <=> 2oxoadp[c] + glu_L[c] ","Lysine metabolism",2.080445
+"100","r0450","r0450","L-2-Aminoadipate:2-oxoglutarate aminotransferase Lysine biosynthesis / Lysine degradation EC:2.6.1.39","akg_m + L2aadp_m ⇌ 2oxoadp_m + glu__L_m","Lysine metabolism",2.07993
+"101","2AMADPTm","2AMADPTm","L-2-aminoadipate shuttle (cytosol/mitochondria)","L2aadp_c + akg_m → akg_c + L2aadp_m","Lysine metabolism",2.078106

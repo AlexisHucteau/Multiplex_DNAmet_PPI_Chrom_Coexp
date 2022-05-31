@@ -37,11 +37,13 @@ PPI_base <- read.csv("~/Documents/List_genes_from_transcriptome/FIsInGene_020720
 
 colnames(PPI_base) <- c("source", "target", "Annotation", "Direction", "Score")
 
-deal_with_NA <- function(df, column, value){
+deal_with_NA <- function(df, column, value_to_change, final_value){
   for (i in column) {
-    data.table::set(df,which(is.na(df[[i]])), i,value)
+    data.table::set(df,which(df[[i]] == value_to_change), i,final_value)
   }
 }
+
+
 
 Make_specific_network <- function(Net, DEGs, msvip, title, collection, P_P = T, PPI=T, logFC_threshold = 1.5, P.Value_DEG_threshold = 0.05, pval_msviper_threshold = 0.1){
   Genes <- dplyr::filter(DEGs, abs(logFC) > logFC_threshold, P.Value < P.Value_DEG_threshold) %>% .[,c(1,4,7)]
@@ -139,6 +141,8 @@ Modify_Cytoscape_network_PPI <- function(e, n, title, collection){
   layoutNetwork()
   exportImage(paste0(collection, "_", title), 'SVG', zoom=200)
 }
+
+RNAseq <- read.csv("~/GitHub/Koichi_gene_expression_analyses_git/Koichi_gene_expression_analyses/DATA/RNAseq_parsed.csv", row.names = 1, header = T, check.names = F)
 ```
 
 # Make regulonaml network
@@ -536,4 +540,42 @@ Aracn_NR_R_AML_reg <- Make_specific_network(NR_R_msviper$regulons, RNAseq_diff_e
 Pchic_GOI_AML_reg <- Make_pchic_genes_specific(pchic, RNAseq_diff_exp$R_OR_NR_B$`NR.B-R.B`, NR_R_AML_msviper, P_P = F, title = "Pchic GoI AML reg", collection = "NR vs R AML reg C")
 ```
 
-# Cell line
+# RcisTarget
+
+```{r}
+BiocManager::install(c("doMC", "doRNG", "RcisTarget", "DT", "visNetwork"))
+
+library(RcisTarget)
+
+motifRankings <- importRankings("hg19-tss-centered-10kb-7species.mc9nr.feather")
+# Load the annotation to human transcription factors
+data(motifAnnotations_hgnc)
+
+BiocManager::install("RcisTarget.hg19.motifDBs.cisbpOnly.500bp")
+library(RcisTarget.hg19.motifDBs.cisbpOnly.500bp)
+# Rankings
+data(hg19_500bpUpstream_motifRanking_cispbOnly)
+motifRankings_cisbpOnly <- hg19_500bpUpstream_motifRanking_cispbOnly
+motifRankings_cisbpOnly
+data(hg19_motifAnnotation_cisbpOnly) 
+```
+
+```{r}
+geneLists <- list(Upregulated=RNAseq_diff_exp$R_OR_NR_B$`NR.B-R.B`$ID[which(RNAseq_diff_exp$R_OR_NR_B$`NR.B-R.B`$logFC > 1.5 & RNAseq_diff_exp$R_OR_NR_B$`NR.B-R.B`$P.Value < 0.1),])
+
+motifEnrichmentTable_wGenes <- cisTarget(geneLists, 
+         motifRankings,
+         motifAnnot=motifAnnotations_hgnc)
+```
+
+
+```{r}
+motifs_AUC <- calcAUC(geneLists, motifRankings, nCores=1)
+
+auc <- getAUC(motifs_AUC)["hypoxia",]
+hist(auc, main="hypoxia", xlab="AUC histogram",
+     breaks=100, col="#ff000050", border="darkred")
+nes3 <- (3*sd(auc)) + mean(auc)
+abline(v=nes3, col="red")
+```
+

@@ -1,0 +1,66 @@
+,"name","abbreviation","description","formula","subsystem","effect"
+"1","CYSB0AT3tc","CYSB0AT3tc","Cysteine Transport by B0At3","cl_e + cys__L_e + na1_e → cl_c + cys__L_c + na1_c","Transport, extracellular",3.983802
+"2","ALAB0AT3tc","ALAB0AT3tc","Alanine Transport by B0At3","ala__L_e + cl_e + na1_e → ala__L_c + cl_c + na1_c","Transport, extracellular",3.737298
+"3","SERB0AT3tc","SERB0AT3tc","Serine Transport by B0At3","cl_e + na1_e + ser__L_e → cl_c + na1_c + ser__L_c","Transport, extracellular",3.737298
+"4","ASNB0AT3tc","ASNB0AT3tc","Asparagine Transport by B0At3","asn__L_e + cl_e + na1_e → asn__L_c + cl_c + na1_c","Transport, extracellular",3.684953
+"5","EX_HC02161.e.","EX_HC02161_e","Exchange of GM1-pool","HC02161_e ⇌ ","Extracellular exchange",3.502722
+"6","r1411","r1411","D-Galactosyl-N-acetyl-D-galactosaminyl-(N-acetylneuraminyl)-D- galactosyl-D-glucosylceramide galactohydrolase EC:3.2.1.23","h2o_e + HC02161_e → gal_e + HC02160_e","Miscellaneous",3.502722
+"7","EX_Nacasp.e.","EX_Nacasp_e","Exchange of N-Acetyl-L-Aspartate","Nacasp_e ⇌ ","Extracellular exchange",3.433912
+"8","NACASPt","NACASPt","Transport of N-Acetyl-L-Aspartate","3.0 na1_c + Nacasp_c ⇌ 3.0 na1_e + Nacasp_e","Transport, extracellular",3.433912
+"9","GLUB0AT3tc","GLUB0AT3tc","Glutamate Transport by B0At3","cl_e + glu__L_e + na1_e → cl_c + glu__L_c + na1_c","Transport, extracellular",3.209916
+"10","GLNB0AT3tc","GLNB0AT3tc","Glutamine Transport by B0At3","cl_e + gln__L_e + na1_e → cl_c + gln__L_c + na1_c","Transport, extracellular",3.185068
+"11","ILEB0AT3tc","ILEB0AT3tc","Iso-Leucine Transport by B0At3","cl_e + ile__L_e + na1_e → cl_c + ile__L_c + na1_c","Transport, extracellular",3.185068
+"12","LEUB0AT3tc","LEUB0AT3tc","Leucine Transport by B0At3","cl_e + leu__L_e + na1_e → cl_c + leu__L_c + na1_c","Transport, extracellular",3.185068
+"13","METB0AT3tc","METB0AT3tc","Methionine Transport by B0At3","cl_e + met__L_e + na1_e → cl_c + met__L_c + na1_c","Transport, extracellular",3.185068
+"14","VALB0AT3tc","VALB0AT3tc","Valine Transport by B0At3","cl_e + na1_e + val__L_e → cl_c + na1_c + val__L_c","Transport, extracellular",3.185068
+"15","RE2644C","RE2644C","Aspartoacylase","h2o_c + CE1556_c ⇌ ac_c + asn__L_c","Urea cycle",3.170209
+"16","CE1556td","CE1556td","Transport of N-Acetyl-L-Asparagine","CE1556_c ⇌ CE1556_e","Transport, extracellular",3.170209
+"17","EX_CE1557.e.","EX_CE1557_e","Exchange of N-Acetyl-L-Asparagine","CE1556[e] <=> ","Extracellular exchange",3.170209
+"18","PHEB0AT3tc","PHEB0AT3tc","Phenylalanine Transport by B0At3","cl_e + na1_e + phe__L_e → cl_c + na1_c + phe__L_c","Transport, extracellular",3.133467
+"19","TRPB0AT3tc","TRPB0AT3tc","Tyrptophan Transport by B0At3","cl_e + na1_e + trp__L_e → cl_c + na1_c + trp__L_c","Transport, extracellular",3.133467
+"20","TYRB0AT3tc","TYRB0AT3tc","Tyrosine Transport by B0At3","cl_e + na1_e + tyr__L_e → cl_c + na1_c + tyr__L_c","Transport, extracellular",3.133467
+"21","r1549","r1549","Amino Acid-Polyamine-Organocation (APC) TCDB:2.A.3.8.1","tyr__L_c + gly_e ⇌ gly_c + tyr__L_e","Transport, extracellular",2.901313
+"22","PROIMINOtc","PROIMINOtc","Transport of L-Proline by the apical IMINO amino acid transporters in kidney and intestine","cl_e + 2.0 na1_e + pro__L_e → cl_c + 2.0 na1_c + pro__L_c","Transport, extracellular",2.822362
+"23","EX_arachd.e.","EX_arachd_e","NC20:4 exchange","arachd_e ⇌ ","Extracellular exchange",2.740704
+"24","EX_C02528.e.","EX_C02528_e","Chenodeoxycholate exchange","C02528_e ⇌ ","Extracellular exchange",2.61271
+"25","HMR_9652","HMR_9652","HMR 9652","homoval_c → homoval_e","Transport, extracellular",2.601513
+"26","HOMOVALte","HOMOVALte","Transport of Homovanillate by Oat3","akg_e + homoval_c ⇌ akg_c + homoval_e","Transport, extracellular",2.601513
+"27","3OHGLUTACte","3OHGLUTACte","Transport of 3-Hydroxy-Glutarate, Extracellular","3ohglutac_c → 3ohglutac_e","Transport, extracellular",2.601513
+"28","3OHGLUTACOAT3t","3OHGLUTACOAT3t","Transport of 3-Hydroxy-Glutarate, Extracellular, Antiport","akg_e + 3ohglutac_c ⇌ akg_c + 3ohglutac_e","Transport, extracellular",2.601513
+"29","2HYDOGOAT3t","2HYDOGOAT3t","Transport of 2-Hydroxy-Glutarate, Extracellular, Antiport","akg_e + 2hydog_c ⇌ akg_c + 2hydog_e","Transport, extracellular",2.601513
+"30","2HYDOGte","2HYDOGte","Transport of 2-Hydroxy-Glutarate, Extracellular","2hydog_c → 2hydog_e","Transport, extracellular",2.601513
+"31","GLUTAROAT3t","GLUTAROAT3t","Transport of Glutarate, Extracellular, Antiport","akg_e + glutar_c ⇌ akg_c + glutar_e","Transport, extracellular",2.601513
+"32","GLUTARte","GLUTARte","Transport of Glutarate, Extracellular","glutar_c → glutar_e","Transport, extracellular",2.601513
+"33","r1540","r1540","Neurotransmitter:Sodium Symporter (Nss) Tcdb:2.A.22.3.3","cl_e + na1_e + taur_e → cl_c + na1_c + taur_c","Transport, extracellular",2.583509
+"34","r1433","r1433","NADPH:Oxidized-Thioredoxin Oxidoreductase","nadp[m] + trdrd[m] -> h[m] + nadph[m] + trdox[m]","Miscellaneous",2.579487
+"35","TRDRm","TRDRm","Thioredoxin Reductase (NADPH)","h[m] + nadph[m] + trdox[m] -> nadp[m] + trdrd[m]","Nucleotide interconversion",2.579487
+"36","EX_tdchola.e.","EX_tdchola_e","Taurochenodeoxycholate exchange","tdchola_e ⇌ ","Extracellular exchange",2.47071
+"37","r1800","r1800","Y+LAT2 Utilized transport","leu__L_c + cys__L_e + na1_e → cys__L_c + na1_c + leu__L_e","Transport, extracellular",2.437384
+"38","r1803","r1803","Y+LAT2 Utilized transport","val__L_c + cys__L_e + na1_e → cys__L_c + na1_c + val__L_e","Transport, extracellular",2.437384
+"39","r1806","r1806","Y+LAT2 Utilized transport","ile__L_c + cys__L_e + na1_e → cys__L_c + na1_c + ile__L_e","Transport, extracellular",2.437384
+"40","r1678","r1678","Y+LAT2 Utilized transport","tyr__L_c + gly_e + na1_e → gly_c + na1_c + tyr__L_e","Transport, extracellular",2.435527
+"41","EX_sfcys.e.","EX_sfcys_e","Exchange of Sulfocysteine","slfcys[e] -> ","Extracellular exchange",2.408072
+"42","SFCYSc","SFCYSc","Formation of sulfocysteine","cys__L_c + h_c + so3_c ⇌ slfcys_c","Methionine and cysteine metabolism",2.408072
+"43","SFCYSe","SFCYSe","Exit of sulfocysteine into extra-cellular space","slfcys_c ⇌ slfcys_e","Transport, extracellular",2.408072
+"44","r1797","r1797","Y+LAT2 Utilized transport","trp__L_c + cys__L_e + na1_e → cys__L_c + na1_c + trp__L_e","Transport, extracellular",2.388839
+"45","r1798","r1798","Y+LAT2 Utilized transport","phe__L_c + cys__L_e + na1_e → cys__L_c + na1_c + phe__L_e","Transport, extracellular",2.388839
+"46","r1799","r1799","Y+LAT2 Utilized transport","tyr__L_c + cys__L_e + na1_e → cys__L_c + na1_c + tyr__L_e","Transport, extracellular",2.388839
+"47","NACDe","NACDe","Release of Nicotinate at the Basolateral Surface","nac[c] -> nac[e] ","Transport, extracellular",2.355325
+"48","EX_HC02195.e.","EX_HC02195_e","Tauroursodeoxycholate exchange","HC02195_e ⇌ ","Extracellular exchange",2.337423
+"49","EX_HC02196.e.","EX_HC02196_e","Glycoursodeoxycholate exchange","HC02196_e ⇌ ","Extracellular exchange",2.337423
+"50","RE2269E","RE2269E","Chymase","2.0 h2o_e + CE5786_e ⇌ leu__L_e + phe__L_e + CE5788_e","Miscellaneous",2.330228
+"51","EX_CE5788.e.","EX_CE5788_e","Kinetensin 1-7 exchange","CE5788_e ⇌ ","Extracellular exchange",2.330228
+"52","EX_dgchol.e.","EX_dgchol_e","Chenodeoxyglycocholate exchange","dgchol_e ⇌ ","Extracellular exchange",2.303119
+"53","ALAtN1","ALAtN1","Alanine transport (Na, H coupled)","h_c + ala__L_e + 2.0 na1_e ⇌ ala__L_c + 2.0 na1_c + h_e","Transport, extracellular",2.259398
+"54","HMR_1095","HMR_1095","HMR 1095","h_c ⇌ h_n","Transport, nuclear",2.240283
+"55","NNATr","NNATr","Nicotinate-nucleotide adenylyltransferase","atp_c + h_c + nicrnt_c → dnad_c + ppi_c","NAD metabolism",2.240283
+"56","DNADtn","DNADtn","DNAD transport, nuclear trhough pore","dnad_c ⇌ dnad_n","Transport, nuclear",2.240283
+"57","NICRNTtn","NICRNTtn","NICRNT transport, nuclear trhough pore","nicrnt_c ⇌ nicrnt_n","Transport, nuclear",2.240283
+"58","NNATn","NNATn","ATP:nicotinamide-nucleotide adenylyltransferase, nucleus","atp_n + h_n + nicrnt_n → dnad_n + ppi_n","NAD metabolism",2.240283
+"59","r1459","r1459","Transport reaction","ppi_c ⇌ ppi_n","Transport, nuclear",2.240283
+"60","ATPtn","ATPtn","ATP diffusion in nucleus","atp_c ⇌ atp_n","Transport, nuclear",2.240283
+"61","RE2270E","RE2270E","Carboxypeptidase A","h2o_e + CE5786_e ⇌ leu__L_e + CE5789_e","Miscellaneous",2.184305
+"62","EX_CE5789.e.","EX_CE5789_e","Kinetensin 1-8 exchange","CE5789_e ⇌ ","Extracellular exchange",2.184305
+"63","NACHORCTL3le","NACHORCTL3le","Transport of Nicotinate ","h_e + nac_e → h_c + nac_c","Transport, extracellular",2.181655
+"64","ALLOP2tu","ALLOP2tu","Uptake of allopurinol by the enterocytes","h_e + allop_e → h_c + allop_c","Drug metabolism",2.098257
+"65","NACSMCTte","NACSMCTte","Nicotinate Transport by Smct1","na1_e + nac_e ⇌ na1_c + nac_c","Transport, extracellular",2.086259
