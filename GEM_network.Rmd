@@ -1,0 +1,69 @@
+---
+title: "GEM_network"
+author: Alexis Hucteau
+date: "`r Sys.Date()`"
+output:
+    html_document:
+      toc: yes
+      toc_float: yes
+      theme: united
+editor_options:
+  markdown:
+    wrap: sentence
+---
+
+%%%%%%%%%%%%% INITIALISATION & PACKAGES %%%%%%%%%%%%%
+
+```{r}
+rm(list = ls())
+
+suppressPackageStartupMessages({
+  library(dplyr)
+})
+```
+
+%%%%%%%%%%%%% LOADING DATA %%%%%%%%%%%%%
+
+1 - we have to create a network. Based on the human GEM that connect reactions to their equation, the idea is to connect each reaction to the metabolites involved.
+
+2 - Clean the metabolites involved. Metabolites can have particular nominations that are problematics " H2O", "2 H20", "H20", " H20 " are considered as 4 different metabolites so we need to convert them into "H20" without 
+  *  
+
+
+```{r}
+Human_GEM <- read.csv("DATA_Reactions/Human_GEM_2.csv")
+
+Metabo_reactions <- stringr::str_split(Human_GEM$EQUATION, pattern = "\\+ | => | <=>")
+
+names(Metabo_reactions) <- Human_GEM$ID
+
+Make_reactions_network <- function(ID){
+  Reduce(function(a, b) rbind(a, data.frame(A = ID, B = b)), Metabo_reactions[[ID]], data.frame(A = ID, B = "NA"))[-1,]
+}
+
+Metabolic_network <- lapply(names(Metabo_reactions), function(reaction){
+  Reduce(function(a, b) rbind(a, data.frame(A = reaction, B = b)), Metabo_reactions[[reaction]], data.frame(A = ID, B = "NA"))[-1,]
+}) %>% Reduce(f = rbind, .)
+
+Metabolic_network_clean <- dplyr::filter(Metabolic_network, B != "")
+
+Metabolic_network_clean$B <- stringr::str_trim(Metabolic_network_clean$B)
+
+Remove_coeff <- function(metab){
+  if(length(metab) > 1){
+    ifelse(stringr::str_detect(metab[1], pattern = "[:alpha:]"), Reduce(x=metab, f = paste), Reduce(x=metab[-1], f = paste))
+  }else{
+    metab
+  }
+}
+
+Metabolic_network_clean$B <- sapply(Metabolic_network_clean$B, function(metabolite){
+  stringr::str_split(metabolite, pattern = "[:space:]") %>% .[[1]] %>% Remove_coeff()
+})
+
+Metabolic_network_clean <- unique(Metabolic_network_clean)
+
+write.table(Metabolic_network_clean, "DATA_Reactions/Metabolic_network_clean.tsv", sep = "\t", row.names = F, quote = F)
+```
+
+

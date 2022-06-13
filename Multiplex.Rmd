@@ -21,7 +21,9 @@ Combine 3/4 types of networks:
 
 ```{r}
 rm(list = ls())
-library(RCy3)
+suppressPackageStartupMessages({
+  library(RCy3)
+})
 
 "%ni%" <- Negate("%in%")
 ```
@@ -490,10 +492,13 @@ Modify_Cytoscape_network_Pchic_Methyls <- function(e, n, title, collection){
 ```
 
 
-# Make Recon3D network
+# Make human genome-scale metabolic model
 
 ```{r}
-Make_specific_Recond3D_network <- function(Recon3D = Recon3D_net, )
+
+importNetworkFromNDEx()
+
+
 ```
 
 
