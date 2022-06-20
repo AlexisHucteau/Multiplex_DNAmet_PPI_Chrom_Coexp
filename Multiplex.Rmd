@@ -22,7 +22,15 @@ Combine 3/4 types of networks:
 ```{r}
 rm(list = ls())
 suppressPackageStartupMessages({
+  library(dplyr)
   library(RCy3)
+  library(igraph)
+  library(data.table)
+  library(viper)
+  library(aracne.networks)
+  library(GeneAnswers)
+  library(org.Hs.eg.db)
+  library(GenomicRanges)
 })
 
 "%ni%" <- Negate("%in%")
@@ -31,11 +39,6 @@ suppressPackageStartupMessages({
 # Make PPI network
 
 ```{r, include=F}
-library(dplyr)
-library(RCy3)
-library(igraph)
-library(data.table)
-
 PPI_base <- read.csv("~/Documents/List_genes_from_transcriptome/FIsInGene_020720_with_annotations.tsv", sep = "\t")
 
 colnames(PPI_base) <- c("source", "target", "Annotation", "Direction", "Score")
@@ -78,7 +81,7 @@ Make_specific_network <- function(Net, DEGs, msvip, title, collection, P_P = T, 
     Modify_Cytoscape_network_Aracn(Net, Net_features, title, collection)
   }
   list(Edges = Net, Nodes = Net_features)
-  
+
 }
 
 NR_R_msviper <- readRDS("~/GitHub/Koichi_gene_expression_analyses_git/Koichi_gene_expression_analyses/Results/Tables/NR_R_msviper.rds")
@@ -93,39 +96,39 @@ Modify_Cytoscape_network_PPI <- function(e, n, title, collection){
   nodeLabels <- mapVisualProperty(visual.prop = "node label", table.column = 'name', mapping.type = 'p')
   createVisualStyle(title, defaults, list(nodeLabels))
   setVisualStyle(title)
-  setNodeShapeMapping(table.column = "Type", 
+  setNodeShapeMapping(table.column = "Type",
                       table.column.values = c("TF", "Gene"),
                       shapes = c('ELLIPSE', 'RECTANGLE'),
                       style.name = title)
-  
+
   setNodeColorMapping(table.column = 'logFC',
                       table.column.values = c(min(n$logFC), 0.0, max(n$logFC)),
                       colors = c('#0000FF', '#FFFFFF', '#FF0000'),
                       style.name = title)
-  
-  setNodeFillOpacityMapping(table.column = 'P.Value', 
-                            table.column.values = c(0, 0.1, 1), 
-                            opacities = c(255, 200, 100), 
+
+  setNodeFillOpacityMapping(table.column = 'P.Value',
+                            table.column.values = c(0, 0.1, 1),
+                            opacities = c(255, 200, 100),
                             style.name = title)
-  
-  setNodeSizeMapping (table.column = 'Eigen_centrality', 
-                      table.column.values = c(0, 1), 
-                      sizes = c(30, 200), 
+
+  setNodeSizeMapping (table.column = 'Eigen_centrality',
+                      table.column.values = c(0, 1),
+                      sizes = c(30, 200),
                       style.name = title)
-  
-  setNodeFontSizeMapping(table.column = 'Eigen_centrality', 
-                         table.column.values = c(0, 1), 
-                         sizes = c(15, 75), 
+
+  setNodeFontSizeMapping(table.column = 'Eigen_centrality',
+                         table.column.values = c(0, 1),
+                         sizes = c(15, 75),
                          style.name = title)
-  
+
   setEdgeTargetArrowShapeMapping(table.column = 'Direction',
                                  table.column.values = names(table(e$Direction)),
-                                 shapes = c('NONE', 'ARROW', 'T', 'NONE', 'ARROW', 'T', 'NONE', 'ARROW'), 
+                                 shapes = c('NONE', 'ARROW', 'T', 'NONE', 'ARROW', 'T', 'NONE', 'ARROW'),
                                  style.name = title)
-  
+
   createDegreeFilter(filter.name = "single", criterion = c(0,0))
   deleteSelectedNodes()
-  
+
   createColumnFilter(filter.name = "NES_DOWN", column = "nes", criterion = 0, type = "nodes", predicate = "LESS_THAN")
   if (!is.na(getSelectedNodes())){
     setNodeColorBypass(getSelectedNodes(), new.colors = "#C411FF")
@@ -151,11 +154,6 @@ RNAseq <- read.csv("~/GitHub/Koichi_gene_expression_analyses_git/Koichi_gene_exp
 # Make regulonaml network
 
 ```{r, include=F}
-library(viper)
-library(aracne.networks)
-library(GeneAnswers)
-library(org.Hs.eg.db)
-
 data(regulonlaml)
 viper_regulons2dorothea <- function(r) {
   res <- r %>%
@@ -171,11 +169,11 @@ viper_regulons2dorothea <- function(r) {
 }
 
 regulonaml <- viper_regulons2dorothea(regulonlaml)
-regulonaml_SYMBOL <- data.frame("source" = GeneAnswers::getSymbols(regulonaml$tf, data = "org.Hs.eg"), 
+regulonaml_SYMBOL <- data.frame("source" = GeneAnswers::getSymbols(regulonaml$tf, data = "org.Hs.eg"),
                                 "target" = GeneAnswers::getSymbols(regulonaml$target, data = "org.Hs.eg"),
                                 "mor" = regulonaml$mor,
                                 "likelihood" = regulonaml$likelihood)
-  
+
 
 Modify_Cytoscape_network_Aracn <- function(e, n, title, collection){
   defaults <- list(NODE_SHAPE="diamond",
@@ -185,49 +183,49 @@ Modify_Cytoscape_network_Aracn <- function(e, n, title, collection){
   nodeLabels <- mapVisualProperty(visual.prop = "node label", table.column = 'name', mapping.type = 'p')
   createVisualStyle(title, defaults, list(nodeLabels))
   setVisualStyle(title)
-  setNodeShapeMapping(table.column = "Type", 
+  setNodeShapeMapping(table.column = "Type",
                       table.column.values = c("TF", "Gene"),
                       shapes = c('ELLIPSE', 'RECTANGLE'),
                       style.name = title)
-  
+
   setNodeColorMapping(table.column = 'logFC',
                       table.column.values = c(min(n$logFC), 0.0, max(n$logFC)),
                       colors = c('#0000FF', '#FFFFFF', '#FF0000'),
                       style.name = title)
-  
-  setNodeFillOpacityMapping(table.column = 'P.Value', 
-                            table.column.values = c(0, 0.1, 1), 
-                            opacities = c(255, 200, 100), 
+
+  setNodeFillOpacityMapping(table.column = 'P.Value',
+                            table.column.values = c(0, 0.1, 1),
+                            opacities = c(255, 200, 100),
                             style.name = title)
-  
-  setNodeSizeMapping (table.column = 'Eigen_centrality', 
-                      table.column.values = c(0, 1), 
-                      sizes = c(30, 200), 
+
+  setNodeSizeMapping (table.column = 'Eigen_centrality',
+                      table.column.values = c(0, 1),
+                      sizes = c(30, 200),
                       style.name = title)
-  
-  setNodeFontSizeMapping(table.column = 'Eigen_centrality', 
-                         table.column.values = c(0, 1), 
-                         sizes = c(15, 75), 
+
+  setNodeFontSizeMapping(table.column = 'Eigen_centrality',
+                         table.column.values = c(0, 1),
+                         sizes = c(15, 75),
                          style.name = title)
-  
+
   setEdgeLineWidthMapping(table.column = 'mor',
                             table.column.values = c(min(e$mor), 0.0, max(e$mor)),
-                            widths = c(10, 2, 10), 
+                            widths = c(10, 2, 10),
                             style.name = title)
-    
+
   setEdgeColorMapping(table.column = 'mor',
                       table.column.values = c(min(e$mor), 0.0, max(e$mor)),
-                      colors = c('#0000FF', "#555555", '#FF0000'), 
+                      colors = c('#0000FF', "#555555", '#FF0000'),
                       style.name = title)
-  
+
   setEdgeOpacityMapping(table.column = 'mor',
                         table.column.values = c(min(e$mor), 0.0, max(e$mor)),
-                        opacities = c(255, 100, 255), 
+                        opacities = c(255, 100, 255),
                         style.name = title)
-  
+
   createDegreeFilter(filter.name = "single", criterion = c(0,0))
   deleteSelectedNodes()
-  
+
   createColumnFilter(filter.name = "NES_DOWN", column = "nes", criterion = 0, type = "nodes", predicate = "LESS_THAN")
   setNodeColorBypass(getSelectedNodes(), new.colors = "#C411FF")
   createColumnFilter(filter.name = "NES_UP", column = "nes", criterion = 0, type = "nodes", predicate = "GREATER_THAN")
@@ -252,10 +250,6 @@ colnames(NR_R_msviper$regulons) <- c("source", "target", "mor", "likelihood", "s
 # Make Pchic Network
 
 ```{r, include=F}
-library(dplyr)
-library(RCy3)
-library(GenomicRanges)
-
 prepare_pchic <- function(cell_lines = "all", minimum_interaction = 5){
   load("DATA/pchic.RData")
   if (length(cell_lines) >= 1){
@@ -279,14 +273,14 @@ Pchic_nodes <- tidyr::separate_rows(Pchic_nodes, Gene_name, sep = ";") %>% uniqu
 Methyl_annotation <- read.csv("~/Illumina_Manifest/MethylationEPIC_v-1-0_B4.csv", as.is = TRUE, skip = 7)
 Methyl_annotation <- Methyl_annotation[, c("CHR", "MAPINFO", "Name", "UCSC_RefGene_Name", "Relation_to_UCSC_CpG_Island", "UCSC_RefGene_Group")] %>% na.omit
 
-pchic_GRanges <- GRanges(seqnames = paste0("chr", pchic_bed$chr), 
-                                           ranges = IRanges(start = pchic_bed$start, end = pchic_bed$end), 
+pchic_GRanges <- GRanges(seqnames = paste0("chr", pchic_bed$chr),
+                                           ranges = IRanges(start = pchic_bed$start, end = pchic_bed$end),
                                            Gene_name = pchic_bed$Name,
                                            ID = pchic_bed$ID
 )
 
-Methyl_Granges <- GRanges(seqnames = paste0("chr", Methyl_annotation$CHR), 
-                                           ranges = IRanges(start = Methyl_annotation$MAPINFO, end = Methyl_annotation$MAPINFO +1), 
+Methyl_Granges <- GRanges(seqnames = paste0("chr", Methyl_annotation$CHR),
+                                           ranges = IRanges(start = Methyl_annotation$MAPINFO, end = Methyl_annotation$MAPINFO +1),
                                            cpg = Methyl_annotation$Name,
                                            Gene = Methyl_annotation$UCSC_RefGene_Name
 )
@@ -297,7 +291,7 @@ overlapping <- function(GRanges_A, GRanges_B, gap = -1){
              data.frame(mcols(GRanges_B[subjectHits(OverL),])))
 }
 
-Methylation_pchic <- overlapping(Methyl_Granges, pchic_GRanges) %>% 
+Methylation_pchic <- overlapping(Methyl_Granges, pchic_GRanges) %>%
   tidyr::separate_rows(Gene_name, sep = ";") %>% unique()
 
 pchic_prom <- pchic
@@ -345,24 +339,24 @@ Modify_Cytoscape_network_Pchic_DEGs <- function(e, n, title, collection){
   nodeLabels <- mapVisualProperty(visual.prop = "node label", table.column = 'name', mapping.type = 'p')
   createVisualStyle(title, defaults, list(nodeLabels))
   setVisualStyle(title)
-  setNodeShapeMapping(table.column = "Type", 
+  setNodeShapeMapping(table.column = "Type",
                       table.column.values = c("TF", "Gene"),
                       shapes = c('ELLIPSE', 'RECTANGLE'),
                       style.name = title)
-  
+
   setNodeColorMapping(table.column = 'logFC',
                       table.column.values = c(min(n$logFC), 0.0, max(n$logFC)),
                       colors = c('#0000FF', '#FFFFFF', '#FF0000'),
                       style.name = title)
-  
-  setNodeFillOpacityMapping(table.column = 'P.Value', 
-                            table.column.values = c(0, 0.1, 1), 
-                            opacities = c(255, 200, 100), 
+
+  setNodeFillOpacityMapping(table.column = 'P.Value',
+                            table.column.values = c(0, 0.1, 1),
+                            opacities = c(255, 200, 100),
                             style.name = title)
-  
+
   createDegreeFilter(filter.name = "single", criterion = c(0,0))
   deleteSelectedNodes()
-  
+
   createColumnFilter(filter.name = "NES_DOWN", column = "nes", criterion = 0, type = "nodes", predicate = "LESS_THAN")
   if (!is.na(getSelectedNodes())){
     setNodeColorBypass(getSelectedNodes(), new.colors = "#C411FF")
@@ -440,7 +434,7 @@ Make_pchic_methylation_network <- function(DMPs, DMRs, pchic_net = pchic, P_P = 
   createNetworkFromDataFrames(Pchic_net_features, pchic_net_final, title, collection)
   Modify_Cytoscape_network_Pchic_Methyls(Pchic_net, Pchic_net_features, title, collection)
 
-  
+
   list(Edges = pchic_net_final, Nodes = Pchic_net_features)
 }
 
@@ -452,31 +446,31 @@ Modify_Cytoscape_network_Pchic_Methyls <- function(e, n, title, collection){
   nodeLabels <- mapVisualProperty(visual.prop = "node label", table.column = 'name', mapping.type = 'p')
   createVisualStyle(title, defaults, list(nodeLabels))
   setVisualStyle(title)
-  setNodeShapeMapping(table.column = "Fragment_type", 
+  setNodeShapeMapping(table.column = "Fragment_type",
                       table.column.values = c("DMR", "cpg", "Gene", "fragment"),
                       shapes = c('RECTANGLE', 'VEE', 'ELLIPSE', 'DIAMOND'),
                       style.name = title)
-  
+
   setNodeColorMapping(table.column = 'logFC_cpg',
                       table.column.values = c(min(n$logFC_cpg), 0.0, max(n$logFC_cpg)),
                       colors = c('#0000FF', '#FFFFFF', '#FF0000'),
                       style.name = title)
-  
-  setNodeFillOpacityMapping(table.column = 'P.Value_cpg', 
-                            table.column.values = c(0, 0.1, 1), 
-                            opacities = c(255, 200, 100), 
+
+  setNodeFillOpacityMapping(table.column = 'P.Value_cpg',
+                            table.column.values = c(0, 0.1, 1),
+                            opacities = c(255, 200, 100),
                             style.name = title)
-  
-  setNodeSizeMapping(table.column = 'Fragment_type', 
-                      table.column.values = c("DMR", "cpg", "Gene", "fragment"), 
-                      sizes = c(40, 20, 60, 1), 
+
+  setNodeSizeMapping(table.column = 'Fragment_type',
+                      table.column.values = c("DMR", "cpg", "Gene", "fragment"),
+                      sizes = c(40, 20, 60, 1),
                       style.name = title, mapping.type = 'd')
-  
-  setNodeFontSizeMapping(table.column = 'Fragment_type', 
-                      table.column.values = c("DMR", "cpg", "Gene", "fragment"), 
-                      sizes = c(40, 20, 60, 1), 
+
+  setNodeFontSizeMapping(table.column = 'Fragment_type',
+                      table.column.values = c("DMR", "cpg", "Gene", "fragment"),
+                      sizes = c(40, 20, 60, 1),
                       style.name = title, mapping.type = 'd')
-  
+
   createDegreeFilter(filter.name = "single", criterion = c(0,0))
   deleteSelectedNodes()
 
@@ -495,16 +489,143 @@ Modify_Cytoscape_network_Pchic_Methyls <- function(e, n, title, collection){
 # Make human genome-scale metabolic model
 
 ```{r}
+Metabolic_network_df <- read.csv("DATA_Reactions/Metabolic_network_clean.tsv", sep = "\t")
 
-importNetworkFromNDEx()
+Enriched_reactions <- list(
+  NR_R <- read.csv("DATA_Reactions/NR_R_T_test.csv", check.names = F, row.names = 1),
+  REL_R <- read.csv("DATA_Reactions/REL_R_T_test.csv", check.names = F, row.names = 1),
+  REL_NR <- read.csv("DATA_Reactions/REL_NR_T_test.csv", check.names = F, row.names = 1)
+)
+names(Enriched_reactions) <- c("NR_R", "REL_R", "REL_NR")
 
+rm(NR_R, REL_R, REL_NR)
+```
+
+
+```{r}
+Modify_Cytoscape_network_Metabolic <- function(nodes, network, title, collection){
+  defaults <- list(NODE_SHAPE="diamond",
+                   NODE_SIZE=10,
+                   EDGE_TRANSPARENCY=120,
+                   NODE_LABEL_POSITION="c,c,c,0.00,0.00")
+  nodeLabels <- mapVisualProperty(visual.prop = "node label", table.column = 'id', mapping.type = 'p')
+  createVisualStyle(title, defaults, list(nodeLabels))
+  setVisualStyle(title)
+  setNodeShapeMapping(table.column = "type",
+                      table.column.values = c("Metabolite", "reaction"),
+                      shapes = c('diamond', 'ELLIPSE'),
+                      style.name = title)
+
+  setNodeColorMapping(table.column = 'mean.diff',
+                      table.column.values = c(min(nodes$mean.diff), 0.0, max(nodes$mean.diff)),
+                      colors = c('#0000FF', '#FFFFFF', '#FF0000'),
+                      style.name = title)
+
+  setNodeSizeMapping (table.column = 'Eigen_centrality',
+                      table.column.values = c(0, 1),
+                      sizes = c(30, 200),
+                      style.name = title)
+
+  setNodeFontSizeMapping(table.column = 'Eigen_centrality',
+                         table.column.values = c(0, 1),
+                         sizes = c(15, 75),
+                         style.name = title)
+
+  createColumnFilter(filter.name = "metabolite", column = "type", criterion = "Metabolite", type = "nodes", predicate = "IS")
+  if (!is.na(getSelectedNodes())){
+    setNodeSizeBypass(getSelectedNodes(), new.sizes = 10)
+    setNodeFontSizeBypass(getSelectedNodes(), new.sizes = 15)
+    clearSelection()
+  }
+  createDegreeFilter(filter.name = "single", criterion = c(0,0))
+  deleteSelectedNodes()
+  # exportImage(paste0(collection, "_", title), 'SVG', zoom=200)
+}
+
+
+
+Modify_Cytoscape_network_Metabolic_converter <- function(nodes, network, title, collection){
+  defaults <- list(NODE_SHAPE="diamond",
+                   NODE_SIZE=30,
+                   EDGE_TRANSPARENCY=120,
+                   NODE_LABEL_POSITION="c,c,c,0.00,0.00",
+                   NOFE_LABEL_FONT_SIZE=20)
+  nodeLabels <- mapVisualProperty(visual.prop = "node label", table.column = 'id', mapping.type = 'p')
+  createVisualStyle(title, defaults, list(nodeLabels))
+  setVisualStyle(title)
+  setNodeShapeMapping(table.column = "type.x",
+                      table.column.values = c("Gene", "reaction"),
+                      shapes = c('diamond', 'ELLIPSE'),
+                      style.name = title)
+
+  setNodeColorMapping(table.column = 'mean.diff',
+                      table.column.values = c(min(nodes$mean.diff), 0.0, max(nodes$mean.diff)),
+                      colors = c('#0000FF', '#FFFFFF', '#FF0000'),
+                      style.name = title)
+
+  createDegreeFilter(filter.name = "single", criterion = c(0,0))
+  deleteSelectedNodes()
+  # exportImage(paste0(collection, "_", title), 'SVG', zoom=200)
+}
+
+
+
+Make_metabolic_network <- function(metabolic_network, enriched_reactions, title, collection, gene_reaction_converter_network, gene_reaction_converter_nodes){
+  metabolic_network <- dplyr::filter(metabolic_network, A %in% rownames(enriched_reactions))
+
+  n_reaction <- length(unique(metabolic_network$A))
+  n_metabolite <- length(unique(metabolic_network$B))  
+  metabolic_network_nodes <- data.frame(id = unique(c(metabolic_network$A, metabolic_network$B)),
+                                            type = c(rep("reaction", n_reaction), rep("Metabolite", n_metabolite)))
+  colnames(metabolic_network) <- c("source", "target")
+
+
+  igraph_net <- graph_from_data_frame(metabolic_network, vertices = metabolic_network_nodes, directed = T)
+  eigen_centrality_result <- eigen_centrality(igraph_net, directed = F)$vector %>% as.data.frame()
+
+  metabolic_network_nodes <- merge(metabolic_network_nodes, eigen_centrality_result, by.x = "id", by.y = 0)
+  colnames(metabolic_network_nodes)[3] <- "Eigen_centrality"
+  metabolic_network_nodes <- merge(metabolic_network_nodes, enriched_reactions, by.x = "id", by.y = 0, all.x = T)
+  metabolic_network_nodes$mean.diff[is.na(metabolic_network_nodes$mean.diff)] <- 0
+
+
+  createNetworkFromDataFrames(nodes = metabolic_network_nodes, edges = metabolic_network, title, collection)
+  Modify_Cytoscape_network_Metabolic(metabolic_network_nodes, metabolic_network, title, collection)
+  
+  gene_reaction_converter_network <- dplyr::filter(gene_reaction_converter_network, source %in% metabolic_network_nodes$id)
+  gene_reaction_converter_nodes <- dplyr::filter(gene_reaction_converter_nodes, id %in% c(gene_reaction_converter_network$source, gene_reaction_converter_network$target))
+  
+  gene_reaction_converter_nodes <- merge(gene_reaction_converter_nodes, metabolic_network_nodes, by.x = "id", by.y = "id", all.x = T)
+  gene_reaction_converter_nodes$mean.diff[is.na(gene_reaction_converter_nodes$mean.diff)] <- 0
+
+  createNetworkFromDataFrames(nodes = gene_reaction_converter_nodes, edges = gene_reaction_converter_network, title = paste0(title, "_gene_converter"), collection = collection)
+  Modify_Cytoscape_network_Metabolic_converter(gene_reaction_converter_nodes, gene_reaction_converter_network, paste0(title, "_gene_converter"), collection)
+}
+```
+
+
+```{r}
+Gene_reaction_converter_network <- read.csv("DATA_Reactions/Gene_reactions_network_cleaned.csv")
+
+
+n_reaction <- length(unique(Gene_reaction_converter_network$A))
+n_gene <- length(unique(Gene_reaction_converter_network$B))
+
+Gene_reaction_converter_nodes <- data.frame(id = unique(c(Gene_reaction_converter_network$A, Gene_reaction_converter_network$B)),
+                                            type = c(rep("reaction", n_reaction), rep("Gene", n_gene)))
+colnames(Gene_reaction_converter_network) <- c("source", "target")
+# createNetworkFromDataFrames(edges = Gene_reaction_converter_network, nodes = Gene_reaction_converter_nodes, title = "Gene_reaction_converter_network", collection = "Gene_reaction_converter_network")
 
 ```
 
 
+```{r}
+Make_metabolic_network(Metabolic_network_df, Enriched_reactions$NR_R, "Metabolic_enrichment", "Non_responder_versus_Good_Responder", Gene_reaction_converter_network, Gene_reaction_converter_nodes)
 
+Make_metabolic_network(Metabolic_network_df, Enriched_reactions$REL_R, "Metabolic_enrichment", "Relapse_versus_Baseline_GR", Gene_reaction_converter_network, Gene_reaction_converter_nodes)
 
-
+Make_metabolic_network(Metabolic_network_df, Enriched_reactions$REL_NR, "Metabolic_enrichment", "Relapse_versus_Baseline_BR", Gene_reaction_converter_network, Gene_reaction_converter_nodes)
+```
 
 
 
@@ -548,7 +669,7 @@ Aracn_NR_R_C <- Make_specific_network(NR_R_msviper$regulons, RNAseq_diff_exp$R_O
 Pchic_GOI_C <- Make_pchic_genes_specific(pchic, RNAseq_diff_exp$R_OR_NR_B$`NR.B-R.B`, NR_R_C_confidence_msviper, P_P = F, title = "Pchic GoI_2", collection = "NR vs R confidence C")
 ```
 
-# AML Aracn 
+# AML Aracn
 
 ```{r}
 NR_R_AML_msviper <- readRDS("~/GitHub/Koichi_gene_expression_analyses_git/Koichi_gene_expression_analyses/Results/Tables/NR_R_AML_msviper.rds")
@@ -563,5 +684,3 @@ PPI_NR_R_AML_reg <- Make_specific_network(PPI_base, RNAseq_diff_exp$R_OR_NR_B$`N
 Aracn_NR_R_AML_reg <- Make_specific_network(NR_R_msviper$regulons, RNAseq_diff_exp$R_OR_NR_B$`NR.B-R.B`, NR_R_AML_msviper, P_P = F, PPI = F, title = "NR AML reg", collection = "NR vs R AML reg")
 Pchic_GOI_AML_reg <- Make_pchic_genes_specific(pchic, RNAseq_diff_exp$R_OR_NR_B$`NR.B-R.B`, NR_R_AML_msviper, P_P = F, title = "Pchic GoI AML reg", collection = "NR vs R AML reg C")
 ```
-
-
