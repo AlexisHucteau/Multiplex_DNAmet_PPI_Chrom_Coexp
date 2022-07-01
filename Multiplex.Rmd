@@ -44,36 +44,36 @@ PPI_base <- read.csv("~/Documents/List_genes_from_transcriptome/FIsInGene_020720
 colnames(PPI_base) <- c("source", "target", "Annotation", "Direction", "Score")
 
 deal_with_NA <- function(df, column, value_to_change, final_value){
-  for (i in column) {
-    data.table::set(df,which(df[[i]] == value_to_change), i,final_value)
+  for (i in column){
+    data.table::set(df,which(df[[i]] == value_to_change), i, final_value)
   }
 }
 
+Annotations <- PPI_base$Annotation %>% table() %>% as.data.frame() %>% .[order(.$Freq, decreasing = T),]
+rownames(Annotations) <- 1:2059
 
+Annotations <- Annotations[c(12, 14, 20, 21, 63, 66, 91, 214, 221, 284, 345, 352, 374), "."]
 
-Make_specific_network <- function(Net, DEGs, msvip, title, collection, P_P = T, PPI=T, logFC_threshold = 1.5, P.Value_DEG_threshold = 0.05, pval_msviper_threshold = 0.1){
+PPI_base <- dplyr::filter(PPI_base, Annotation %ni% Annotations)
+
+Annotations <- dplyr::filter(Annotations, ., pattern = "GErel") | (stringr::str_detect(., pattern = "expression regulate") & stringr::str_detect(., pattern = ))
+
+Make_specific_network <- function(Net, DEGs, title, collection, P_P = T, PPI=T, logFC_threshold = 1.5, P.Value_DEG_threshold = 0.05){
   Genes <- dplyr::filter(DEGs, abs(logFC) > logFC_threshold, P.Value < P.Value_DEG_threshold) %>% .[,c(1,4,7)]
-  TFs <- dplyr::filter(msvip$mrs_table, pval < pval_msviper_threshold) %>% .[,c(1,3,4)]
-  Nodes_of_Interest <- c(Genes$ID, TFs$TF) %>% unique()
+  Nodes_of_Interest <- Genes$ID %>% unique()
   if (P_P){
-    Net <- dplyr::filter(Net, source %in% Nodes_of_Interest & target %in% Nodes_of_Interest)
+    Net <- dplyr::filter(Net, source %in% Nodes_of_Interest & target %in% Nodes_of_Interest & source %in% DEGs$ID & target %in% DEGs$ID)
   }else{
-    Net <- dplyr::filter(Net, source %in% Nodes_of_Interest | target %in% Nodes_of_Interest)
+    Net <- dplyr::filter(Net, (source %in% Nodes_of_Interest | target %in% Nodes_of_Interest) & source %in% DEGs$ID & target %in% DEGs$ID)
   }
-  Net_features <- merge(DEGs, msvip$mrs_table, by.x = "ID", by.y = "TF", all.x = T, all.y = T)
-  Nodes_in_Net <- c(Net$source, Net$target) %>% .[. %ni%Net_features$ID] %>% unique()
-  Nodes_in_Net <- data.frame(ID = Nodes_in_Net)
-  Net_features <- merge(Net_features, Nodes_in_Net, by = "ID", all.x = T, all.y = T)
-  Net_features <- dplyr::filter(Net_features, ID %in% c(Net$source, Net$target))
-  deal_with_NA(Net_features, c("logFC", "nes"), 0)
-  deal_with_NA(Net_features, c("P.Value", "pval"), 1)
-  colnames(Net_features)[1] <- "id"
+  Net_features <- dplyr::filter(DEGs, ID %in% c(Net$source, Net$target))
+  colnames(Net_features)[7] <- "id"
+  Net_features <- Net_features[,c(7, 1:6)]
   igraph_net <- graph_from_data_frame(Net, vertices = Net_features, directed = T)
   eigen_centrality_result <- eigen_centrality(igraph_net, directed = F)$vector %>% as.data.frame()
-  Net_features <- Net_features[,c("id", "logFC", "P.Value", "nes", "pval")]
+  Net_features <- Net_features[,c("id", "logFC", "P.Value")]
   Net_features <- merge(Net_features, eigen_centrality_result, by.x = "id", by.y = 0)
-  colnames(Net_features)[6] <- "Eigen_centrality"
-  Net_features$Type <- ifelse(Net_features$nes == 0, "Gene", "TF")
+  colnames(Net_features)[4] <- "Eigen_centrality"
   createNetworkFromDataFrames(Net_features, Net, title, collection)
   if(PPI){
     Modify_Cytoscape_network_PPI(Net, Net_features, title, collection)
@@ -91,26 +91,35 @@ RNAseq_diff_exp <- readRDS("~/GitHub/Koichi_gene_expression_analyses_git/Koichi_
 Modify_Cytoscape_network_PPI <- function(e, n, title, collection){
   defaults <- list(NODE_SHAPE="diamond",
                    NODE_SIZE=10,
-                   EDGE_TRANSPARENCY=120,
+                   EDGE_TRANSPARENCY=40,
                    NODE_LABEL_POSITION="c,c,c,0.00,0.00")
   nodeLabels <- mapVisualProperty(visual.prop = "node label", table.column = 'name', mapping.type = 'p')
   createVisualStyle(title, defaults, list(nodeLabels))
   setVisualStyle(title)
-  setNodeShapeMapping(table.column = "Type",
-                      table.column.values = c("TF", "Gene"),
-                      shapes = c('ELLIPSE', 'RECTANGLE'),
-                      style.name = title)
-
+  
+  min_logFC <- min(n$logFC)
+  max_logFC <- max(n$logFC)
+  
   setNodeColorMapping(table.column = 'logFC',
-                      table.column.values = c(min(n$logFC), 0.0, max(n$logFC)),
+                      table.column.values = c(min_logFC, 0.0, max_logFC),
                       colors = c('#0000FF', '#FFFFFF', '#FF0000'),
                       style.name = title)
 
   setNodeFillOpacityMapping(table.column = 'P.Value',
                             table.column.values = c(0, 0.1, 1),
-                            opacities = c(255, 200, 100),
+                            opacities = c(255, 200, 20),
                             style.name = title)
-
+  
+  setNodeBorderOpacityMapping(table.column = 'P.Value',
+                            table.column.values = c(0, 0.1, 1),
+                            opacities = c(255, 200, 20),
+                            style.name = title)
+  
+  setNodeLabelOpacityMapping(table.column = 'P.Value',
+                            table.column.values = c(0, 0.1, 1),
+                            opacities = c(255, 200, 20),
+                            style.name = title)
+  
   setNodeSizeMapping (table.column = 'Eigen_centrality',
                       table.column.values = c(0, 1),
                       sizes = c(30, 200),
@@ -129,21 +138,6 @@ Modify_Cytoscape_network_PPI <- function(e, n, title, collection){
   createDegreeFilter(filter.name = "single", criterion = c(0,0))
   deleteSelectedNodes()
 
-  createColumnFilter(filter.name = "NES_DOWN", column = "nes", criterion = 0, type = "nodes", predicate = "LESS_THAN")
-  if (!is.na(getSelectedNodes())){
-    setNodeColorBypass(getSelectedNodes(), new.colors = "#C411FF")
-    clearSelection()
-  }
-  createColumnFilter(filter.name = "NES_UP", column = "nes", criterion = 0, type = "nodes", predicate = "GREATER_THAN")
-  if (!is.na(getSelectedNodes())){
-    setNodeColorBypass(getSelectedNodes(), new.colors = "#5AFF00")  
-    clearSelection()
-  }
-  createColumnFilter(filter.name = "TF_activity_pval", column = "pval", criterion = c(0.1,0.99), type = "nodes", predicate = "BETWEEN")
-  if (!is.na(getSelectedNodes())){
-    setNodeColorBypass(getSelectedNodes(), new.colors = "#BBBBBB")
-    clearSelection()
-  }
   layoutNetwork()
   exportImage(paste0(collection, "_", title), 'SVG', zoom=200)
 }
@@ -317,8 +311,8 @@ Make_pchic_genes_specific <- function(Pchic_net = pchic_prom, DEGs, TFs, title, 
   Pchic_net_features <- merge(Pchic_net_features, Genes, by.x = "ID", by.y = "ID", all.x = T)
   Pchic_net_features <- merge(Pchic_net_features, TFs, by.x = "ID", by.y = "TF", all.x = T)
   Pchic_net_features <- Pchic_net_features[,c(1,3:6)]
-  deal_with_NA(Pchic_net_features, c("logFC", "nes"), 0)
-  deal_with_NA(Pchic_net_features, c("P.Value", "pval"), 1)
+  deal_with_NA(Pchic_net_features, c("logFC", "nes"), NA, 0)
+  deal_with_NA(Pchic_net_features, c("P.Value", "pval"), NA, 1)
   colnames(Pchic_net_features)[1] <- "id"
   igraph_net <- graph_from_data_frame(Pchic_net, vertices = Pchic_net_features, directed = T)
   eigen_centrality_result <- eigen_centrality(igraph_net, directed = F)$vector %>% as.data.frame()
@@ -405,9 +399,9 @@ Make_pchic_methylation_network <- function(DMPs, DMRs, pchic_net = pchic, P_P = 
   pchic_net_features <- rbind(pchic_net[,c(1,2)], pchic_net[,c(3,4)])
   pchic_features <- merge(pchic_net_features, DMPs, by.x = "ID", by.y = "ID", all.x = T)
   pchic_features <- merge(pchic_features, DMRs, by.x = "ID", by.y = "ID", all.x = T)
-  deal_with_NA(pchic_features, c("rowname.x", "rowname.y"), "")
-  deal_with_NA(pchic_features, c("logFC", "value"), 0)
-  deal_with_NA(pchic_features, c("p.value", "P.Value"), 1)
+  deal_with_NA(pchic_features, c("rowname.x", "rowname.y"), NA, "")
+  deal_with_NA(pchic_features, c("logFC", "value"), NA, 0)
+  deal_with_NA(pchic_features, c("p.value", "P.Value"), NA, 1)
   colnames(pchic_features) <- c("id", "Name", "cpg", "logFC_cpg", "P.Value_cpg", "DMR", "logFC_DMR", "P.Value_DMR")
   pchic_features <- unique(pchic_features)
   pchic_features <- pchic_features[!duplicated(pchic_features$id),]
@@ -528,7 +522,7 @@ Modify_Cytoscape_network_Metabolic <- function(nodes, network, title, collection
 
   setNodeFontSizeMapping(table.column = 'Eigen_centrality',
                          table.column.values = c(0, 1),
-                         sizes = c(15, 75),
+                         sizes = c(15, 100),
                          style.name = title)
 
   createColumnFilter(filter.name = "metabolite", column = "type", criterion = "Metabolite", type = "nodes", predicate = "IS")
@@ -539,7 +533,7 @@ Modify_Cytoscape_network_Metabolic <- function(nodes, network, title, collection
   }
   createDegreeFilter(filter.name = "single", criterion = c(0,0))
   deleteSelectedNodes()
-  # exportImage(paste0(collection, "_", title), 'SVG', zoom=200)
+  exportImage(paste0(collection, "_", title), 'SVG', zoom=200)
 }
 
 
@@ -614,8 +608,6 @@ n_gene <- length(unique(Gene_reaction_converter_network$B))
 Gene_reaction_converter_nodes <- data.frame(id = unique(c(Gene_reaction_converter_network$A, Gene_reaction_converter_network$B)),
                                             type = c(rep("reaction", n_reaction), rep("Gene", n_gene)))
 colnames(Gene_reaction_converter_network) <- c("source", "target")
-# createNetworkFromDataFrames(edges = Gene_reaction_converter_network, nodes = Gene_reaction_converter_nodes, title = "Gene_reaction_converter_network", collection = "Gene_reaction_converter_network")
-
 ```
 
 
@@ -635,10 +627,10 @@ Make_metabolic_network(Metabolic_network_df, Enriched_reactions$REL_NR, "Metabol
 
 
 ```{r, include=F}
-PPI_NR_R_little <- Make_specific_network(PPI_base, RNAseq_diff_exp$R_OR_NR_B$`NR.B-R.B`, NR_R_msviper, P_P = T, title = "PPI", collection = "NR vs R little")
+PPI_NR_R <- Make_specific_network(PPI_base, RNAseq_diff_exp$R_OR_NR_B$`NR.B-R.B`, P_P = F, title = "PPI", collection = "NR vs R")
 AracnAML_NR_R_little <- Make_specific_network(regulonaml_SYMBOL, RNAseq_diff_exp$R_OR_NR_B$`NR.B-R.B`, NR_R_msviper, P_P = T, PPI = F, title = "Regulon AML", collection = "NR vs R little")
 Aracn_NR_R_little <- Make_specific_network(NR_R_msviper$regulons, RNAseq_diff_exp$R_OR_NR_B$`NR.B-R.B`, NR_R_msviper, P_P = T, PPI = F, title = "NR Aracn", collection = "NR vs R little")
-Pchic_GOI_little <- Make_pchic_genes_specific(pchic, RNAseq_diff_exp$R_OR_NR_B$`NR.B-R.B`, NR_R_msviper, P_P = T, title = "Pchic GoI", collection = "NR vs R little")
+Pchic_GOI_little <- Make_pchic_genes_specific(pchic, RNAseq_diff_exp$R_OR_NR_B$`NR.B-R.B`, NR_R_msviper, P_P = F, title = "Pchic GoI", collection = "NR vs R little")
 Pchic_methylation_little <- Make_pchic_methylation_network(DMP_NR_R_annotated$DMP_Good_vs_Bad_Baseline$Good_Responder_to_Bad_Responder, DMR_NR_R_annotated$DMR_Good_vs_Bad_Baseline, P_P = T, title = "Pchic Methyl", collection = "NR vs R little")
 
 ```

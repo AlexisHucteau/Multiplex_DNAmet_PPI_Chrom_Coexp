@@ -61,17 +61,21 @@ Baseline_aracne_network <- read.csv("output_Baseline/network.txt", sep = "\t")
 Good_n_Bad_aracne_network <- read.csv("output_Good_n_Bad_responder/network.txt", sep = "\t")
 Relapse_n_Good_aracn_network <- read.csv("output_Relapse_n_Good/network.txt", sep = "\t")
 All_sample_aracn_network <- read.csv("output/network.txt", sep = "\t")
+Baseline_aracne_CPM_network <- read.csv("output_CPM_baseline/network.txt", sep = "\t")
+Baseline_aracne_TPM_network <- read.csv("output_RNAseq4Aracn_TPM_Baseline_TF_names_v_1.01/network.txt", sep = "\t")
 
-ARACNe_networks <- list(Bad_responder_aracne_network, Baseline_aracne_network, Good_n_Bad_aracne_network, Relapse_n_Good_aracn_network, All_sample_aracn_network, regulonaml_SYMBOL, regulons_B, regulons_C, allregulons)
-names(ARACNe_networks) <- c("Bad_responder_aracne_network", "Baseline_aracne_network", "Good_n_Bad_aracne_network", "Relapse_n_Good_aracn_network", "All_sample_aracn_network", "regulonaml_SYMBOL", "regulons_B", "regulons_C", "allregulons")
+# ARACNe_networks <- list(Bad_responder_aracne_network, Baseline_aracne_network, Good_n_Bad_aracne_network, Relapse_n_Good_aracn_network, All_sample_aracn_network, regulonaml_SYMBOL, regulons_B, regulons_C, allregulons)
+ARACNe_networks <- list(Baseline_aracne_TPM_network)
+names(ARACNe_networks) <- c("Baseline_aracne_TPM_network")
+# names(ARACNe_networks) <- c("Bad_responder_aracne_network", "Baseline_aracne_network", "Good_n_Bad_aracne_network", "Relapse_n_Good_aracn_network", "All_sample_aracn_network", "regulonaml_SYMBOL", "regulons_B", "regulons_C", "allregulons")
 
 ARACNe_networks_cytos <- lapply(names(ARACNe_networks), function(net){
   colnames(ARACNe_networks[[net]]) <- c("source", "target", "MI", "pvalue")
-  createNetworkFromDataFrames(edges = ARACNe_networks[[net]], title = net, collection = "ARACNe network6")
+  createNetworkFromDataFrames(edges = ARACNe_networks[[net]], title = net, collection = "ARACNe network")
 })
 
 NR_R_ARACNe_networks <- c("Bad_responder_aracne_network", "Baseline_aracne_network", "Good_n_Bad_aracne_network", "All_sample_aracn_network", "regulonaml_SYMBOL", "regulons_B", "regulons_C", "allregulons")
-
+NR_R_ARACNe_networks <- c("Baseline_aracne_TPM_network")
 ref_R_B <- Factor_R_OR_NR_B == "R.B"
 ref_NR_B <- Factor_R_OR_NR_B == "NR.B"
 
@@ -84,7 +88,7 @@ NR_R_msviper_networks <- lapply(NR_R_ARACNe_networks, function(net){
   colnames(ARACNe_networks[[net]]) <- c("tf", "target", "MI", "pvalue")
   ms <- run_msviper(RNAseq, ARACNe_networks[[net]], use_aracne = T, ref_R_B, ref_NR_B,  "R", "NR", minsize = 4, ges.filter=T)
   colnames(ms$regulons) <- c("source", "target", "mor", "likelihood", "state")
-  # msviper_network <- Make_specific_network(Net = ms$regulons, DEGs = RNAseq_diff_exp$R_OR_NR_B$`NR.B-R.B`, msvip = ms, title = net, collection = "NR_vs_R", P_P = F, PPI = F)
+  msviper_network <- Make_specific_network(Net = ms$regulons, DEGs = RNAseq_diff_exp$R_OR_NR_B$`NR.B-R.B`, msvip = ms, title = net, collection = "NR_vs_R", P_P = F, PPI = F)
   list(ms)
 })
 

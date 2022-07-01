@@ -1,0 +1,75 @@
+---
+title: "Multi_layer_network_supra_adjacency_matrix"
+author: Alexis Hucteau
+date: "`r Sys.Date()`"
+output:
+    html_document:
+      toc: yes
+      toc_float: yes
+      theme: united
+editor_options:
+  markdown:
+    wrap: sentence
+---
+
+
+```{r}
+rm(list = ls())
+
+suppressPackageStartupMessages({
+  library(dplyr)
+  library(igraph)
+})
+```
+
+LOADING LAYERS OF THE MULTI-LAYER NETWORK
+
+```{r}
+Pchic_layer <- read.csv("DATA/pchic_network.csv")
+GRN_layer <- read.csv("output_TPM_Baseline/network.txt", sep = "\t") %>% dplyr::filter(pvalue < 0.05) %>% .[,1:2]
+PPI_layer <- read.csv("DATA/PPI_layer.csv")[,2:3]
+Gene_Reaction_layer <- read.csv("DATA_Reactions/Gene_reactions_network_cleaned.csv")
+Metabolic_layer <- read.csv("DATA_Reactions/Metabolic_network_clean.tsv", sep = "\t")
+NR_R_reaction_enrichment <- read.csv("DATA_Reactions/NR_R_T_test.csv", row.names = 1)
+NR_R_reaction_enrichment <- dplyr::filter(NR_R_reaction_enrichment, statistic > summary(NR_R_reaction_enrichment$statistic)[5] | statistic < summary(NR_R_reaction_enrichment$statistic)[3])
+NR_R_metabolic_layer <- Metabolic_layer[Metabolic_layer$A %in% rownames(NR_R_reaction_enrichment),]
+Gene_Reaction_layer <- Gene_Reaction_layer[Gene_Reaction_layer$A %in% rownames(NR_R_reaction_enrichment),]
+```
+
+```{r}
+Pchic_adj <- igraph::graph_from_data_frame(Pchic_layer) %>% igraph::as_adj(., type = "both", sparse = F) %>% as.data.frame()
+GRN_adj <- igraph::graph_from_data_frame(GRN_layer) %>% igraph::as_adj(., type = "both", sparse = F) %>% as.data.frame()
+PPI_adj <- igraph::graph_from_data_frame(PPI_layer) %>% igraph::as_adj(., type = "both", sparse = F) %>% as.data.frame()
+Gene_Reaction_adj <- igraph::graph_from_data_frame(Gene_Reaction_layer) %>% igraph::as_adj(., type = "both", sparse = F) %>% as.data.frame()
+Metabolic_adj <- igraph::graph_from_data_frame(NR_R_metabolic_layer) %>% igraph::as_adj(., type = "both", sparse = F) %>% as.data.frame()
+
+```
+
+```{r}
+colnames(Pchic_adj) <- paste0(colnames(Pchic_adj), "_pchic")
+rownames(Pchic_adj) <- paste0(rownames(Pchic_adj), "_pchic")
+Pchic_adj$row <- rownames(Pchic_adj)
+
+colnames(GRN_adj) <- paste0(colnames(GRN_adj), "_GRN")
+rownames(GRN_adj) <- paste0(rownames(GRN_adj), "_GRN")
+GRN_adj$row <- rownames(GRN_adj)
+
+colnames(PPI_adj) <- paste0(colnames(PPI_adj), "_PPI")
+rownames(PPI_adj) <- paste0(rownames(PPI_adj), "_PPI")
+PPI_adj$row <- rownames(PPI_adj)
+
+colnames(Gene_Reaction_adj) <- paste0(colnames(Gene_Reaction_adj), "_GRM")
+rownames(Gene_Reaction_adj) <- paste0(rownames(Gene_Reaction_adj), "_GRM")
+Gene_Reaction_adj$row <- rownames(Gene_Reaction_adj)
+
+colnames(Metabolic_adj) <- paste0(colnames(Metabolic_adj), "_Metab")
+rownames(Metabolic_adj) <- paste0(rownames(Metabolic_adj), "_Metab")
+Metabolic_adj$row <- rownames(Metabolic_adj)
+```
+
+```{r}
+Adjacency_matrices <- list(Pchic_adj, GRN_adj, PPI_adj, Gene_Reaction_adj, Metabolic_adj)
+
+supra_adjacency_matrix <- purrr::reduce(.x = Adjacency_matrices, function(a,b) merge(x = a, y = b, all.x = T, all.y = T, by.x = "row", by.y = "row"))
+```
+
