@@ -1,0 +1,60 @@
+---
+title: "Differential co-Expressed Geness"
+author: Alexis Hucteau
+date: "`r Sys.Date()`"
+output:
+    html_document:
+      toc: yes
+      toc_float: yes
+      theme: united
+editor_options:
+  markdown:
+    wrap: sentence
+---
+
+```{r}
+rm(list = ls())
+suppressPackageStartupMessages({
+  library(dplyr)
+  library(RCy3)
+  library(igraph)
+  library(data.table)
+  library(Hmisc)
+})
+
+"%ni%" <- Negate("%in%")
+```
+
+```{r}
+RNAseq <- read.csv("~/GitHub/Koichi_gene_expression_analyses_git/Koichi_gene_expression_analyses/DATA/RNAseq_parsed.csv", row.names = 1, header = T, check.names = F)
+
+gene_sd <- sapply(rownames(RNAseq), function(gene){
+  sd(RNAseq[gene,])
+})
+names(gene_sd) <- rownames(RNAseq)
+gene_sd <- gene_sd[order(gene_sd, decreasing = T)]
+most_variable_genes <- names(gene_sd)[1:5000]
+```
+
+```{r}
+RNAseq_variable_genes <- RNAseq[most_variable_genes,]
+
+NR_samples <- Factor_R_OR_NR_B == "NR.B"
+
+corr_genes_NR <- rcorr(as.matrix(t(RNAseq_variable_genes[,NR_samples])), type = "pearson")
+pvalue_genes_NR <- corr_genes_NR$p
+corr_genes_NR <- corr_genes_NR$r
+
+R_samples <- Factor_R_OR_NR_B == "R.B"
+
+corr_genes_R <- rcorr(as.matrix(t(RNAseq_variable_genes[,R_samples])), type = "pearson")
+pvalue_genes_R <- corr_genes_R$p
+corr_genes_R <- corr_genes_R$r
+
+REL_samples <- Factor_R_OR_NR_B == "OR.REL" | Factor_R_OR_NR_B == "R.REL"
+
+corr_genes_REL <- rcorr(as.matrix(t(RNAseq_variable_genes[,REL_samples])), type = "pearson")
+pvalue_genes_REL <- corr_genes_REL$p
+corr_genes_REL <- corr_genes_REL$r
+```
+
