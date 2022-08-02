@@ -19,6 +19,7 @@ rm(list = ls())
 suppressPackageStartupMessages({
   library(dplyr)
   library(igraph)
+  library(ggvenn)
 })
 ```
 
@@ -31,10 +32,56 @@ PPI_layer <- read.csv("DATA/PPI_layer.csv")[,2:3]
 Gene_Reaction_layer <- read.csv("DATA_Reactions/Gene_reactions_network_cleaned.csv")
 Metabolic_layer <- read.csv("DATA_Reactions/Metabolic_network_clean.tsv", sep = "\t")
 NR_R_reaction_enrichment <- read.csv("DATA_Reactions/NR_R_T_test.csv", row.names = 1)
-NR_R_reaction_enrichment <- dplyr::filter(NR_R_reaction_enrichment, statistic > summary(NR_R_reaction_enrichment$statistic)[5] | statistic < summary(NR_R_reaction_enrichment$statistic)[3])
+# NR_R_reaction_enrichment <- dplyr::filter(NR_R_reaction_enrichment, statistic > summary(NR_R_reaction_enrichment$statistic)[5] | statistic < summary(NR_R_reaction_enrichment$statistic)[2])
 NR_R_metabolic_layer <- Metabolic_layer[Metabolic_layer$A %in% rownames(NR_R_reaction_enrichment),]
 Gene_Reaction_layer <- Gene_Reaction_layer[Gene_Reaction_layer$A %in% rownames(NR_R_reaction_enrichment),]
 ```
+
+## Test overlaps
+
+```{r}
+VennDiagram_dat <- list(Metabolic_layer = unique(Gene_Reaction_layer$B),
+                        GRN_layer = unique(GRN_layer$Regulator, GRN_layer$Target),
+                        PPI_layer = unique(PPI_layer$source, PPI_layer$target))
+
+ggvenn(
+  VennDiagram_dat, 
+  stroke_size = 0.5, set_name_size = 4
+  )
+
+intersect(unique(PPI_layer$source, PPI_layer$target), unique(Gene_Reaction_layer$B))
+intersect(unique(PPI_layer$source, PPI_layer$target), unique(GRN_layer$Regulator, GRN_layer$Target))
+```
+
+# TEST MOGAMUN
+
+```{r}
+
+```
+
+
+
+
+# TEST MuxViz
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ```{r}
 Pchic_adj <- igraph::graph_from_data_frame(Pchic_layer) %>% igraph::as_adj(., type = "both", sparse = F) %>% as.data.frame()

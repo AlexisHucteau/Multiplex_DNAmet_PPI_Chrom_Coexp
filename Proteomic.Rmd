@@ -1,0 +1,160 @@
+---
+title: "Proteomic"
+author: Alexis Hucteau
+date: "`r Sys.Date()`"
+output:
+    html_document:
+      toc: yes
+      toc_float: yes
+      theme: united
+editor_options:
+  markdown:
+    wrap: sentence
+---
+
+
+```{r}
+rm(list = ls())
+
+suppressPackageStartupMessages({
+  library(dplyr)
+  library(FactoMineR)
+  library(factoextra)
+  library(sva)
+  library(xlsx)
+  library(clusterProfiler)
+  library(pheatmap)
+  library(rdist)
+  library(DEP)
+  library(SummarizedExperiment)
+})
+
+deal_with_NA <- function(df, column, value_to_change, final_value){
+  for (i in column){
+    print(i)
+    data.table::set(df,which(df[[i]] == value_to_change), i, final_value)
+  }
+}
+
+"%ni%" <- Negate("%in%")
+```
+
+```{r}
+data.dir <- "/media/alexis/DATA/Proteomic/"
+
+Discovery_Cohort_Proteomic <- read.csv(paste0(data.dir,"Discovery_cohort.csv"))
+
+Discovery_Cohort_Proteomic_unimputed <- read.csv(paste0(data.dir,"Discovery_cohort_unimputed.csv"), check.names = F)
+
+Cell_lines_Proteomic <- read.csv(paste0(data.dir,"Cell_lines.csv"))
+
+CD34_Proteomic <- read.csv(paste0(data.dir,"CD34.csv"), check.names = F)
+
+Validation_cohort_Proteomic <- read.csv(paste0(data.dir,"Validation_cohort.csv"), dec = ",")
+```
+
+```{r}
+Discovery_clinicals <- readxl::read_excel("/media/alexis/DATA/Proteomic/1-s2.0-S1535610822000587-mmc7/Data_S1_Discovery_Cohort.xlsx", sheet = "Clinical Characteristics")
+
+Discovery_Genotype <- readxl::read_excel("/media/alexis/DATA/Proteomic/1-s2.0-S1535610822000587-mmc7/Data_S1_Discovery_Cohort.xlsx", sheet = "PanelSeq I")
+
+Discovery_Genotype_II <- readxl::read_excel("/media/alexis/DATA/Proteomic/1-s2.0-S1535610822000587-mmc7/Data_S1_Discovery_Cohort.xlsx", sheet = "PanelSeq II")
+
+Discovery_Genotype_II <- Discovery_Genotype_II[,c(1,3,4,2)]
+colnames(Discovery_Genotype_II) <- c("Pat_ID", "Type", "Frequency", "Gene")
+
+Discovery_Genotype <- rbind(Discovery_Genotype, Discovery_Genotype_II)
+rm(Discovery_Genotype_II)
+```
+
+
+
+```{r}
+Make_mutation_subgroups <- function(mutations_of_interest, mutations_to_skip, genotype = Discovery_Genotype, no_mutated_patients = c("F126", "F86", "F129", "F30")){
+  genotype_of_interest <- dplyr::filter(genotype, Gene %in% mutations_of_interest) %>% .$Pat_ID %>% unique()
+  patient_to_skip <- dplyr::filter(genotype, Gene %in% mutations_to_skip) %>% .$Pat_ID %>% unique()
+  genotype_control <- genotype$Pat_ID[genotype$Pat_ID %ni% patient_to_skip] %>% unique()
+  genotype_of_interest <- intersect(genotype_of_interest, genotype_control)
+  genotype_control <- c(genotype_control[genotype_control %ni% genotype_of_interest], no_mutated_patients)
+  
+  pheno <- data.frame(Patient_ID = c(genotype_of_interest, patient_to_skip, genotype_control), 
+                      pheno = c(rep("Mutations_of_interest", length(genotype_of_interest)), rep("Others", length(patient_to_skip)), rep("Group_control", length(genotype_control))))
+  return(pheno)  
+}
+```
+
+
+
+```{r}
+Pheno <- Make_mutation_subgroups(c("IDH1", "IDH2"), c("DNMT3A", "TET2", "DNMT1", "NPM1"))
+rownames(Pheno) <- Pheno$Patient_ID
+
+Pheno <- Pheno[colnames(Discovery_Cohort_Proteomic)[1:177],]
+```
+
+```{r}
+res.pca <- PCA(t(Discovery_Cohort_Proteomic_unimputed[1:177]))
+tmp <- t(na.omit(Discovery_Cohort_Proteomic_unimputed[1:177]))
+p <- fviz_pca_ind(res.pca, habillage=Pheno$pheno,
+             addEllipses=TRUE, ellipse.level=0.95)
+print(p)
+```
+
+```{r}
+rdistance_Patient <- rdist(t(Discovery_Cohort_Proteomic[,1:177]), metric = "euclidean")
+
+pheatmap(rdistance_Patient)
+```
+
+```{r}
+data <- Discovery_Cohort_Proteomic_unimputed
+data$PG.Genes %>% duplicated() %>% any()
+
+data %>% group_by(PG.Genes) %>% summarize(frequency = n()) %>% arrange(desc(frequency)) %>% filter(frequency > 1)
+data_unique <- make_unique(data, "PG.Genes", "PG.UniProtIds", delim = ";")
+data_unique <- exp(data_unique, )
+pheno_se <- data.frame("label" = colnames(data)[1:177], condition = Pheno$pheno, replicate = 1:177)
+
+data_se <- make_se(data_unique, 1:177, pheno_se)
+data_se
+plot_frequency(data_se)
+```
+
+```{r}
+data_filt <- filter_missval(data_se, thr = 0)
+data_filt2 <- filter_missval(data_se, thr = 1)
+plot_numbers(data_filt)
+```
+
+```{r}
+plot_coverage(data_filt)
+```
+
+```{r}
+for (i in colnames(data_filt@assays@data@listData[[1]])){
+    print(i)
+    data_filt@assays@data@listData[[1]][,i][is.nan(data_filt@assays@data@listData[[1]][,i])]<-NA
+}
+
+data_norm <- normalize_vsn(data_filt)
+
+plot_normalization(data_filt, data_norm)
+```
+
+```{r}
+plot_missval(data_filt)
+```
+
+```{r}
+plot_detect(data_filt)
+```
+
+```{r}
+data_imp <- impute(data_filt, fun = "MinProb", q = 0.01)
+data_imp_man <- impute(data_filt, fun = "man", shift = 1.8, scale = 0.3)
+data_imp_knn <- impute(data_filt, fun = "knn", rowmax = 0.9)
+
+plot_imputation(data_filt, data_imp)
+plot_imputation(data_filt, data_imp_man)
+```
+
