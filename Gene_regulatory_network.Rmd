@@ -21,6 +21,7 @@ suppressPackageStartupMessages({
   library(data.table)
   library(viper)
   library(aracne.networks)
+  library(stringr)
 })
 
 "%ni%" <- Negate("%in%")
@@ -34,12 +35,25 @@ RNAseq_diff_exp <- readRDS("~/GitHub/Koichi_gene_expression_analyses_git/Koichi_
 RNAseq <- read.csv("~/GitHub/Koichi_gene_expression_analyses_git/Koichi_gene_expression_analyses/DATA/RNAseq_parsed.csv", row.names = 1, header = T, check.names = F)
 
 Baseline_aracne_TPM_network <- read.csv("output_TPM_Baseline/network.txt", sep = "\t")
+colnames(Baseline_aracne_TPM_network)[1:2] <- c("tf", "target")
 ```
 
 ### TF activities
 
 ```{r}
-ms_NR_R <- run_msviper(RNAseq, Baseline_aracne_TPM_network, use_aracne = T, ref_R_B, ref_NR_B,  "R", "NR", minsize = 4, ges.filter=T)
+source("~/Core_scripts/msviper_functions.R")
+source("~/GitHub/Multiplex_DNAmet_PPI_Chrom_Coexp/Make_koichi_factor.R")
 
+ref_R_B <- Factor_R_OR_NR_B == "R.B"
+ref_NR_B <- Factor_R_OR_NR_B == "NR.B"
+ref_REL <- Factor_R_OR_NR_B == "OR.REL" | Factor_R_OR_NR_B == "R.REL"
+
+ms_NR_R <- run_msviper(RNAseq, Baseline_aracne_TPM_network, use_aracne = T, ref_R_B, ref_NR_B,  "R", "NR", minsize = 4, ges.filter=T)
+write.csv(ms_NR_R$regulons, "Results/GRN/GRN_NR_R.csv", row.names = F)
+write.csv(ms_NR_R$mrs_table, "Results/GRN/TF_activities_NR_R.csv", row.names = F)
+
+ms_REL_R <- run_msviper(RNAseq, Baseline_aracne_TPM_network, use_aracne = T, ref_R_B, ref_REL,  "R", "REL", minsize = 4, ges.filter=T)
+write.csv(ms_REL_R$regulons, "Results/GRN/GRN_REL_R.csv", row.names = F)
+write.csv(ms_REL_R$mrs_table, "Results/GRN/TF_activities_REL_R.csv", row.names = F)
 ```
 

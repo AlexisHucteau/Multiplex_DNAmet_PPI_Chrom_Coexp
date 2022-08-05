@@ -92,19 +92,6 @@ rownames(Pheno) <- Pheno$Patient_ID
 Pheno <- Pheno[colnames(Discovery_Cohort_Proteomic)[1:177],]
 ```
 
-```{r}
-res.pca <- PCA(t(Discovery_Cohort_Proteomic_unimputed[1:177]))
-tmp <- t(na.omit(Discovery_Cohort_Proteomic_unimputed[1:177]))
-p <- fviz_pca_ind(res.pca, habillage=Pheno$pheno,
-             addEllipses=TRUE, ellipse.level=0.95)
-print(p)
-```
-
-```{r}
-rdistance_Patient <- rdist(t(Discovery_Cohort_Proteomic[,1:177]), metric = "euclidean")
-
-pheatmap(rdistance_Patient)
-```
 
 ```{r}
 data <- Discovery_Cohort_Proteomic_unimputed
@@ -112,10 +99,17 @@ data$PG.Genes %>% duplicated() %>% any()
 
 data %>% group_by(PG.Genes) %>% summarize(frequency = n()) %>% arrange(desc(frequency)) %>% filter(frequency > 1)
 data_unique <- make_unique(data, "PG.Genes", "PG.UniProtIds", delim = ";")
-data_unique <- exp(data_unique, )
+
+data_unique_log_reverted <- sapply(data_unique[,1:177], function(x){
+  sapply(x, function(y){
+    2**y
+  })
+})
+
+data_unique_log_reverted <- cbind(data_unique_log_reverted, data_unique[,177:183])
 pheno_se <- data.frame("label" = colnames(data)[1:177], condition = Pheno$pheno, replicate = 1:177)
 
-data_se <- make_se(data_unique, 1:177, pheno_se)
+data_se <- make_se(data_unique_log_reverted, 1:177, pheno_se)
 data_se
 plot_frequency(data_se)
 ```
@@ -132,17 +126,16 @@ plot_coverage(data_filt)
 
 ```{r}
 for (i in colnames(data_filt@assays@data@listData[[1]])){
-    print(i)
     data_filt@assays@data@listData[[1]][,i][is.nan(data_filt@assays@data@listData[[1]][,i])]<-NA
 }
 
 data_norm <- normalize_vsn(data_filt)
 
-plot_normalization(data_filt, data_norm)
+plot_normalization(data_filt[,1:5], data_norm[,1:5])
 ```
 
 ```{r}
-plot_missval(data_filt)
+plot_missval(data_filt[, 1:10])
 ```
 
 ```{r}
@@ -152,9 +145,174 @@ plot_detect(data_filt)
 ```{r}
 data_imp <- impute(data_filt, fun = "MinProb", q = 0.01)
 data_imp_man <- impute(data_filt, fun = "man", shift = 1.8, scale = 0.3)
-data_imp_knn <- impute(data_filt, fun = "knn", rowmax = 0.9)
 
 plot_imputation(data_filt, data_imp)
 plot_imputation(data_filt, data_imp_man)
 ```
 
+```{r}
+data_diff <- test_diff(data_imp, type = "control", control = "Group_control")
+
+dep <- add_rejections(data_diff, alpha = 0.05, lfc = log2(1.5))
+```
+
+```{r}
+plot_pca(dep, n = 500, point_size = 4, label = F, indicate = "condition")
+```
+
+```{r}
+plot_cor(dep, significant = FALSE, lower = 0, upper = 1, pal = "Reds")
+```
+
+```{r}
+plot_heatmap(dep, type = "centered", kmeans = FALSE, 
+             k = 3, show_row_names = FALSE,
+             indicate = "condition")
+```
+
+```{r}
+plot_heatmap(dep, type = "contrast", kmeans = FALSE, 
+             k = 6, col_limit = 10, show_row_names = FALSE)
+```
+
+```{r}
+plot_volcano(dep, contrast = "Mutations_of_interest_vs_Group_control", label_size = 2, add_names = TRUE, adjusted = F)
+```
+
+```{r}
+plot_single(dep, proteins = "IDH1", type = "centered") + theme(legend.position = "none")
+```
+
+```{r}
+# plot_cond(dep)
+```
+
+```{r}
+df_long <- get_df_long(dep)
+```
+
+##### CD34 data 
+
+```{r}
+colnames(CD34_Proteomic)[1:13] <- stringr::str_remove(colnames(CD34_Proteomic)[1:13], pattern = "20210617_EXPL2_AsJa_SA_Revision_Healthy_DIAproteome_CD34cells_") %>% stringr::str_remove(pattern = ".raw.PG.Quantity") %>% stringr::str_split(pattern = "] ") %>% lapply(function(x) x[2]) %>% unlist()
+```
+
+```{r}
+Merged_patient_and_CD34 <- merge(Discovery_Cohort_Proteomic_unimputed, CD34_Proteomic, by.x = "PG.UniProtIds", by.y = "UniProtIds", all.x =T, all.y = T)
+
+data_merged <- Merged_patient_and_CD34
+
+data_merged$Genes %>% duplicated() %>% any()
+
+data_merged %>% group_by(Genes) %>% summarize(frequency = n()) %>% arrange(desc(frequency)) %>% filter(frequency > 1)
+data_merged_unique <- make_unique(data_merged, "PG.Genes", "PG.UniProtIds", delim = ";")
+
+data_merged_unique_log_reverted <- data_merged_unique
+data_merged_unique_log_reverted[,c(2:178, 182:194)] <- sapply(data_merged_unique_log_reverted[,c(2:178, 182:194)], function(x){
+  sapply(x, function(y){
+    2**y
+  })
+})
+
+Group_control <- Pheno[Pheno$pheno=="Group_control",]
+Mutants <- Pheno[Pheno$pheno=="Mutations_of_interest",]
+Others <- Pheno[Pheno$pheno=="Others",]
+
+Group_control$replicat <- 1:nrow(Group_control)
+Mutants$replicat <- 1:nrow(Mutants)
+Others$replicat <- 1:nrow(Others)
+
+CD34_pheno <- data.frame("Patient_ID" = colnames(data_merged)[182:194], "pheno" = rep("CD34", 13), "replicat" = 1:13)
+
+pheno_merged_se <- rbind(Group_control, Mutants, Others, CD34_pheno)
+rownames(pheno_merged_se) <- pheno_merged_se$Patient_ID
+pheno_merged_se <- pheno_merged_se[colnames(data_merged)[c(2:178, 182:194)],]
+colnames(pheno_merged_se) <- c("label", "condition", "replicate")
+
+data_for_batch <- data_merged_unique_log_reverted
+for (i in colnames(data_for_batch[,c(2:178, 182:194)])){
+    data_for_batch[,c(2:178, 182:194)][,i][is.nan(data_for_batch[,c(2:178, 182:194)][,i])]<-NA
+}
+
+batch <- ifelse(pheno_merged_se$condition == "CD34", "CD34", "Patients")
+
+  # pchic <- data.frame(pchic[rowSums(pchic[,cell_lines] >= minimum_interaction) >= 1, 1:10]) %>% na.omit(.)
+
+data_for_batch <- dplyr::filter(data_for_batch, !is.na(PG.Genes) & !is.na(Genes))
+
+data_for_batch <- data.frame(data_for_batch[rowSums(is.na(data_for_batch[,2:178])) < 176 & rowSums(is.na(data_for_batch[,182:194])) < 12,])
+Batch_removed_data <- sva::ComBat(as.matrix(data_for_batch[,c(2:178, 182:194)]), batch)
+Batch_removed_data <- cbind(Batch_removed_data, data_for_batch[,c(1, 179:181, 195:200)])
+# data_merged_batched_se <- make_se(Batch_removed_data, 1:190, pheno_merged_se)
+
+data_merged_batched_se <- make_se(data_for_batch, c(2:178, 182:194), pheno_merged_se)
+data_merged_batched_se
+plot_frequency(data_merged_batched_se)
+```
+
+```{r}
+data_merged_batched_filt <- filter_missval(data_merged_batched_se, thr = 0)
+data_merged_batched_filt2 <- filter_missval(data_merged_batched_se, thr = 1)
+plot_numbers(data_merged_batched_filt)
+```
+
+```{r}
+plot_coverage(data_merged_batched_filt) + theme(legend.position = "none")
+```
+
+```{r}
+data_merged_batched_norm <- normalize_vsn(data_merged_batched_filt)
+```
+
+```{r}
+plot_detect(data_merged_batched_filt)
+```
+
+```{r}
+data_merged_batched_imp <- impute(data_merged_batched_filt, fun = "MinProb", q = 0.01)
+data_merged_batched_imp_man <- impute(data_merged_batched_filt, fun = "man", shift = 1.8, scale = 0.3)
+
+plot_imputation(data_merged_batched_filt, data_merged_batched_imp)
+plot_imputation(data_merged_batched_filt, data_merged_batched_imp_man)
+```
+
+```{r}
+data_merged_batched_diff <- test_diff(data_merged_batched_imp, type = "control", control = "CD34")
+
+dep_merged <- add_rejections(data_merged_batched_diff, alpha = 0.05, lfc = log2(1.5))
+```
+
+```{r}
+plot_pca(dep_merged, n = 500, point_size = 4, label = F, indicate = "condition")
+```
+
+```{r}
+plot_cor(dep_merged, significant = TRUE, lower = 0, upper = 1, pal = "Reds")
+```
+
+```{r}
+plot_heatmap(dep_merged, type = "centered", kmeans = TRUE, 
+             k = 2, show_row_names = FALSE,
+             indicate = "condition")
+```
+
+```{r}
+plot_heatmap(dep_merged, type = "contrast", kmeans = FALSE, 
+             k = 6, col_limit = 10, show_row_names = FALSE)
+```
+
+```{r}
+plot_volcano(dep_merged, contrast = "Mutations_of_interest_vs_CD34", label_size = 2, add_names = TRUE, adjusted = F)
+```
+
+```{r}
+plot_single(dep_merged, proteins = "IDH1", type = "centered") + theme(legend.position = "none")
+```
+
+```{r}
+plot_cond(dep_merged)
+```
+
+```{r}
+df_long <- get_df_long(dep_merged)
+```
