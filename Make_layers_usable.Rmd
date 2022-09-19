@@ -1,0 +1,280 @@
+---
+title: "Make layers usable"
+author: Alexis Hucteau
+date: "`r Sys.Date()`"
+output:
+    html_document:
+      toc: yes
+      toc_float: yes
+      theme: united
+editor_options:
+  markdown:
+    wrap: sentence
+---
+
+```{r}
+rm(list = ls())
+suppressPackageStartupMessages({
+  library(dplyr)
+  library(RCy3)
+  library(igraph)
+  library(data.table)
+  library(GenomicRanges)
+  library(data.table)
+})
+
+"%ni%" <- Negate("%in%")
+```
+
+```{r}
+Pchic_layer <- read.table("Results/Pchic/pchic_NR_R_network.tsv", sep = "\t", header = T)
+Pchic_all_network <- read.table("Results/Pchic/pchic_network.tsv", sep = "\t", header = T)
+Pchic_all_network$target <- as.integer(Pchic_all_network$target)
+Fragments_genes <- read.table("Results/Pchic/pchic_fragment_gene_network.tsv", sep = "\t", header = T)
+```
+
+#### Replace fragment of gene promoter nodes to Gene nodes
+
+```{r}
+Interconnect_all_node_from_vector <- function(vec){
+  len <- length(vec)
+  source <- sapply(1:len, function(element){
+    rep(vec[element], len-element)
+  }) %>% unlist()
+  target <- sapply(1:(len-1), function(element){
+    vec[(1+element):len]
+  }) %>% unlist()
+  data.frame("source" = source,
+             "target" = target)
+}
+
+Replace_fragments_promoter_to_gene_names <- function(pchic_network, fragment_gene_annotation){
+  res <- lapply(1:nrow(pchic_network), function(n_row){
+    fragment_A_gene <- dplyr::filter(fragment_gene_annotation, source == pchic_network[n_row, "source"]) %>% .$target
+    if (length(fragment_A_gene) == 0){
+      fragment_A_gene <- pchic_network[n_row, "source"]
+    }
+    fragment_B_gene <- dplyr::filter(fragment_gene_annotation, source == pchic_network[n_row, "target"]) %>% .$target
+    if (length(fragment_B_gene) == 0){
+      fragment_B_gene <- pchic_network[n_row, "target"]
+    }
+    vec <- unique(c(fragment_A_gene, fragment_B_gene))
+    
+    if(n_row %% floor(nrow(pchic_network)/100) == 0){
+      message(paste0(n_row %/% floor(nrow(pchic_network)/100), "%!"))
+    }
+    if(length(vec) == 1){
+      data.frame("source" = pchic_network[n_row, "source"], "target"= pchic_network[n_row, "target"])
+    }else{
+      Interconnect_all_node_from_vector(vec)
+    }
+  })
+
+  res <- purrr::reduce(res, rbind)
+  unique(res)
+}
+```
+
+```{r}
+Promoter_fragment <- Replace_fragments_promoter_to_gene_names(Pchic_layer, Fragments_genes)
+```
+
+```{r}
+Promoter_fragment_all_pchic <- Replace_fragments_promoter_to_gene_names(Pchic_all_network, Fragments_genes)
+write.table(Promoter_fragment_all_pchic, "Results/Pchic/Promoter_fragment_all_pchic.tsv", sep = "\t", row.names = F, quote = F)
+```
+
+```{r}
+Shorten_path_network <- function(prom_frag, pchic_net){
+  res <- c(prom_frag$source, prom_frag$target) %>%
+    unique() %>%
+    .[. %in% c(pchic_net$source, pchic_net$target)]
+  lapply(1:length(res), function(frag){
+    nodes <- dplyr::filter(prom_frag, source %in% res[frag] | target %in% res[frag]) %>% 
+      unlist()
+    nodes <- nodes[nodes != res[frag]]
+    if(frag %% floor(length(res)/100) == 0){
+      message(paste0(frag %/% floor(length(res)/100), "%!"))
+    }
+    if(length(nodes) < 2){
+      data.frame("source" = NULL, "target" = NULL)
+    }else{
+      Interconnect_all_node_from_vector(nodes)
+    }
+  })
+  # res <- purrr::reduce(res, rbind)
+  # res <- unique(res)
+  # tmp <- res 
+  # print(colnames(res))
+  # tmp <- sapply(1:nrow(tmp), function(Row){
+  #   tmp2 <- tmp[Row,c("source", "target")]
+  #   tmp2 <- unlist(tmp2)
+  #   tmp2 <- sort(tmp2)
+  #   tmp2
+  # })
+  # tmp <- t(tmp)
+  # res <- res[!duplicated(tmp),]
+  # self_loop <- sapply(1:nrow(res), function(Row){
+  #   res[Row, "source"] != res[Row, "target"]
+  # })
+  # res[self_loop,]
+}
+```
+
+```{r}
+Fragments_remaining <- Shorten_path_network(Promoter_fragment, Pchic_layer)
+
+write.table(Fragments_remaining, "Results/Pchic/Fragments_remaining.tsv", sep = "\t", quote = F, row.names = F)
+```
+
+```{r}
+Promoter_fragment_all_pchic <- read.table("Results/Pchic/Promoter_fragment_all_pchic.tsv", sep = "\t", header = T)
+Fragments_remaining_all_pchic <- Shorten_path_network(Promoter_fragment_all_pchic, Pchic_all_network)
+
+save.image("/media/alexis/DATA/Session/R session/Remove_fragment_from_pchic.RData")
+# system("shutdown")
+Fragments_remaining_all_pchic_binded <- rbindlist(Fragments_remaining_all_pchic)
+Fragments_remaining_all_pchic_binded <- dplyr::filter(Fragments_remaining_all_pchic_binded, source != target)
+tmp <- Fragments_remaining_all_pchic_binded 
+tmp <- sapply(1:nrow(tmp), function(Row){
+  tmp2 <- tmp[Row,c("source", "target")]
+  tmp2 <- unlist(tmp2)
+  tmp2 <- sort(tmp2)
+  tmp2
+})
+tmp <- t(tmp)
+res <- res[!duplicated(tmp),]
+
+write.table(Fragments_remaining_all_pchic, "Results/Pchic/Fragments_remaining_all_pchic.tsv", sep = "\t", quote = F, row.names = F)
+# system("shutdown")
+```
+
+
+```{r}
+Fragments_features <- read.table("Results/Pchic/pchic_NR_R_meth_features.tsv", header = T)
+Fragments_features <- merge(Fragments_features, Fragments_genes, by.x = "ID", by.y = "source", all.x = T)
+Fragments_features$target <- sapply(1:nrow(Fragments_features), function(fragment){
+  if(is.na(Fragments_features[fragment,"target"])){
+    Fragments_features[fragment,"ID"]
+  }else{
+    Fragments_features[fragment, "target"]
+  }
+})
+
+Promoter_fragment <- read.table("Results/Pchic/Promoter_fragement_cleaned.tsv", sep = "\t", header = T)
+Fragments_features_promoter_fragments <- dplyr::filter(Fragments_features, target %in% Promoter_fragment$source | target %in% Promoter_fragment$target)
+
+Fragments_features_promoter_fragments <- split(Fragments_features_promoter_fragments, Fragments_features_promoter_fragments$target)
+
+Fragments_features_promoter_fragments <- lapply(names(Fragments_features_promoter_fragments), function(gene){
+  data.frame("name" = gene, 
+             "logFC" = mean(Fragments_features_promoter_fragments[[gene]]$logFC), 
+             "P.Value" = max(Fragments_features_promoter_fragments[[gene]]$P.Value))
+}) %>% purrr::reduce(rbind)
+
+write.table(Fragments_features_promoter_fragments, "Results/Pchic/pchic_NR_R_meth_features_promoter_fragments_features.tsv", sep = "\t", quote = F, row.names = F)
+```
+
+```{r}
+load("/media/alexis/DATA/Session/BMIQ_Koichi.RData")
+setwd("~/GitHub/Multiplex_DNAmet_PPI_Chrom_Coexp/")
+source("~/GitHub/Multiplex_DNAmet_PPI_Chrom_Coexp/Make_koichi_factor.R")
+
+Make_factor(Samples_names = colnames(BMIQ_Koichi), met_data = T)
+
+BMIQ_Koichi_NR <- BMIQ_Koichi[,Factor_R_OR_NR_B == "NR.B"]
+
+BMIQ_Koichi_NR_mean_sd <- lapply(1:nrow(BMIQ_Koichi_NR), function(cpg){
+  mean_df <- BMIQ_Koichi_NR[cpg,] %>% unlist() %>% mean()
+  sd_df <- BMIQ_Koichi_NR[cpg,] %>% unlist() %>% sd()
+  data.frame("Mean" = mean_df,
+             "Std" = sd_df)
+}) %>% data.table::rbindlist()
+rownames(BMIQ_Koichi_NR_mean_sd) <- rownames(BMIQ_Koichi_NR)
+
+write.table(BMIQ_Koichi_NR_mean_sd, "Results/Pchic/CpG_mean_sd.tsv", sep = "\t", row.names = T, quote = T)
+```
+
+```{r}
+BMIQ_Koichi_NR_mean_sd <- read.table("Results/Pchic/CpG_mean_sd.tsv", sep = "\t", row.names = 1)
+
+Promoter_fragment <- read.table("Results/Pchic/Promoter_fragment_cleaned.tsv", sep = "\t", header = T)
+
+AnnoBMIQ <- read.table("/media/alexis/DATA/Illumina_manifest/infinium-methylationepic.tsv", header = T)
+AnnoBMIQ$Strand <- ifelse(AnnoBMIQ$Strand == "F", "+", "-")
+
+AnnoBMIQ <- na.omit(AnnoBMIQ)
+
+prepare_pchic <- function(cell_lines = "all", minimum_interaction = 5){
+  load("/media/alexis/DATA/pchic.RData")
+  if (length(cell_lines) >= 1){
+    cell_lines = c("Mon", "Mac0", "Mac1", "Mac2", "Neu", "MK", "EP", "Ery", "FoeT", "nCD4", "tCD4", "aCD4", "naCD4", "nCD8", "tCD8", "nB", "tB")
+  }
+  pchic <- data.frame(pchic[rowSums(pchic[,cell_lines] >= minimum_interaction) >= 1, 1:10]) %>% na.omit(.)
+  colnames(pchic)[c(1:5, 6:10)] <- rep(c("chr", "start", "end", "ID", "Name"), 2)
+  return(pchic)
+}
+
+pchic <- prepare_pchic(cell_lines = c("Mon", "Mac1", "Mac0", "Mac2", "MK", "Ery", "EP"))
+pchic_bed <- rbind(pchic[,1:5], pchic[,6:10]) %>% unique()
+```
+
+```{r}
+pchic_ranges <- GRanges(pchic_bed)
+
+AnnoBMIQ_ranges <- GRanges(seqnames = AnnoBMIQ$CHR,
+                           ranges = IRanges(start = AnnoBMIQ$MAPINFO, end = AnnoBMIQ$MAPINFO+1),
+                           strand = AnnoBMIQ$Strand,
+                           names = AnnoBMIQ$Name)
+
+tmp_overlap <- findOverlaps(pchic_ranges, AnnoBMIQ_ranges)
+pchic_AnnoBMIQ_overlap <- data.frame(mcols(pchic_ranges[queryHits(tmp_overlap)]),
+                                     data.frame(mcols(AnnoBMIQ_ranges[subjectHits(tmp_overlap),])))
+rm(tmp_overlap)
+```
+
+
+```{r}
+pchic_AnnoBMIQ_overlap_Koichi_NR_mean_sd <- merge(pchic_AnnoBMIQ_overlap, BMIQ_Koichi_NR_mean_sd, by.x = "names", by.y = 0)
+
+Fragments_methylation_features <- split(pchic_AnnoBMIQ_overlap_Koichi_NR_mean_sd, pchic_AnnoBMIQ_overlap_Koichi_NR_mean_sd$ID)
+
+Fragments_methylation_features <- lapply(names(Fragments_methylation_features), function(frag){
+  data.frame("name" = frag, 
+             "mean" = mean(unlist(Fragments_methylation_features[[frag]]$Mean)), 
+             "Std" = max(unlist(Fragments_methylation_features[[frag]]$Std)))
+}) %>% data.table::rbindlist()
+
+write.table(Fragments_methylation_features, "Results/Pchic/Fragments_methylations_betavalues.tsv", sep = "\t", row.names = F)
+```
+
+```{r}
+pchic_gene_network <- pchic[,1:5] %>% unique()
+pchic_gene_network <- tidyr::separate_rows(pchic_gene_network, Name, sep = ";")
+pchic_gene_network <- unique(pchic_gene_network)
+pchic_gene_network <- pchic_gene_network[,c("ID", "Name")]
+colnames(pchic_gene_network) <- c("source", "target")
+
+pchic_gene_network <- dplyr::filter(pchic_gene_network, target %ni% c("snoU13", "Y_RNA"))
+write.table(pchic_gene_network,"Results/Pchic/pchic_fragment_gene_network.tsv", sep = "\t", row.names = F, quote = F)
+```
+
+
+```{r}
+Fragments_methylation_features <- read.table("Results/Pchic/Fragments_methylations_betavalues.tsv", sep = "\t", header = T)
+
+pchic_gene_network <- read.table("Results/Pchic/pchic_fragment_gene_network.tsv", sep = "\t", header = T)
+
+Fragments_methylation_features_pchic_gene_network <- merge(pchic_gene_network, Fragments_methylation_features, by.x = "source", by.y = "name", all.y = T)
+A <- Fragments_methylation_features_pchic_gene_network %>% dplyr::filter(is.na(target))
+Fragments_methylation_features_pchic_gene_network <- Fragments_methylation_features_pchic_gene_network %>% dplyr::filter(!is.na(target))
+Fragments_methylation_features_pchic_gene_network$ID <- Fragments_methylation_features_pchic_gene_network$target
+A$ID <- A$source
+Fragments_methylation_features_pchic_gene_network <- rbind(Fragments_methylation_features_pchic_gene_network, A)
+Fragments_methylation_features_pchic_gene_network <- Fragments_methylation_features_pchic_gene_network %>% 
+  dplyr::select(ID, mean, Std)
+
+Fragments_methylation_features_pchic_gene_network %>% write.table("Results/Pchic/Fragments_methylation_features_pchic_gene_network.tsv", sep = "\t", row.names = F, quote = F)
+```
+
+

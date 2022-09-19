@@ -23,6 +23,7 @@ suppressPackageStartupMessages({
 })
 
 "%ni%" <- Negate("%in%")
+source("~/GitHub/Multiplex_DNAmet_PPI_Chrom_Coexp/Make_koichi_factor.R")
 ```
 
 ```{r}
@@ -42,19 +43,59 @@ RNAseq_variable_genes <- RNAseq[most_variable_genes,]
 NR_samples <- Factor_R_OR_NR_B == "NR.B"
 
 corr_genes_NR <- rcorr(as.matrix(t(RNAseq_variable_genes[,NR_samples])), type = "pearson")
-pvalue_genes_NR <- corr_genes_NR$p
+pvalue_genes_NR <- corr_genes_NR$P
 corr_genes_NR <- corr_genes_NR$r
 
 R_samples <- Factor_R_OR_NR_B == "R.B"
 
 corr_genes_R <- rcorr(as.matrix(t(RNAseq_variable_genes[,R_samples])), type = "pearson")
-pvalue_genes_R <- corr_genes_R$p
+pvalue_genes_R <- corr_genes_R$P
 corr_genes_R <- corr_genes_R$r
 
 REL_samples <- Factor_R_OR_NR_B == "OR.REL" | Factor_R_OR_NR_B == "R.REL"
 
 corr_genes_REL <- rcorr(as.matrix(t(RNAseq_variable_genes[,REL_samples])), type = "pearson")
-pvalue_genes_REL <- corr_genes_REL$p
+pvalue_genes_REL <- corr_genes_REL$P
 corr_genes_REL <- corr_genes_REL$r
+```
+
+```{r}
+test <- lapply(1:(ncol(pvalue_genes_NR)-1), function(num_col){
+  sapply((1+num_col):nrow(pvalue_genes_NR), function(num_row){
+    if(pvalue_genes_NR[num_row, num_col] < 0.05 && abs(corr_genes_NR[num_row, num_col]) > 0.75){
+      rownames(pvalue_genes_NR)[num_row]
+    }else{
+      ""
+    }
+  }) %>% unique()
+})
+names(test) <- rownames(pvalue_genes_NR)[1:4999]
+
+test <- lapply(names(test), function(gene){
+  l <- length(test[[gene]])
+  if(l==1){
+    data.frame("V1" = "",
+             "V2" = "")
+  }else{
+    data.frame("V1" = rep(gene, l-1),
+               "V2" = test[[gene]][2:l])
+  }
+})
+
+test <- purrr::reduce(test, rbind)
+test <- unique(test)
+
+tmp <- test 
+print(colnames(tmp))
+tmp <- sapply(1:nrow(tmp), function(Row){
+  tmp2 <- tmp[Row,c("V1", "V2")]
+  tmp2 <- unlist(tmp2)
+  tmp2 <- sort(tmp2)
+  tmp2
+})
+tmp <- t(tmp)
+test3 <- test[!duplicated(tmp),]
+
+test3 %>% write.table("Results/Coexp/Coexp_genes.tsv", sep = "\t", quote = F, row.names = F, col.names = F)
 ```
 

@@ -26,97 +26,79 @@ suppressPackageStartupMessages({
 LOADING LAYERS OF THE MULTI-LAYER NETWORK
 
 ```{r}
-Pchic_layer <- read.csv("DATA/pchic_network.csv")
-GRN_layer <- read.csv("output_TPM_Baseline/network.txt", sep = "\t") %>% dplyr::filter(pvalue < 0.05) %>% .[,1:2]
-PPI_layer <- read.csv("DATA/PPI_layer.csv")[,2:3]
-Gene_Reaction_layer <- read.csv("DATA_Reactions/Gene_reactions_network_cleaned.csv")
-Metabolic_layer <- read.csv("DATA_Reactions/Metabolic_network_clean.tsv", sep = "\t")
-NR_R_reaction_enrichment <- read.csv("DATA_Reactions/NR_R_T_test.csv", row.names = 1)
-# NR_R_reaction_enrichment <- dplyr::filter(NR_R_reaction_enrichment, statistic > summary(NR_R_reaction_enrichment$statistic)[5] | statistic < summary(NR_R_reaction_enrichment$statistic)[2])
-NR_R_metabolic_layer <- Metabolic_layer[Metabolic_layer$A %in% rownames(NR_R_reaction_enrichment),]
-Gene_Reaction_layer <- Gene_Reaction_layer[Gene_Reaction_layer$A %in% rownames(NR_R_reaction_enrichment),]
+Pchic_all_network <- read.table("Results/Pchic/Promoter_fragment_all_pchic.tsv", sep = "\t", header = T)
+fPPI <- read.csv("~/Documents/List_genes_from_transcriptome/FIsInGene_020720_with_annotations.tsv", sep = "\t")
+colnames(fPPI) <- c("source", "target", "Annotation", "Direction", "Score")
+Metabolic_all_network <- 
+```
+
+
+```{r}
+Pchic_layer <- read.table("Results/Pchic/Promoter_fragment_cleaned.tsv", sep = "\t", header = T)
+GRN_layer <- read.table("Results/GRN/GRN_NR_R.tsv", sep = "\t")
+PPI_layer <- read.table("Results/Proteo/fPPI_network_filtered.tsv", sep = "\t", header = T)
+Metabolic_layer <- read.csv("Results/Metabolic_network/Gene_metabolite_network_converted.tsv", sep = "\t", header = F)
 ```
 
 ## Test overlaps
 
 ```{r}
-VennDiagram_dat <- list(Metabolic_layer = unique(Gene_Reaction_layer$B),
-                        GRN_layer = unique(GRN_layer$Regulator, GRN_layer$Target),
-                        PPI_layer = unique(PPI_layer$source, PPI_layer$target))
+VennDiagram_dat <- list(Chromatin_layer = unique(Pchic_layer$source, Pchic_layer$target),
+                        GRN_layer = unique(GRN_layer$V1, GRN_layer$V2),
+                        PPI_layer = unique(PPI_layer$source, PPI_layer$target), 
+                        Metabolic_layer = unique(Metabolic_layer$V1, Metabolic_layer$V2)
+                        )
 
 ggvenn(
   VennDiagram_dat, 
   stroke_size = 0.5, set_name_size = 4
   )
-
-intersect(unique(PPI_layer$source, PPI_layer$target), unique(Gene_Reaction_layer$B))
-intersect(unique(PPI_layer$source, PPI_layer$target), unique(GRN_layer$Regulator, GRN_layer$Target))
 ```
 
-# TEST MOGAMUN
+Make_combined_network
+
+Chromatin layer
 
 ```{r}
+Chromatine_layer_nodes <- unique(Pchic_layer$source, Pchic_layer$target) %>% intersect(unique(GRN_layer$V1, GRN_layer$V2))
+Chromatine_layer_nodes <- unique(Pchic_layer$source, Pchic_layer$target) %>% intersect(unique(Metabolic_layer$V1, Metabolic_layer$V2)) %>% c(., Chromatine_layer_nodes) %>% unique()
 
+Chromatine_layer_focus <- Pchic_layer %>% dplyr::filter(.$source %in% Chromatine_layer_nodes | .$target %in% Chromatine_layer_nodes)
+colnames(Chromatine_layer_focus) <- c("source", "target")
 ```
 
-
-
-
-# TEST MuxViz
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+GRN layer
 
 ```{r}
-Pchic_adj <- igraph::graph_from_data_frame(Pchic_layer) %>% igraph::as_adj(., type = "both", sparse = F) %>% as.data.frame()
-GRN_adj <- igraph::graph_from_data_frame(GRN_layer) %>% igraph::as_adj(., type = "both", sparse = F) %>% as.data.frame()
-PPI_adj <- igraph::graph_from_data_frame(PPI_layer) %>% igraph::as_adj(., type = "both", sparse = F) %>% as.data.frame()
-Gene_Reaction_adj <- igraph::graph_from_data_frame(Gene_Reaction_layer) %>% igraph::as_adj(., type = "both", sparse = F) %>% as.data.frame()
-Metabolic_adj <- igraph::graph_from_data_frame(NR_R_metabolic_layer) %>% igraph::as_adj(., type = "both", sparse = F) %>% as.data.frame()
+GRN_layer_nodes <- unique(GRN_layer$V1, GRN_layer$V2) %>% intersect(unique(PPI_layer$source, PPI_layer$target))
+GRN_layer_nodes <- unique(GRN_layer$V1, GRN_layer$V2) %>% intersect(unique(Pchic_layer$source, Pchic_layer$target)) %>% c(., GRN_layer_nodes) %>% unique()
 
+GRN_layer_focus <- GRN_layer %>% dplyr::filter(.$V1 %in% GRN_layer_nodes | .$V2 %in% GRN_layer_nodes) %>% .[,1:2]
+colnames(GRN_layer_focus) <- c("source", "target")
+```
+
+PPI_layer
+
+```{r}
+PPI_layer_nodes <- unique(PPI_layer$source, PPI_layer$target) %>% intersect(unique(Metabolic_layer$V1, Metabolic_layer$V2))
+PPI_layer_nodes <- unique(PPI_layer$source, PPI_layer$target) %>% intersect(unique(GRN_layer$V1, GRN_layer$V2)) %>% c(., PPI_layer_nodes) %>% unique()
+
+PPI_layer_focus <- PPI_layer %>% dplyr::filter(.$source %in% PPI_layer_nodes | .$target %in% PPI_layer_nodes) %>% .[,1:2]
+colnames(PPI_layer_focus) <- c("source", "target")
 ```
 
 ```{r}
-colnames(Pchic_adj) <- paste0(colnames(Pchic_adj), "_pchic")
-rownames(Pchic_adj) <- paste0(rownames(Pchic_adj), "_pchic")
-Pchic_adj$row <- rownames(Pchic_adj)
+Metabolic_layer_nodes <- unique(Metabolic_layer$V1, Metabolic_layer$V2) %>% intersect(unique(PPI_layer$source, PPI_layer$target))
+Metabolic_layer_nodes <- unique(Metabolic_layer$V1, Metabolic_layer$V2) %>% intersect(unique(Pchic_layer$source, Pchic_layer$target)) %>% c(., Metabolic_layer_nodes) %>% unique()
 
-colnames(GRN_adj) <- paste0(colnames(GRN_adj), "_GRN")
-rownames(GRN_adj) <- paste0(rownames(GRN_adj), "_GRN")
-GRN_adj$row <- rownames(GRN_adj)
-
-colnames(PPI_adj) <- paste0(colnames(PPI_adj), "_PPI")
-rownames(PPI_adj) <- paste0(rownames(PPI_adj), "_PPI")
-PPI_adj$row <- rownames(PPI_adj)
-
-colnames(Gene_Reaction_adj) <- paste0(colnames(Gene_Reaction_adj), "_GRM")
-rownames(Gene_Reaction_adj) <- paste0(rownames(Gene_Reaction_adj), "_GRM")
-Gene_Reaction_adj$row <- rownames(Gene_Reaction_adj)
-
-colnames(Metabolic_adj) <- paste0(colnames(Metabolic_adj), "_Metab")
-rownames(Metabolic_adj) <- paste0(rownames(Metabolic_adj), "_Metab")
-Metabolic_adj$row <- rownames(Metabolic_adj)
+Metabolic_layer_focus <- Metabolic_layer %>% dplyr::filter(.$V1 %in% Metabolic_layer_nodes | .$V2 %in% Metabolic_layer_nodes)
+colnames(Metabolic_layer_focus) <- c("source", "target")
 ```
 
 ```{r}
-Adjacency_matrices <- list(Pchic_adj, GRN_adj, PPI_adj, Gene_Reaction_adj, Metabolic_adj)
+Combined_network <- list(Chromatine_layer_focus, GRN_layer_focus, PPI_layer_focus, Metabolic_layer_focus)
+Combined_network <- Combined_network %>% purrr::reduce(rbind) %>% unique()
 
-supra_adjacency_matrix <- purrr::reduce(.x = Adjacency_matrices, function(a,b) merge(x = a, y = b, all.x = T, all.y = T, by.x = "row", by.y = "row"))
+Combined_network %>% write.table("Results/Combined_network.tsv", sep = "\t", quote = F, row.names = F)
 ```
 

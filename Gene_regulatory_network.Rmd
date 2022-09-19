@@ -33,6 +33,8 @@ suppressPackageStartupMessages({
 RNAseq_diff_exp <- readRDS("~/GitHub/Koichi_gene_expression_analyses_git/Koichi_gene_expression_analyses/Results/Tables/RNAseq_diff_gene_expression_analysis.rds")
 
 RNAseq <- read.csv("~/GitHub/Koichi_gene_expression_analyses_git/Koichi_gene_expression_analyses/DATA/RNAseq_parsed.csv", row.names = 1, header = T, check.names = F)
+RNAseq_diff_exp$R_OR_NR_B$`NR.B-R.B` %>% write.table("Results/GRN/DEG_NR_R.tsv", row.names = F, sep = "\t", quote = F)
+RNAseq_diff_exp$R_OR_NR_B$`NR.B-R.B` %>% dplyr::filter(abs(logFC) > 0.75 & P.Value < 0.05) %>% write.table("Results/GRN/Filtered_DEG_NR_R.tsv", row.names = F, sep = "\t", quote = F)
 
 Baseline_aracne_TPM_network <- read.csv("output_TPM_Baseline/network.txt", sep = "\t")
 colnames(Baseline_aracne_TPM_network)[1:2] <- c("tf", "target")
@@ -49,11 +51,21 @@ ref_NR_B <- Factor_R_OR_NR_B == "NR.B"
 ref_REL <- Factor_R_OR_NR_B == "OR.REL" | Factor_R_OR_NR_B == "R.REL"
 
 ms_NR_R <- run_msviper(RNAseq, Baseline_aracne_TPM_network, use_aracne = T, ref_R_B, ref_NR_B,  "R", "NR", minsize = 4, ges.filter=T)
-write.csv(ms_NR_R$regulons, "Results/GRN/GRN_NR_R.csv", row.names = F)
-write.csv(ms_NR_R$mrs_table, "Results/GRN/TF_activities_NR_R.csv", row.names = F)
+write.table(ms_NR_R$regulons, "Results/GRN/GRN_NR_R.tsv", row.names = F, sep = "\t", quote = F)
+write.table(ms_NR_R$mrs_table, "Results/GRN/TF_activities_NR_R.tsv", row.names = F, sep = "\t", quote = F)
 
 ms_REL_R <- run_msviper(RNAseq, Baseline_aracne_TPM_network, use_aracne = T, ref_R_B, ref_REL,  "R", "REL", minsize = 4, ges.filter=T)
-write.csv(ms_REL_R$regulons, "Results/GRN/GRN_REL_R.csv", row.names = F)
-write.csv(ms_REL_R$mrs_table, "Results/GRN/TF_activities_REL_R.csv", row.names = F)
+write.table(ms_REL_R$regulons, "Results/GRN/GRN_REL_R.tsv", row.names = F, sep = "\t", quote = F)
+write.table(ms_REL_R$mrs_table, "Results/GRN/TF_activities_REL_R.tsv", row.names = F, sep = "\t", quote = F)
+```
+
+### DEGs
+
+```{r}
+NR_R_DEG <- RNAseq_diff_exp$R_OR_NR_B$`NR.B-R.B` %>% dplyr::filter(ID %in% c(ms_NR_R$regulons$tf, ms_NR_R$regulons$target)) %>% dplyr::select(ID, logFC:P.Value)
+write.table(NR_R_DEG, "Results/GRN/DEG_NR_R.tsv", row.names = F, sep = "\t", quote = F)
+
+REL_R_DEG <- RNAseq_diff_exp$R_OR_NR_B$`R.REL-R.B` %>% dplyr::filter(ID %in% c(ms_REL_R$regulons$tf, ms_REL_R$regulons$target)) %>% dplyr::select(ID, logFC:P.Value)
+write.table(REL_R_DEG, "Results/GRN/DEG_REL_R.tsv", row.names = F, sep = "\t", quote = F)
 ```
 

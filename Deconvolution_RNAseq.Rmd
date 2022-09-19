@@ -1,0 +1,317 @@
+---
+title: "Deconvolution"
+author: Alexis Hucteau
+date: "`r Sys.Date()`"
+output:
+    html_document:
+      toc: yes
+      toc_float: yes
+      theme: united
+editor_options:
+  markdown:
+    wrap: sentence
+---
+
+
+```{r}
+rm(list = ls())
+
+suppressPackageStartupMessages({
+  library(tidyr) # pivot_longer
+  library(readr) # read_tsv read_csv write_tsv
+  library(stringr) # str_c
+  library(magrittr) # %<>%
+  library(EpiDISH) # epidish
+  library(MCPcounter) # MCPcounter.estimate
+  library(immunedeconv) # deconvolute
+  library(DeconRNASeq) # DeconRNASeq
+  library(purrr) # reduce
+  library(parallel) # mclapply
+  library(ggplot2)
+  library(gridExtra)
+  library(grid)
+})
+source("~/Core_scripts/core_functions.R")
+
+```
+
+```{r}
+output_path <- "Results/Deconvolution/res.tsv"
+signatures_path <- "~/Pipeline/GEMDeCan/Gene_expression/data/signatures/"
+threads <- 10
+
+signature_files <- list.files(signatures_path, full.names = T)
+signature_files <- setdiff(signature_files, signature_files[dir.exists(signature_files)])
+
+TPM <- read.csv("/media/alexis/DATA/Raw_good_names_binded_filtered_TPM.tsv", sep = "\t", check.names = F)
+# TPM_matrix <- as.matrix(TPM[, -1])
+# rownames(TPM_matrix) <- TPM %>% pull(1)
+TPM_matrix <- as.matrix(TPM)
+
+computeQuantiseq <- function(TPM_matrix) {
+  quantiseq <- as_tibble(deconvolute(TPM_matrix, "quantiseq")) %>%
+    pivot_longer(-cell_type) %>%
+    pivot_wider(names_from = cell_type, values_from = value) %>%
+    rename(sample = name)
+
+  colnames(quantiseq)[-1] <- str_c("Quantiseq_", colnames(quantiseq)[-1])
+  colnames(quantiseq) <- sapply(colnames(quantiseq), . %>% {
+    str_replace_all(., " ", "_")
+  })
+  quantiseq
+}
+
+computeMCP <- function(TPM_matrix, signatures_path) {
+  genes <- read.table(file.path(signatures_path, "MCPcounter", "MCPcounter-genes.txt"), sep = "\t", stringsAsFactors = FALSE, header = TRUE, colClasses = "character", check.names = FALSE)
+  mcp <- as_tibble(MCPcounter.estimate(TPM_matrix, genes = genes, featuresType = "HUGO_symbols", probesets = NULL), rownames = "cell_type") %>%
+    pivot_longer(-cell_type) %>%
+    pivot_wider(names_from = cell_type, values_from = value) %>%
+    rename(sample = name)
+
+  colnames(mcp)[-1] <- str_c("MCP_", colnames(mcp)[-1])
+  colnames(mcp) <- sapply(colnames(mcp), . %>% {
+    str_replace_all(., " ", "_")
+  })
+  mcp
+}
+
+methods_with_variable_signatures <- function(TPM_matrix, signature_files, threads) {
+  TPM_df <- as.data.frame(TPM_matrix)
+  all_methods_and_signatures <- mclapply(signature_files, function(signature_file) {
+    signature <- as.matrix(read.table(signature_file, header = TRUE, row.names = 1, sep = "\t"))
+
+    signature_name <- basename(signature_file)
+    signature_name <- str_split(signature_name, "\\.")[[1]][1]
+
+    epi <- epidish(TPM_matrix, signature, method = "RPC", maxit = 200)
+    epi <- as_tibble(epi$estF, rownames = "sample")
+    colnames(epi)[-1] <- str_c("Epidish", signature_name, colnames(epi)[-1], sep = "_")
+    colnames(epi) <- sapply(colnames(epi), . %>% {
+      str_replace_all(., " ", "_")
+    })
+
+    decon <- DeconRNASeq(TPM_df, as.data.frame(signature))
+    decon <- bind_cols(colnames(TPM_df), as_tibble(decon$out.all)) %>% rename(sample = ...1)
+    colnames(decon)[-1] <- str_c("DeconRNASeq", signature_name, colnames(decon)[-1], sep = "_")
+    colnames(decon) <- sapply(colnames(decon), . %>% {
+      str_replace_all(., " ", "_")
+    })
+
+    inner_join(epi, decon, by = "sample")
+  }, mc.cores = threads)
+  reduce(all_methods_and_signatures, inner_join, "sample")
+}
+
+all_deconvolutions_table <- mclapply(c("Quantiseq", "MCP", "rest"), function(method) {
+  if (method == "Quantiseq") {
+    computeQuantiseq(TPM_matrix)
+  } else if (method == "MCP") {
+    computeMCP(TPM_matrix, signatures_path)
+  } else if (method == "rest") {
+    methods_with_variable_signatures(TPM_matrix, signature_files, threads)
+  }
+}, mc.cores = threads)
+
+
+all_deconvolutions_table %<>% reduce(inner_join, "sample")
+
+all_deconvolutions_table %>% write_tsv(output_path)
+
+```
+
+```{r}
+source("~/GitHub/Multiplex_DNAmet_PPI_Chrom_Coexp/Make_koichi_factor.R")
+Factor_R_OR_NR_B <- Make_factor(Samples_names = all_deconvolutions_table$sample)
+Factor_R_OR_NR_B
+
+deconv_methods <- colnames(all_deconvolutions_table)[-1] %>% sapply(function(col){
+  stringr::str_split(col, "_") %>%
+    sapply(function(ele){
+      if(ele[1] %in% c("Quantiseq", "MCP")){
+        ele[1]
+      }else{
+        ele[-length(ele)]
+      }
+    }) %>% paste(., collapse = "_")
+}) %>% unname() %>% unique()
+
+deconv_list <- lapply(deconv_methods, function(dec_met){
+  col_filter <- c("sample", colnames(all_deconvolutions_table)[stringr::str_detect(colnames(all_deconvolutions_table), pattern = paste0(dec_met, "_"))])
+  all_deconvolutions_table[,col_filter]
+})
+names(deconv_list) <- deconv_methods
+```
+
+```{r}
+Make_violin_plot <- function(index, dat){
+  dat <- dat[[index]]
+  cell_prop <- unlist(dat[,-1]) %>% unname()
+  cell_type <- colnames(dat)[-1] %>% stringr::str_remove(pattern = paste0(index, "_"))
+  df <- data.frame("cell_type" = rep(cell_type, each = nrow(dat)),
+                   "Cell_proportion" = cell_prop)
+  
+  p <- ggplot(df, aes(x = cell_type, y = Cell_proportion, fill = cell_type))
+  p <- p + ggplot2::geom_boxplot(outlier.shape = NA)
+  p <- p + ggplot2::ylim(0,1)
+  p <- p + ggplot2::ggtitle(index)
+  p
+}
+```
+geom_boxplot(stat="identity")
+
+```{r}
+deconv_plots <- lapply(names(deconv_list), function(a) Make_violin_plot(a, dat = deconv_list))
+names(deconv_plots) <- names(deconv_list)
+deconv_plots
+```
+
+```{r}
+# png(file = paste0("./Chas_GE_all_Clines.png"), width = 1920, height = 1080)
+grid.arrange(deconv_plots$Epidish_BPRNACan, deconv_plots$Epidish_BPRNACan3DProMet, deconv_plots$Epidish_BPRNACanProMet,
+             ncol=1,
+             top = textGrob('Epidish',
+                            just = c('center'),
+                            gp = gpar(fontsize = 16)))
+# dev.off()
+
+grid.arrange(deconv_plots$DeconRNASeq_BPRNACan, deconv_plots$DeconRNASeq_BPRNACan3DProMet, deconv_plots$DeconRNASeq_BPRNACanProMet,
+             ncol=1,
+             top = textGrob('DeconRNAseq',
+                            just = c('center'),
+                            gp = gpar(fontsize = 16)))
+
+grid.arrange(deconv_plots$Quantiseq, deconv_plots$MCP,
+             ncol=1,
+             top = textGrob('DeconRNAseq',
+                            just = c('center'),
+                            gp = gpar(fontsize = 16)))
+```
+
+```{r}
+NR_deconv <- lapply(deconv_list, function(method){
+  method[Factor_R_OR_NR_B=="NR.B",]
+})
+
+R_deconv <- lapply(deconv_list, function(method){
+  method[Factor_R_OR_NR_B=="R.B",]
+})
+
+REL_deconv <- lapply(deconv_list, function(method){
+  method[Factor_R_OR_NR_B=="OR.REL" | Factor_R_OR_NR_B=="R.REL",]
+})
+
+deconv_NR_plots <- lapply(names(NR_deconv), function(a){
+  p <- Make_violin_plot(a, NR_deconv) 
+  p <- p + ggtitle("NR n=23")
+})
+  
+names(deconv_NR_plots) <- names(NR_deconv)
+
+deconv_R_plots <- lapply(names(R_deconv), function(a){
+  p <- Make_violin_plot(a, R_deconv) 
+  p <- p + ggtitle("R n=7")
+})
+names(deconv_R_plots) <- names(R_deconv)
+
+deconv_REL_plots <- lapply(names(REL_deconv), function(a){
+  p <- Make_violin_plot(a, REL_deconv) 
+  p <- p + ggtitle("REL n=10")
+})
+names(deconv_REL_plots) <- names(REL_deconv)
+
+deconv_NR_plots
+deconv_R_plots
+deconv_REL_plots
+```
+
+```{r}
+method <- names(deconv_plots)[i]
+
+png(file = paste0("Results/Deconvolution/", method, "_deconvolution.png"), width = 1920, height = 1080)
+grid.arrange(deconv_plots[[method]], deconv_NR_plots[[method]], deconv_R_plots[[method]], deconv_REL_plots[[method]],
+             ncol=1,
+             top = textGrob(method,
+                            just = c('center'),
+                            gp = gpar(fontsize = 32)))
+dev.off()
+i <- i + 1
+```
+
+```{r}
+test <- lapply(names(NR_deconv), function(method){
+  dat <- NR_deconv[[method]]
+  cell_prop <- unlist(dat[,-1]) %>% unname()
+  cell_type <- colnames(dat)[-1] %>% stringr::str_remove(pattern = paste0(method, "_"))
+  df <- data.frame("cell_type" = rep(cell_type, each = nrow(dat)),
+                   "Cell_proportion" = cell_prop,
+                   "Pheno" = rep("NR", length(cell_prop)))
+  
+  dat2 <- R_deconv[[method]]
+  cell_prop2 <- unlist(dat2[,-1]) %>% unname()
+  cell_type2 <- colnames(dat2)[-1] %>% stringr::str_remove(pattern = paste0(method, "_"))
+  df2 <- data.frame("cell_type" = rep(cell_type2, each = nrow(dat2)),
+                   "Cell_proportion" = cell_prop2,
+                   "Pheno" = rep("R", length(cell_prop2)))
+  
+  dat3 <- REL_deconv[[method]]
+  cell_prop3 <- unlist(dat3[,-1]) %>% unname()
+  cell_type3 <- colnames(dat3)[-1] %>% stringr::str_remove(pattern = paste0(method, "_"))
+  df3 <- data.frame("cell_type" = rep(cell_type3, each = nrow(dat3)),
+                   "Cell_proportion" = cell_prop3,
+                   "Pheno" = rep("REL", length(cell_prop3)))
+
+  rbind(df, df2) %>% rbind(df3)
+  
+  
+})
+names(test) <- names(NR_deconv)
+
+
+test_plot <- lapply(names(test), function(method){
+  dat_binded <- test[[method]]
+  p <- ggplot(dat_binded, aes(x = cell_type, y = Cell_proportion, fill = Pheno))
+  p <- p + ggplot2::geom_boxplot(outlier.shape = NA)
+  p <- p + ggplot2::ylim(0,1)
+  p <- p + ggplot2::ggtitle(method)
+  p
+})
+test_plot
+
+test_plot2 <- lapply(names(test), function(method){
+  dat_binded <- test[[method]]
+  p <- ggplot(dat_binded, aes(x = Pheno, y = Cell_proportion, fill = cell_type))
+  p <- p + ggplot2::geom_boxplot(outlier.shape = NA)
+  p <- p + ggplot2::ylim(0,1)
+  p <- p + ggplot2::ggtitle(method)
+  p
+})
+test_plot2
+```
+
+
+
+
+
+
+
+
+
+####### DNA meth deconvolution
+
+```{r}
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+

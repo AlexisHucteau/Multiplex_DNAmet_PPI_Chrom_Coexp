@@ -1,0 +1,64 @@
+---
+title: "Test Mully"
+author: Alexis Hucteau
+date: "`r Sys.Date()`"
+output:
+    html_document:
+      toc: yes
+      toc_float: yes
+      theme: united
+editor_options:
+  markdown:
+    wrap: sentence
+---
+
+```{r}
+rm(list = ls())
+suppressPackageStartupMessages({
+  library(dplyr)
+  library(mully)
+})
+
+"%ni%" <- Negate("%in%")
+```
+
+```{r}
+fPPI <- read.table("Results/Proteo/fPPI_network_filtered.tsv", sep = "\t", header = T)
+colnames(fPPI)[1:2] <- c("V1", "V2")
+write.table(fPPI[,-(3:5)], "Results/Proteo/fPPI_for_mully.csv", row.names = F, quote = F, sep = ",")
+fPPI_unique_nodes <- c(fPPI$V1, fPPI$V2) %>% unique()
+fPPI_nodes <- data.frame("name" = fPPI_unique_nodes, 
+                         "attr1" = rep("lalala", length(fPPI_unique_nodes)),
+                         "attr2" = rep("lalala", length(fPPI_unique_nodes)),
+                         "n" = rep("PPI", length(fPPI_unique_nodes))
+                         )
+write.table(fPPI_nodes, "Results/Proteo/fPPI_nodes_for_mully.csv", row.names = F, quote = F, sep = ",")
+Mully_PPI <- mully(direct = T)
+Mully_PPI <- addLayer(Mully_PPI, c("PPI"))
+
+Mully_PPI <- importNodesCSV(Mully_PPI, "Results/Proteo/fPPI_nodes_for_mully.csv", name = "name")
+Mully_PPI <- importEdgesCSV(Mully_PPI, "Results/Proteo/fPPI_for_mully.csv")
+```
+
+```{r}
+GRN <- read.table("Results/GRN/GRN_NR_R.tsv", sep = "\t", header = T)
+colnames(GRN)[1:2] <- c("V1", "V2")
+write.table(GRN[,-(3:5)], "Results/GRN/GRN_for_mully.csv", row.names = F, quote = F, sep = ",")
+GRN_unique_nodes <- c(GRN$V1, GRN$V2) %>% unique()
+GRN_nodes <- data.frame("name" = GRN_unique_nodes, 
+                         "attr1" = rep("lalala", length(GRN_unique_nodes)),
+                         "attr2" = rep("lalala", length(GRN_unique_nodes)),
+                         "n" = rep("GRN", length(GRN_unique_nodes))
+                         )
+write.table(GRN_nodes, "Results/GRN/GRN_nodes_for_mully.csv", row.names = F, quote = F, sep = ",")
+Mully_PPI <- addLayer(Mully_PPI, c("PPI"))
+
+Mully_PPI <- importNodesCSV(Mully_PPI, "Results/GRN/GRN_nodes_for_mully.csv", name = "name")
+Mully_PPI <- importEdgesCSV(Mully_PPI, "Results/GRN/GRN_for_mully.csv")
+print(Mully_PPI, "GRN")
+```
+
+```{r}
+Mully <- merge(Mully_GRN, Mully_PPI)
+```
+

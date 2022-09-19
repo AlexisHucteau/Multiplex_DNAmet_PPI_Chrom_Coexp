@@ -1,0 +1,61 @@
+---
+title: "Combining_layers"
+author: Alexis Hucteau
+date: "`r Sys.Date()`"
+output:
+    html_document:
+      toc: yes
+      toc_float: yes
+      theme: united
+editor_options:
+  markdown:
+    wrap: sentence
+---
+
+```{r}
+rm(list = ls())
+suppressPackageStartupMessages({
+  library(dplyr)
+  library(igraph)
+  library(data.table)
+  library(ggvenn)
+})
+
+"%ni%" <- Negate("%in%")
+```
+
+
+
+```{r}
+Genes_from_pchic <- read.table("Results/Pchic/pchic_NR_R_meth_features_promoter_fragments_features.tsv", sep = "\t", header = T)$name %>% unique()
+
+Genes_from_DEG <- read.table("Results/GRN/Filtered_DEG_NR_R.tsv", sep = "\t", header = T)$ID %>% unique()
+
+Genes_from_TF <- read.table("Results/GRN/TF_activities_NR_R.tsv", sep = "\t", header = T) %>% dplyr::filter(pval <0.1) %>% .$TF %>% unique()
+
+Genes_from_fPPI <- read.table("Results/Proteo/Diff_Prot_exp_filtered.tsv", sep = "\t", header = T) %>% .$name %>% unique()
+
+Genes_from_Metabo <- read.table("Results/Metabolic_network/Gene_reactions_network.tsv", sep = "\t") %>% .$V2 %>% unique()
+```
+
+```{r}
+Genes_venndiag <- list(Pchic = Genes_from_pchic, TF = Genes_from_TF, Genes = Genes_from_DEG, fPPI = Genes_from_fPPI, Metabolic = Genes_from_Metabo)
+
+ggvenn(
+  Genes_venndiag, 
+  stroke_size = 0.5, set_name_size = 4
+  )
+```
+
+```{r}
+Genes_Pchic_n_GRN <- c(Genes_from_TF, Genes_from_DEG) %>% intersect(Genes_from_pchic)
+
+Genes_GRN_n_fPPI <- c(Genes_from_TF, Genes_from_DEG) %>% intersect(Genes_from_fPPI)
+
+Genes_fPPI_n_Metabolic <- Genes_from_fPPI %>% intersect(Genes_from_Metabo)
+
+Genes_Metabolic_n_pchic <- Genes_from_Metabo %>% intersect(Genes_from_pchic)
+
+union_genes <- c(Genes_Pchic_n_GRN, Genes_GRN_n_fPPI, Genes_fPPI_n_Metabolic, Genes_Metabolic_n_pchic) %>% unique()
+```
+

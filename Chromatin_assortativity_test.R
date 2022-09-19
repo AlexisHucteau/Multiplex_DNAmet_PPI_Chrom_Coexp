@@ -1,3 +1,5 @@
+rm(list = ls())
+
 suppressPackageStartupMessages({
   library(dplyr)
   library(chaser)
@@ -432,7 +434,7 @@ AnnoBMIQ <- AnnoBMIQ[,c(107, 108, 109, 2:106)]
 colnames(AnnoBMIQ)[1:3] <- c("chrom", "start", "end")
 AnnoBMIQ$chrom <- paste0("chr", AnnoBMIQ$chrom)
 
-
+write.table(AnnoBMIQ, "../DATA/Pchic/Meth_fragments.tsv", sep = "\t", row.names = F)
 
 
 

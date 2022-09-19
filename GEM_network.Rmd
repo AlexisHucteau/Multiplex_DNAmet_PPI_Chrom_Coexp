@@ -188,12 +188,90 @@ Gene_reactions_network <- lapply(names(Gene_reactions), function(reaction){
 Gene_reactions_network_cleaned <- na.omit(Gene_reactions_network)
 Gene_reactions_network_cleaned <- dplyr::filter(Gene_reactions_network_cleaned, B != "")
 
-write.csv(Gene_reactions_network_cleaned, "DATA_Reactions/Gene_reactions_network_cleaned.csv")
+Gene_reactions_network_cleaned_filtered <- Gene_reactions_network_cleaned[Gene_reactions_network_cleaned$A %in% rownames(NR_R_T_test),]
+
+write.table(Gene_reactions_network_cleaned_filtered, "Results/Metabolic_network/Gene_reactions_network.tsv", sep = "\t", row.names = F, quote = F)
+write.table(NR_R_T_test, "Results/Metabolic_network/Metabolic_features.tsv", sep = "\t", quote = F)
+
+Metabolic_network_clean_NR_R <- dplyr::filter(Metabolic_network_clean, A %in% rownames(NR_R_T_test))
+write.table(Metabolic_network_clean_NR_R, "Results/Metabolic_network/Metabolic_network_clean_NR_R.tsv", sep = "\t", row.names = F, quote = F)
 ```
 
 
 
 
+
+
+
+
+
+
+
+
+
+```{r}
+Gene_reaction_net <- read.table("Results/Metabolic_network/Gene_reactions_network.tsv", sep = "\t", header = F)
+Metabolic_network <- read.table("Results/Metabolic_network/Metabolic_network_clean_NR_R.tsv", sep =  "\t", header = F)
+
+Interconnect_all_node_from_vector <- function(vec){
+  len <- length(vec)
+  source <- sapply(1:len, function(element){
+    rep(vec[element], len-element)
+  }) %>% unlist()
+  target <- sapply(1:(len-1), function(element){
+    vec[(1+element):len]
+  }) %>% unlist()
+  data.frame("V1" = source,
+             "V2" = target)
+}
+
+Replace_reactions_to_gene_names <- function(metabo_net, reaction_gene_annotation){
+  res <- lapply(1:nrow(metabo_net), function(n_row){
+    reaction_A_gene <- dplyr::filter(reaction_gene_annotation, V1 == metabo_net[n_row, "V1"]) %>% .$V2
+    if (length(reaction_A_gene) == 0){
+      reaction_A_gene <- metabo_net[n_row, "V1"]
+    }
+    reaction_B_gene <- dplyr::filter(reaction_gene_annotation, V1 == metabo_net[n_row, "V2"]) %>% .$V2
+    if (length(reaction_B_gene) == 0){
+      reaction_B_gene <- metabo_net[n_row, "V2"]
+    }
+    vec <- unique(c(reaction_A_gene, reaction_B_gene))
+    
+    if(n_row %% floor(nrow(metabo_net)/100) == 0){
+      message(paste0(n_row %/% floor(nrow(metabo_net)/100), "%!"))
+    }
+    if(length(vec) == 1){
+      data.frame("V1" = metabo_net[n_row, "V1"], "V2"= metabo_net[n_row, "V2"])
+    }else{
+      Interconnect_all_node_from_vector(vec)
+    }
+  })
+
+  res <- data.table::rbindlist(res)
+  unique(res)
+}
+
+```
+
+```{r}
+Gene_metabolite_network <- Replace_reactions_to_gene_names(Metabolic_network, Gene_reaction_net)
+
+write.table(Gene_metabolite_network, "Results/Metabolic_network/Gene_metabolite_network_converted.tsv", sep = "\t", row.names = F, quote = F, col.names = F)
+```
+
+```{r}
+Metabolic_network_all <- read.table("/home/alexis/GitHub/Multiplex_DNAmet_PPI_Chrom_Coexp/DATA_Reactions/Metabolic_network_clean.tsv", sep = "\t", header = T)
+colnames(Metabolic_network_all) <- c("V1", "V2")
+Gene_reaction_converter <- read.table("/home/alexis/GitHub/Multiplex_DNAmet_PPI_Chrom_Coexp/DATA_Reactions/Gene_reactions_network_cleaned.csv", sep = ",", header = T, row.names = 1)
+colnames(Gene_reaction_converter) <- c("V1", "V2")
+```
+
+
+```{r}
+Gene_metabolite_all_network <- Replace_reactions_to_gene_names(Metabolic_network_all, Gene_reaction_converter)
+
+
+```
 
 
 

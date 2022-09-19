@@ -5,13 +5,14 @@ colRNA <- c("2292873_REL", "2410163_REL", "2297941_REL", "974025_REL", "2260553_
 
 Make_factor <- function(Samplesheet = Clinical_patient_data,
                         Samples_names,
+                        met_data = F,
                         Mutations_to_ignore = 0,
-                        Clinical_outcome_A,
-                        Clinical_name_A,
-                        Clinical_outcome_B,
-                        Clinical_name_B,
-                        Clinical_outcome_C,
-                        Clinical_name_C){
+                        Clinical_outcome_A = c("CR", "CRi"),
+                        Clinical_name_A = "R",
+                        Clinical_outcome_B = c("MLFS", "HI", "CRp", "PR"),
+                        Clinical_name_B = "OR",
+                        Clinical_outcome_C = c("SD", "PD"),
+                        Clinical_name_C = "NR"){
   # Function made for Clinical_patient_data
   # Create a factor that can be used for Differential_analysis function
   # Samplesheet = Clinical_patient_data
@@ -36,20 +37,35 @@ Make_factor <- function(Samplesheet = Clinical_patient_data,
     Mutations_factor <- factor(rep("", length(Samples_names)))
   }
   
-  Clinical_outcome_A <- Samplesheet[which(Samplesheet$Best_response %in% Clinical_outcome_A),] %>%
-    c(.$Baseline_RNAseq_data, .$Relapse_RNAseq_data) %>%
-    na.omit()
-  Clinical_outcome_B <- Samplesheet[which(Samplesheet$Best_response %in% Clinical_outcome_B),] %>%
-    c(.$Baseline_RNAseq_data, .$Relapse_RNAseq_data) %>%
-    na.omit()
-  Clinical_outcome_C <- Samplesheet[which(Samplesheet$Best_response %in% Clinical_outcome_C),] %>%
-    c(.$Baseline_RNAseq_data, .$Relapse_RNAseq_data) %>%
-    na.omit()
-  
+  if(met_data){
+    Clinical_outcome_A <- Samplesheet[which(Samplesheet$Best_response %in% Clinical_outcome_A),] %>%
+      c(.$Baseline_Sample, .$Post_treatment_sample) %>%
+      na.omit()
+    Clinical_outcome_B <- Samplesheet[which(Samplesheet$Best_response %in% Clinical_outcome_B),] %>%
+      c(.$Baseline_Sample, .$Post_treatment_sample) %>%
+      na.omit()
+    Clinical_outcome_C <- Samplesheet[which(Samplesheet$Best_response %in% Clinical_outcome_C),] %>%
+      c(.$Baseline_Sample, .$Post_treatment_sample) %>%
+      na.omit()
+  }else{
+    Clinical_outcome_A <- Samplesheet[which(Samplesheet$Best_response %in% Clinical_outcome_A),] %>%
+      c(.$Baseline_RNAseq_data, .$Relapse_RNAseq_data) %>%
+      na.omit()
+    Clinical_outcome_B <- Samplesheet[which(Samplesheet$Best_response %in% Clinical_outcome_B),] %>%
+      c(.$Baseline_RNAseq_data, .$Relapse_RNAseq_data) %>%
+      na.omit()
+    Clinical_outcome_C <- Samplesheet[which(Samplesheet$Best_response %in% Clinical_outcome_C),] %>%
+      c(.$Baseline_RNAseq_data, .$Relapse_RNAseq_data) %>%
+      na.omit()
+  }
   Clinical_outcome <- factor(ifelse(Samples_names %in% Clinical_outcome_A, Clinical_name_A,
                                     ifelse(Samples_names %in% Clinical_outcome_B, Clinical_name_B,
                                            ifelse(Samples_names %in% Clinical_outcome_C, Clinical_name_C, ""))))
-  Sample_timing <- factor(ifelse(Samples_names %in% Samplesheet$Baseline_RNAseq_data, "B", "REL"))
+  if(met_data){
+    Sample_timing <- factor(ifelse(Samples_names %in% Samplesheet$Baseline_Sample, "B", "Post"))
+  }else{
+    Sample_timing <- factor(ifelse(Samples_names %in% Samplesheet$Baseline_RNAseq_data, "B", "REL"))
+  }
   if(typeof(Mutations_to_ignore) != "double"){
     Final_factor <- paste(Mutations_factor, Clinical_outcome, Sample_timing, sep = ".") %>% as.factor()
   }else{
@@ -61,13 +77,6 @@ Make_factor <- function(Samplesheet = Clinical_patient_data,
 
 
 Factor_R_OR_NR_B <- Make_factor(Clinical_patient_data,
-                                colRNA,
-                                0,
-                                c("CR", "CRi"),
-                                "R",
-                                c("MLFS", "HI", "CRp", "PR"),
-                                "OR",
-                                c("SD", "PD"),
-                                "NR")
+                                colRNA)
 
 rm(colRNA)

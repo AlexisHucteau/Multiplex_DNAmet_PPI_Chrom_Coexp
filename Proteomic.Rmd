@@ -236,14 +236,12 @@ for (i in colnames(data_for_batch[,c(2:178, 182:194)])){
 
 batch <- ifelse(pheno_merged_se$condition == "CD34", "CD34", "Patients")
 
-  # pchic <- data.frame(pchic[rowSums(pchic[,cell_lines] >= minimum_interaction) >= 1, 1:10]) %>% na.omit(.)
-
 data_for_batch <- dplyr::filter(data_for_batch, !is.na(PG.Genes) & !is.na(Genes))
 
 data_for_batch <- data.frame(data_for_batch[rowSums(is.na(data_for_batch[,2:178])) < 176 & rowSums(is.na(data_for_batch[,182:194])) < 12,])
 Batch_removed_data <- sva::ComBat(as.matrix(data_for_batch[,c(2:178, 182:194)]), batch)
 Batch_removed_data <- cbind(Batch_removed_data, data_for_batch[,c(1, 179:181, 195:200)])
-# data_merged_batched_se <- make_se(Batch_removed_data, 1:190, pheno_merged_se)
+data_merged_batched_se <- make_se(Batch_removed_data, 1:190, pheno_merged_se)
 
 data_merged_batched_se <- make_se(data_for_batch, c(2:178, 182:194), pheno_merged_se)
 data_merged_batched_se
@@ -314,5 +312,21 @@ plot_cond(dep_merged)
 ```
 
 ```{r}
-df_long <- get_df_long(dep_merged)
+Diff_Prot_exp <- dep_merged@elementMetadata@listData %>% as.data.frame()
+
+write.table(Diff_Prot_exp, "Results/Proteo/Diff_Prot_exp.tsv", quote = F, row.names = F, sep = "\t")
 ```
+
+```{r}
+fPPI <- read.table("Results/Proteo/fPPI_network.tsv", sep = "\t", header = T)
+Diff_Prot_exp <- read.table("Results/Proteo/Diff_Prot_exp.tsv", sep = "\t", header = T) %>% as.data.frame()
+Diff_Prot_exp <- Diff_Prot_exp %>% 
+  dplyr::filter(Mutations_of_interest_vs_CD34_p.val < 0.1) %>% 
+  dplyr::select(name, Mutations_of_interest_vs_CD34_diff, Mutations_of_interest_vs_CD34_p.val, ProteinDescriptions)
+
+write.table(Diff_Prot_exp, "Results/Proteo/Diff_Prot_exp_filtered.tsv", sep = "\t", quote = F, row.names = F)
+
+fPPI <- dplyr::filter(fPPI, source %in% Diff_Prot_exp$name | target %in% Diff_Prot_exp$name)
+write.table(fPPI, "Results/Proteo/fPPI_network_filtered.tsv", sep = "\t", quote = F, row.names = F)
+```
+
