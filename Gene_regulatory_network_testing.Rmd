@@ -1,0 +1,495 @@
+---
+title: "Gene regulatory network testing"
+author: Alexis Hucteau
+date: "`r Sys.Date()`"
+output:
+    html_document:
+      toc: yes
+      toc_float: yes
+      theme: united
+editor_options:
+  markdown:
+    wrap: sentence
+---
+
+```{r}
+rm(list = ls())
+```
+
+
+```{r}
+suppressPackageStartupMessages({
+  library(dplyr)
+  library(RCy3)
+  library(igraph)
+  library(data.table)
+  library(viper)
+  library(aracne.networks)
+  library(stringr)
+  library(clusterProfiler)
+  library(ggplot2)
+  library(gridExtra)
+  library(grid)
+  library(ggvenn)
+
+})
+
+"%ni%" <- Negate("%in%")
+```
+
+```{r}
+RNAseq_diff_exp <- readRDS("~/GitHub/Koichi_gene_expression_analyses_git/Koichi_gene_expression_analyses/Results/Tables/RNAseq_diff_gene_expression_analysis.rds")
+
+NR_R_DEG <- RNAseq_diff_exp$R_OR_NR_B$`NR.B-R.B`
+
+RNAseq <- read.csv("~/GitHub/Koichi_gene_expression_analyses_git/Koichi_gene_expression_analyses/DATA/RNAseq_parsed.csv", row.names = 1, header = T, check.names = F)
+
+source("~/Core_scripts/msviper_functions.R")
+source("~/GitHub/Multiplex_DNAmet_PPI_Chrom_Coexp/Make_koichi_factor.R")
+
+ref_R_B <- Factor_R_OR_NR_B == "R.B"
+ref_NR_B <- Factor_R_OR_NR_B == "NR.B"
+ref_REL <- Factor_R_OR_NR_B == "OR.REL" | Factor_R_OR_NR_B == "R.REL"
+```
+
+```{r}
+deal_with_missing_values <- function(df, column, final_value){
+  for (i in column){
+    data.table::set(df, which(is.na(df[[i]])), i, final_value)
+  }
+}
+```
+
+
+```{r}
+Do_net_features <- function(vip, DEG, filtered = F, short = F){
+  genes_of_interest <- dplyr::filter(DEG, abs(logFC) > 0.75 & P.Value < 0.1) %>%
+    .$ID
+  TF_of_interest <- dplyr::filter(vip$mrs_table, pval < 0.1) %>% 
+    .$TF
+  if (filtered){
+    element_of_interest <- unlist(genes_of_interest, TF_of_interest) %>% unique()
+  }else{
+    element_of_interest <- unique(unlist(DEG$ID, vip$mrs_table$TF))
+  }
+  if (short){
+    reg <- vip$regulons %>% 
+      dplyr::filter(tf %in% element_of_interest & target %in% element_of_interest)
+  }else{
+    reg <- vip$regulons %>% 
+      dplyr::filter(tf %in% element_of_interest | target %in% element_of_interest)
+  }
+  igraph <- igraph::graph_from_data_frame(reg, directed = F)
+  eigen_centrality_result <- eigen_centrality(igraph, directed = F)$vector %>% as.data.frame()
+  page_rank_result <- igraph::page_rank(igraph, directed = F)$vector %>% as.data.frame()
+  res <- merge(DEG, eigen_centrality_result, by.x = "ID", by.y = 0, all.x = T)
+  colnames(res)[8] <- "eigenvalue"
+  res <- merge(res, page_rank_result, by.x = "ID", by.y = 0, all.x = T)
+  colnames(res)[9] <- "Page_Rank"
+  min_eigen <- min(res$eigenvalue)
+  res$eigenvalue <- log(res$eigenvalue)
+
+  res <- merge(res, vip$mrs_table, by.x = "ID", by.y = "TF", all.x = T)
+  res$eigenvalue <- sapply(res$eigenvalue, function(eigen){
+    test <- (is.na(eigen) | eigen == -Inf)
+    if (test){
+      min_eigen
+    }else{
+      eigen
+    }
+  })
+  res$Page_Rank <- log(res$Page_Rank)
+  res <- dplyr::filter(res, ID %in% c(reg$tf, reg$target))
+  list("features" = res, "net" = reg)
+}
+```
+
+```{r}
+Do_cool_scatterplot <- function(Feature, title, filtered_plot = T){
+  Feature <- dplyr::filter(Feature, eigenvalue > -10.001 & Page_Rank > -9 )#& ((P.Value < 0.05 & abs(logFC) > 1.5) | pval < 0.05))
+  DEG <- sapply(1:nrow(Feature), function(n){
+    res <- "NoSign"
+    if (Feature[n,"P.Value"] < 0.1){
+      if (Feature[n, "logFC"] > 0){
+        res <- "UP"
+      }else{
+        res <- "DOWN"
+      }
+    }
+    if(!is.na(Feature[n, "pval"])){
+      if(Feature[n, "pval"] < 0.1){
+        if (Feature[n, "nes"] > 0){
+          res <- "TF_UP"
+        }else{
+          res <- "TF_DOWN"
+        }
+      }
+    }
+    res
+  })
+  color <-  c("#00FF00", "#888888", "#0000FF", "#FF0000", "#FF00FF")
+  if(filtered_plot){
+    Feature <- Feature[DEG != "NoSign",]
+    DEG <- DEG[DEG != "NoSign"]
+    color =  c("#00FF00", "#0000FF", "#FF0000", "#FF00FF")
+  }
+  ggplot(Feature, aes(x = Page_Rank, y = eigenvalue, label = ID, colour = DEG))+
+    geom_text(check_overlap = T, size = 4, nudge_x = 0.0005, hjust = 0, outlier.size = 0)+
+    geom_point(size = 0.5)+
+    labs(title = paste0("Network-based node prioritization ", title))+
+    xlab("Page Rank (log)")+
+    ylab("Eigen Centrality (log)")+
+    scale_colour_manual(values= color)
+}
+```
+
+```{r}
+Do_msvip <- function(net_folder){
+  net <- read.table(paste0(net_folder, "/network.txt"), sep = "\t")
+  colnames(net)[1:2] <- c("tf", "target")
+
+  run_msviper(RNAseq, net, use_aracne = T, ref_R_B, ref_NR_B, "R", "NR", minsize = 4, ges.filter = T)
+}
+```
+
+
+```{r}
+List_of_network <- list.dirs(recursive = F)[list.dirs(recursive = F) %>% stringr::str_detect("utput")] %>% stringr::str_remove("./")
+
+mv_vip_list <- lapply(List_of_network, function(a) {
+  Do_msvip(a)
+})
+names(mv_vip_list) <- List_of_network
+```
+
+```{r}
+saveRDS(mv_vip_list, "/media/alexis/DATA/mv_vip_list.rds")
+```
+
+
+```{r}
+From_network_to_TF_activity <- function(name_msvip, filtered = F, short = F){
+  ms_vip <- mv_vip_list[[name_msvip]]
+  features <- Do_net_features(ms_vip, NR_R_DEG, filtered, short)
+  params <- paste0("_params", "_filtered"[filtered], "_short"[short])
+  scat <- Do_cool_scatterplot(features[["features"]], title = paste0(stringr::str_remove(name_msvip, pattern = "Output_"), params))
+  folder_output <- paste0("Results/GRN_testing/", stringr::str_remove(name_msvip, pattern = "Output_"), params)
+  dir.create(folder_output, showWarnings = F)
+  
+  png(paste0(folder_output, "/Network based nodes.png"), width = 1280, height = 720)
+  plot(scat)
+  dev.off()
+  
+  png(paste0(folder_output, "/TF_activities.png"), width = 1280, height = 720)
+  plot(ms_vip$mrs, mrs = 50)
+  dev.off()
+  ms_vip_table <- ms_vip$mrs_table %>%
+    dplyr::filter(TF %in% c(features[["net"]]$tf, features[["net"]]$target))
+  min_eigen <- min(na.omit(features[["features"]]$eigenvalue))
+  deal_with_missing_values(features[["features"]], c("eigenvalue"), min_eigen)
+  deal_with_missing_values(features[["features"]], c("nes", "size"), 0)
+  deal_with_missing_values(features[["features"]], c("pval", "pval.fdr"), 1)
+  res <- list("ms_vip" = ms_vip_table, "features" = features[["features"]], "scat" = scat, "mrs" = ms_vip$mrs, "net" = features[["net"]])
+}
+Networks_testing_analysis <- list()
+```
+
+
+```{r}
+shorter = T
+filter_param = T
+params <- paste("params", "filtered"[filter_param], "shorter"[shorter], sep = "_")
+List_of_network <- list.dirs(recursive = F)[list.dirs(recursive = F) %>% stringr::str_detect("utput")] %>% stringr::str_remove("./")
+
+Networks_testing_analysis[[params]] <- lapply(List_of_network, function(a) {
+  From_network_to_TF_activity(a, filter_param, shorter)
+})
+names(Networks_testing_analysis[[params]]) <- List_of_network
+
+shorter = F
+filter_param = T
+params <- paste("params", "filtered"[filter_param], "shorter"[shorter], sep = "_")
+List_of_network <- list.dirs(recursive = F)[list.dirs(recursive = F) %>% stringr::str_detect("utput")] %>% stringr::str_remove("./")
+
+Networks_testing_analysis[[params]] <- lapply(List_of_network, function(a) {
+  From_network_to_TF_activity(a, filter_param, shorter)
+})
+names(Networks_testing_analysis[[params]]) <- List_of_network
+
+shorter = T
+filter_param = F
+params <- paste("params", "filtered"[filter_param], "shorter"[shorter], sep = "_")
+List_of_network <- list.dirs(recursive = F)[list.dirs(recursive = F) %>% stringr::str_detect("utput")] %>% stringr::str_remove("./")
+
+Networks_testing_analysis[[params]] <- lapply(List_of_network, function(a) {
+  From_network_to_TF_activity(a, filter_param, shorter)
+})
+names(Networks_testing_analysis[[params]]) <- List_of_network
+
+shorter = F
+filter_param = F
+params <- paste("params", "filtered"[filter_param], "shorter"[shorter], sep = "_")
+List_of_network <- list.dirs(recursive = F)[list.dirs(recursive = F) %>% stringr::str_detect("utput")] %>% stringr::str_remove("./")
+
+Networks_testing_analysis[[params]] <- lapply(List_of_network, function(a) {
+  From_network_to_TF_activity(a, filter_param, shorter)
+})
+names(Networks_testing_analysis[[params]]) <- List_of_network
+```
+
+```{r}
+shorter = T
+filter_param = F
+params <- paste("params", "filtered"[filter_param], "shorter"[shorter], sep = "_")
+
+png(file = paste0("Results/GRN/Network_prio", params, ".png"), width = 1920, height = 1080)
+grid.arrange(Networks_testing_analysis[[params]][["Output_all_Samples_TPM"]][["scat"]], 
+             Networks_testing_analysis[[params]][["Output_CHEA"]][["scat"]], 
+             Networks_testing_analysis[[params]][["Output_regulons_E"]][["scat"]],
+             Networks_testing_analysis[[params]][["Output_regulonAML"]][["scat"]],
+             Networks_testing_analysis[[params]][["Output_String_filtered_0.7"]][["scat"]],
+             ncol=3,
+             top = textGrob("Network_priorization",
+                            just = c('center'),
+                            gp = gpar(fontsize = 32)))
+dev.off()
+```
+
+```{r}
+# saveRDS(Networks_testing_analysis, paste0("/media/alexis/DATA/Network_testing_analysis", "_filtered"[filter_param], "_shorter"[shorter], ".rds"))
+```
+
+```{r}
+Modify_Cytoscape_network <- function(e, n, title, collection){
+  defaults <- list(NODE_SHAPE="diamond",
+                   NODE_SIZE=10,
+                   EDGE_TRANSPARENCY=200,
+                   NODE_LABEL_POSITION="c,c,c,0.00,0.00")
+  nodeLabels <- mapVisualProperty(visual.prop = "node label", table.column = 'id', mapping.type = 'p')
+  createVisualStyle(title, defaults, list(nodeLabels))
+  setVisualStyle(title)
+  createDegreeFilter(filter.name = "single", criterion = c(0,0))
+  deleteSelectedNodes()
+  deleteSelectedNodes()
+
+  min_logFC <- min(n$logFC)
+  max_logFC <- max(n$logFC)
+  setNodeShapeMapping(table.column = "TF",
+                      table.column.values = c("Gene", "TF"),
+                      shapes = c('diamond', 'ELLIPSE'),
+                      style.name = title)
+  
+  setNodeColorMapping(table.column = 'logFC',
+                      table.column.values = c(min_logFC, 0.0, max_logFC),
+                      colors = c('#0000FF', '#FFFFFF', '#FF0000'),
+                      style.name = title)
+
+  setNodeFillOpacityMapping(table.column = 'P.Value',
+                            table.column.values = c(0, 0.1, 1),
+                            opacities = c(255, 200, 20),
+                            style.name = title)
+  
+  setNodeBorderOpacityMapping(table.column = 'P.Value',
+                            table.column.values = c(0, 0.1, 1),
+                            opacities = c(255, 200, 20),
+                            style.name = title)
+  
+  setNodeLabelOpacityMapping(table.column = 'P.Value',
+                            table.column.values = c(0, 0.1, 1),
+                            opacities = c(255, 200, 20),
+                            style.name = title)
+  
+  setEdgeTargetArrowShapeDefault(style.name = title, 
+                                 new.shape = "ARROW")
+  
+  setEdgeColorMapping(table.column = 'mor', 
+                      table.column.values = c(-1, 0, 1), 
+                      colors = c("#FF0000", "#FFFFFF", "#0000FF"), 
+                      style.name = title)
+  
+  min_eigen <- min(n$eigenvalue)
+  max_eigen <- max(n$eigenvalue)
+  
+  setNodeSizeMapping (table.column = 'eigenvalue',
+                      table.column.values = c(min_eigen, max_eigen),
+                      sizes = c(10, 200),
+                      style.name = title)
+
+  setNodeFontSizeMapping(table.column = 'eigenvalue',
+                         table.column.values = c(min_eigen, max_eigen),
+                         sizes = c(15, 75),
+                         style.name = title)
+
+  layoutNetwork()
+  # exportImage(paste0("Results/GRN_testing/Network_figures/", collection, "_", title), 'SVG', zoom=200)
+}
+```
+
+
+```{r}
+Make_Cytoscape_network <- function(net, feat, title, collection){
+  Genes_n_TFs <- feat %>% 
+    dplyr::filter((abs(logFC) > 0.75 & P.Value < 0.1) | pval < 0.1) %>% 
+    unlist(.$ID) %>% 
+    unique()
+  head(Genes_n_TFs)
+  filtered <- net %>% dplyr::filter(tf %in% Genes_n_TFs | target %in% Genes_n_TFs)
+  filtered_feat <- feat %>% 
+    dplyr::filter(ID %in% filtered$tf | ID %in% filtered$target)
+  head(filtered_feat)
+  colnames(filtered)[1:2] <- c("source", "target")
+  colnames(filtered_feat)[1] <- c("id")
+  filtered <- filtered %>%
+    dplyr::filter(source %in% filtered_feat$id & target %in% filtered_feat$id)
+  filtered_feat$TF <- ifelse(filtered_feat$nes != 0, "TF", "Gene")
+  head(filtered)
+  createNetworkFromDataFrames(nodes = filtered_feat, edges = filtered, title = title, collection = collection)
+  Modify_Cytoscape_network(filtered, filtered_feat, title, collection)
+}
+```
+
+```{r}
+List_of_network
+
+shorter = F
+filter_param = F
+params <- paste("params", "filtered"[filter_param], "shorter"[shorter], sep = "_")
+
+lapply(names(Networks_testing_analysis$params__), function(net_it){
+  Make_Cytoscape_network(Networks_testing_analysis[[params]][[net_it]]$net, 
+                                     Networks_testing_analysis[[params]][[net_it]]$features, 
+                                     paste(params, net_it, sep = "_"), 
+                                     paste0(params, net_it, sep = "_"))
+  
+})
+
+shorter = T
+filter_param = F
+params <- paste("params", "filtered"[filter_param], "shorter"[shorter], sep = "_")
+
+lapply(names(Networks_testing_analysis$params__), function(net_it){
+  Make_Cytoscape_network(Networks_testing_analysis[[params]][[net_it]]$net, 
+                                     Networks_testing_analysis[[params]][[net_it]]$features, 
+                                     paste(params, net_it, sep = "_"), 
+                                     paste0(params, net_it, sep = "_"))
+  
+})
+
+shorter = F
+filter_param = T
+params <- paste("params", "filtered"[filter_param], "shorter"[shorter], sep = "_")
+
+lapply(names(Networks_testing_analysis$params__), function(net_it){
+  Make_Cytoscape_network(Networks_testing_analysis[[params]][[net_it]]$net, 
+                                     Networks_testing_analysis[[params]][[net_it]]$features, 
+                                     paste(params, net_it, sep = "_"), 
+                                     paste0(params, net_it, sep = "_"))
+  
+})
+
+shorter = T
+filter_param = T
+params <- paste("params", "filtered"[filter_param], "shorter"[shorter], sep = "_")
+
+lapply(names(Networks_testing_analysis$params__), function(net_it){
+  Make_Cytoscape_network(Networks_testing_analysis[[params]][[net_it]]$net, 
+                                     Networks_testing_analysis[[params]][[net_it]]$features, 
+                                     paste(params, net_it, sep = "_"), 
+                                     paste0(params, net_it, sep = "_"))
+  
+})
+```
+
+```{r}
+Activated_element <- lapply(names(Networks_testing_analysis$params__), function(net){
+  Networks_testing_analysis$params__[[net]]$features %>% 
+    dplyr::filter(pval < 0.1) %>%
+    .$ID
+})
+names(Activated_element) <- names(Networks_testing_analysis$params__) %>% stringr::str_remove(pattern = "Output_")
+ggvenn(Activated_element[c(1,2,4,8)])
+
+```
+
+```{r}
+Influent_elements <- lapply(names(Networks_testing_analysis$params__), function(net){
+  Networks_testing_analysis$params__[[net]]$features %>% 
+    dplyr::filter(eigenvalue > min(.$eigenvalue)) %>%
+    .[order(.$eigenvalue, decreasing = T),] %>%
+    .[1:500,] %>%
+    .$ID
+})
+names(Influent_elements) <- names(Networks_testing_analysis$params__) %>% stringr::str_remove(pattern = "Output_")
+ggvenn(Influent_elements[c(1,2,4,8)])
+```
+
+```{r}
+Calcul_distance_network <- function(name_node_A, name_node_B, igraph_net){
+  name_node_A <- as.character(name_node_A)
+  name_node_B <- as.character(name_node_B)
+  if(name_node_A %ni% names(V(igraph_net)) | name_node_B %ni% names(V(igraph_net))){
+    return(Inf)
+  }
+  V_A <- V(igraph_net)[names(V(igraph_net)) == name_node_A]
+  V_B <- V(igraph_net)[names(V(igraph_net)) == name_node_B]
+  dis <- igraph::distances(igraph_net, V_A, V_B) %>%
+    .[1]
+  dis
+}
+
+Compare_edge_networks <- function(net_A, net_B){
+  igraph_net_B <- igraph::graph_from_data_frame(net_B)
+  res <- sapply(1:nrow(net_A), function(node){
+    Calcul_distance_network(net_A[node,1], net_A[node, 2], igraph_net_B)
+  })
+  res %>% 
+    .[. != Inf]
+}
+```
+
+```{r}
+All_samples_versus_regulon_AML <- Compare_edge_networks(Networks_testing_analysis$params__$Output_all_Samples_TPM$net, Networks_testing_analysis$params__$Output_regulonAML$net)
+```
+
+```{r}
+TR_activities <- lapply(names(Networks_testing_analysis$params__), function(network){
+    print(paste(params, network))
+    viper(RNAseq, dorothea2viper_regulons(mv_vip_list[[network]]$regulons))
+  })
+names(TR_activities) <- names(Networks_testing_analysis$params__)
+
+TR_activities_of_interest <- TR_activities[c("Output_all_Samples_TPM", "Output_CHEA", "Output_String_filtered_0.7")]
+```
+
+```{r}
+annotation_heatmap <- data.frame("Phenotype" = Factor_R_OR_NR_B)
+rownames(annotation_heatmap) <- colnames(RNAseq)
+ann_color_RNA <- list(
+    Phenotype = c(NR.B = "red", R.B = "blue", OR.REL = "orange", R.REL = "orange", OR.B = "grey")
+    )
+
+lapply(names(TR_activities_of_interest), function(network){
+  pheatmap::pheatmap(TR_activities_of_interest[[network]], main = stringr::str_remove(network, pattern = "Output_"), annotation_col = annotation_heatmap, annotation_colors = ann_color_RNA)
+})
+pheatmap::pheatmap(TR_activities_of_interest$Output_String_filtered_0.7, main = "String", annotation_col = annotation_heatmap, annotation_colors = ann_color_RNA)
+```
+
+```{r}
+TR_activities_of_interest_df <- lapply(TR_activities_of_interest, function(df){
+  as.data.frame(df)
+})
+Binded_rows_TR <- rbindlist(TR_activities_of_interest_df)
+Binded_rows_TR$TR <- c(rownames(TR_activities_of_interest$Output_all_Samples_TPM), rownames(TR_activities_of_interest$Output_CHEA), rownames(TR_activities_of_interest$Output_String_filtered_0.7))
+```
+
+```{r}
+Binded_rows_TR$var <- sapply(1:nrow(Binded_rows_TR), function(TR){
+  sd(Binded_rows_TR[TR,1:51])
+})
+Binded_rows_TR <- Binded_rows_TR[order(Binded_rows_TR$var)]
+Binded_rows_TR_high_var <- dplyr::filter(Binded_rows_TR, var > 2)
+png("Results/GRN/Heatmap.png", height = 960, width = 960)
+pheatmap::pheatmap(Binded_rows_TR_high_var[,1:51], main = "All", annotation_col = annotation_heatmap, annotation_colors = ann_color_RNA, labels_row = Binded_rows_TR_high_var$TR)
+dev.off()
+```
+

@@ -1,0 +1,126 @@
+---
+title: "Network dorothea generation"
+author: Alexis Hucteau
+date: "`r Sys.Date()`"
+output:
+    html_document:
+      toc: yes
+      toc_float: yes
+      theme: united
+editor_options:
+  markdown:
+    wrap: sentence
+---
+
+```{r}
+rm(list = ls())
+suppressPackageStartupMessages({
+  library(dplyr)
+  library(RCy3)
+  library(igraph)
+  library(data.table)
+  library(viper)
+  library(aracne.networks)
+  library(stringr)
+  library(clusterProfiler)
+  library(ggplot2)
+  library(biomaRt)
+  library(GeneAnswers)
+  library(org.Hs.eg.db)
+})
+
+"%ni%" <- Negate("%in%")
+```
+
+```{r}
+data(regulonlaml)
+viper_regulons2dorothea <- function(r) {
+  res <- r %>%
+    purrr::map_df(
+      .f = function(i) {
+        tf_target <- i$tfmode %>%
+          tibble::enframe(name = "target", value = "mor") %>%
+          mutate(likelihood = i$likelihood)
+      },
+      .id = "tf"
+    )
+  return(res)
+}
+
+regulonaml <- viper_regulons2dorothea(regulonlaml)
+regulonaml_SYMBOL <- data.frame("source" = GeneAnswers::getSymbols(regulonaml$tf, data = "org.Hs.eg"),
+                                "target" = GeneAnswers::getSymbols(regulonaml$target, data = "org.Hs.eg"),
+                                "mor" = regulonaml$mor,
+                                "likelihood" = regulonaml$likelihood)
+
+dir.create("Output_regulonAML")
+write.table(regulonaml_SYMBOL, "Output_regulonAML/network.txt", sep = "\t", quote = F, row.names = F)
+```
+
+
+```{r}
+data(dorothea_hs, package = "dorothea")
+Net <- list()
+Net[["regulons_A"]] = dorothea_hs %>%
+  filter(confidence %in% c("A"))
+Net[["regulons_B"]] = dorothea_hs %>%
+  filter(confidence %in% c("A", "B"))
+Net[["regulons_C"]] = dorothea_hs %>%
+  filter(confidence %in% c("A", "B", "C"))
+Net[["regulons_D"]] = dorothea_hs %>%
+  filter(confidence %in% c("A", "B", "C", "D"))
+Net[["regulons_D"]] = dorothea_hs %>%
+  filter(confidence %in% c("A", "B", "C", "D"))
+Net[["regulons_E"]] <- dorothea_hs
+
+lapply(names(Net), function(net){
+  dir.create(paste0("Output_", net))
+  write.table(Net[[net]][,c(1,3)], paste0("Output_", net, "/network.txt"), sep = "\t", quote = F, row.names = F)
+})
+```
+
+```{r}
+String_network <- read.table("/media/alexis/DATA/String_network/filtered_0.7.txt", sep =" ", header = F, check.names = F)
+
+mart <- useDataset("hsapiens_gene_ensembl", useMart("ensembl"))
+
+protein1 <- String_network$V1 %>% 
+  sapply(function(gene){
+    stringr::str_split(gene, pattern = "[.]") %>% 
+    unlist() %>%
+    .[2]
+  }) %>% 
+  unname()
+
+protein2 <- String_network$V2 %>% 
+  sapply(function(gene){
+    stringr::str_split(gene, pattern = "[.]") %>% 
+    unlist() %>%
+    .[2]
+  }) %>% 
+  unname()
+String_corrected <- data.frame("source" = protein1, 
+                               "target" = protein2)
+
+genes <- unlist(protein1, protein2) %>% unique()
+
+G_list <- getBM(filters= "ensembl_peptide_id", 
+                attributes= c("ensembl_peptide_id","hgnc_symbol"),
+                values=genes,
+                mart= mart)
+
+String_corrected <- merge(String_corrected, G_list, by.x = "source", by.y = "ensembl_peptide_id", all.x = T)
+String_corrected <- merge(String_corrected, G_list, by.x = "target", by.y = "ensembl_peptide_id", all.x = T)
+```
+
+```{r}
+String_corrected <- String_corrected[,3:4]
+colnames(String_corrected) <- c("source", "target")
+
+String_corrected <- unique(String_corrected)
+```
+
+```{r}
+String_corrected %>% write.table("Output_String_filtered_0.7/network.txt", sep = "\t", quote = F, row.names = F)
+```
+

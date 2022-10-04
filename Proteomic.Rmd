@@ -275,7 +275,7 @@ plot_imputation(data_merged_batched_filt, data_merged_batched_imp_man)
 ```
 
 ```{r}
-data_merged_batched_diff <- test_diff(data_merged_batched_imp, type = "control", control = "CD34")
+data_merged_batched_diff <- test_diff(data_merged_batched_imp, type = "control", control = "Group_control")
 
 dep_merged <- add_rejections(data_merged_batched_diff, alpha = 0.05, lfc = log2(1.5))
 ```
@@ -300,7 +300,7 @@ plot_heatmap(dep_merged, type = "contrast", kmeans = FALSE,
 ```
 
 ```{r}
-plot_volcano(dep_merged, contrast = "Mutations_of_interest_vs_CD34", label_size = 2, add_names = TRUE, adjusted = F)
+plot_volcano(dep_merged, contrast = "Mutations_of_interest_vs_Group_control", label_size = 2, add_names = TRUE, adjusted = F)
 ```
 
 ```{r}
@@ -321,9 +321,10 @@ write.table(Diff_Prot_exp, "Results/Proteo/Diff_Prot_exp.tsv", quote = F, row.na
 fPPI <- read.table("Results/Proteo/fPPI_network.tsv", sep = "\t", header = T)
 Diff_Prot_exp <- read.table("Results/Proteo/Diff_Prot_exp.tsv", sep = "\t", header = T) %>% as.data.frame()
 Diff_Prot_exp <- Diff_Prot_exp %>% 
-  dplyr::filter(Mutations_of_interest_vs_CD34_p.val < 0.1) %>% 
-  dplyr::select(name, Mutations_of_interest_vs_CD34_diff, Mutations_of_interest_vs_CD34_p.val, ProteinDescriptions)
+  dplyr::filter(Mutations_of_interest_vs_Group_control_p.val < 0.1) %>% 
+  dplyr::select(name, Mutations_of_interest_vs_Group_control_diff, Mutations_of_interest_vs_Group_control_p.val, ProteinDescriptions)
 
+Diff_Prot_exp <- Diff_Prot_exp[order(Diff_Prot_exp$Mutations_of_interest_vs_Group_control_diff, decreasing =T),]
 write.table(Diff_Prot_exp, "Results/Proteo/Diff_Prot_exp_filtered.tsv", sep = "\t", quote = F, row.names = F)
 
 fPPI <- dplyr::filter(fPPI, source %in% Diff_Prot_exp$name | target %in% Diff_Prot_exp$name)

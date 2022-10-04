@@ -23,6 +23,7 @@ suppressPackageStartupMessages({
   library(grid)
   library(ggplot2)
   library(GenomicRanges)
+  library(ChAMP)
 })
 
 source("~/Core_scripts/core_functions.R")
@@ -54,10 +55,25 @@ DMP_NR_R <- na.omit(DMP_NR_R)
 
 pchic_net <- dplyr::filter(Pchic_edges, source %in% DMP_NR_R$ID | target %in% DMP_NR_R$ID)
 
-write.table(pchic_net, "~/GitHub/Multiplex_DNAmet_PPI_Chrom_Coexp/Results/Pchic/pchic_NR_R_network.tsv", sep = "\t", row.names = F, quote = F)
-write.table(DMP_NR_R,  "~/GitHub/Multiplex_DNAmet_PPI_Chrom_Coexp/Results/Pchic/pchic_NR_R_meth_features.tsv", sep = "\t", row.names = F, quote = F)
+# write.table(pchic_net, "~/GitHub/Multiplex_DNAmet_PPI_Chrom_Coexp/Results/Pchic/pchic_NR_R_network.tsv", sep = "\t", row.names = F, quote = F)
+# write.table(DMP_NR_R,  "~/GitHub/Multiplex_DNAmet_PPI_Chrom_Coexp/Results/Pchic/pchic_NR_R_meth_features.tsv", sep = "\t", row.names = F, quote = F)
 
 ```
+
+```{r}
+load("/media/alexis/DATA/Session/BMIQ_Koichi.RData")
+load("/media/alexis/DATA/Session/Methylation_Koichi_analysis.RData")
+
+myGSEA <- champ.GSEA(beta=BMIQ_Koichi, DMP=DMP_Res_vs_NonRes_Koichi$R_to_NR, DMR=DMR_Res_vs_NonRes_Koichi$BumphunterDMR, arraytype="EPIC",adjPval=0.05, method="fisher")
+```
+
+
+
+
+
+
+
+
 
 ```{r}
 pchic_gene_network <- pchic[,1:5] %>% unique() %>% dplyr::filter(ID %in% c(pchic_net$source, pchic_net$target))

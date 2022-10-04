@@ -23,4 +23,4 @@ done
 
 java -Xmx5G -jar ~/ARACNe-AP/dist/aracne.jar -o $output --consolidate
 
-#shutdown
+# ~/shutdown_o_clock.sh

@@ -22,6 +22,8 @@ suppressPackageStartupMessages({
   library(viper)
   library(aracne.networks)
   library(stringr)
+  library(clusterProfiler)
+  library(ggplot2)
 })
 
 "%ni%" <- Negate("%in%")
@@ -32,12 +34,20 @@ suppressPackageStartupMessages({
 ```{r}
 RNAseq_diff_exp <- readRDS("~/GitHub/Koichi_gene_expression_analyses_git/Koichi_gene_expression_analyses/Results/Tables/RNAseq_diff_gene_expression_analysis.rds")
 
+NR_R_DEG <- RNAseq_diff_exp$R_OR_NR_B$`NR.B-R.B`
+
 RNAseq <- read.csv("~/GitHub/Koichi_gene_expression_analyses_git/Koichi_gene_expression_analyses/DATA/RNAseq_parsed.csv", row.names = 1, header = T, check.names = F)
 RNAseq_diff_exp$R_OR_NR_B$`NR.B-R.B` %>% write.table("Results/GRN/DEG_NR_R.tsv", row.names = F, sep = "\t", quote = F)
-RNAseq_diff_exp$R_OR_NR_B$`NR.B-R.B` %>% dplyr::filter(abs(logFC) > 0.75 & P.Value < 0.05) %>% write.table("Results/GRN/Filtered_DEG_NR_R.tsv", row.names = F, sep = "\t", quote = F)
+RNAseq_diff_exp$R_OR_NR_B$`NR.B-R.B` %>% 
+  dplyr::filter(abs(logFC) > 0.75 & P.Value < 0.05) %>% 
+  write.table("Results/GRN/Filtered_DEG_NR_R.tsv", row.names = F, sep = "\t", quote = F)
 
-Baseline_aracne_TPM_network <- read.csv("output_TPM_Baseline/network.txt", sep = "\t")
-colnames(Baseline_aracne_TPM_network)[1:2] <- c("tf", "target")
+output_RNAseq4Aracn_TPM_Baseline_TF_names_v_1.01 <- read.csv("output_RNAseq4Aracn_TPM_Baseline_TF_names_v_1.01/network.txt", sep = "\t")
+Output_threshold_up <- read.csv("Output_threshold_up/network.txt", sep = "\t")
+Output_1E5 <- read.csv("Results/GRN_threshold_1E-5/network.txt", sep = "\t")
+colnames(output_RNAseq4Aracn_TPM_Baseline_TF_names_v_1.01)[1:2] <- c("tf", "target")
+colnames(Output_threshold_up)[1:2] <- c("tf", "target")
+colnames(Output_1E5)[1:2] <- c("tf", "target")
 ```
 
 ### TF activities
@@ -50,22 +60,109 @@ ref_R_B <- Factor_R_OR_NR_B == "R.B"
 ref_NR_B <- Factor_R_OR_NR_B == "NR.B"
 ref_REL <- Factor_R_OR_NR_B == "OR.REL" | Factor_R_OR_NR_B == "R.REL"
 
-ms_NR_R <- run_msviper(RNAseq, Baseline_aracne_TPM_network, use_aracne = T, ref_R_B, ref_NR_B,  "R", "NR", minsize = 4, ges.filter=T)
-write.table(ms_NR_R$regulons, "Results/GRN/GRN_NR_R.tsv", row.names = F, sep = "\t", quote = F)
-write.table(ms_NR_R$mrs_table, "Results/GRN/TF_activities_NR_R.tsv", row.names = F, sep = "\t", quote = F)
+ms_NR_R_1E8 <- run_msviper(RNAseq, output_RNAseq4Aracn_TPM_Baseline_TF_names_v_1.01, use_aracne = T, ref_R_B, ref_NR_B,  "R", "NR", minsize = 4, ges.filter=T)
+ms_NR_R_1E2 <- run_msviper(RNAseq, Output_threshold_up, use_aracne = T, ref_R_B, ref_NR_B,  "R", "NR", minsize = 4, ges.filter=T)
+ms_NR_R_1E5 <- run_msviper(RNAseq, Output_1E5, use_aracne = T, ref_R_B, ref_NR_B,  "R", "NR", minsize = 4, ges.filter=T)
 
-ms_REL_R <- run_msviper(RNAseq, Baseline_aracne_TPM_network, use_aracne = T, ref_R_B, ref_REL,  "R", "REL", minsize = 4, ges.filter=T)
-write.table(ms_REL_R$regulons, "Results/GRN/GRN_REL_R.tsv", row.names = F, sep = "\t", quote = F)
-write.table(ms_REL_R$mrs_table, "Results/GRN/TF_activities_REL_R.tsv", row.names = F, sep = "\t", quote = F)
+# write.table(ms_NR_R$regulons, "Results/GRN/GRN_NR_R.tsv", row.names = F, sep = "\t", quote = F)
+# write.table(ms_NR_R$mrs_table, "Results/GRN/TF_activities_NR_R.tsv", row.names = F, sep = "\t", quote = F)
+
+# ms_REL_R <- run_msviper(RNAseq, Baseline_aracne_TPM_network, use_aracne = T, ref_R_B, ref_REL,  "R", "REL", minsize = 4, ges.filter=T)
+# write.table(ms_REL_R$regulons, "Results/GRN_threshold2/GRN_REL_R.tsv", row.names = F, sep = "\t", quote = F)
+# write.table(ms_REL_R$mrs_table, "Results/GRN_threshold2/TF_activities_REL_R.tsv", row.names = F, sep = "\t", quote = F)
 ```
 
 ### DEGs
 
 ```{r}
-NR_R_DEG <- RNAseq_diff_exp$R_OR_NR_B$`NR.B-R.B` %>% dplyr::filter(ID %in% c(ms_NR_R$regulons$tf, ms_NR_R$regulons$target)) %>% dplyr::select(ID, logFC:P.Value)
-write.table(NR_R_DEG, "Results/GRN/DEG_NR_R.tsv", row.names = F, sep = "\t", quote = F)
+# NR_R_DEG <- RNAseq_diff_exp$R_OR_NR_B$`NR.B-R.B` %>% dplyr::filter(ID %in% c(ms_NR_R$regulons$tf, ms_NR_R$regulons$target)) %>% dplyr::select(ID, logFC:P.Value)
+# write.table(NR_R_DEG, "Results/GRN_threshold2/DEG_NR_R.tsv", row.names = F, sep = "\t", quote = F)
 
-REL_R_DEG <- RNAseq_diff_exp$R_OR_NR_B$`R.REL-R.B` %>% dplyr::filter(ID %in% c(ms_REL_R$regulons$tf, ms_REL_R$regulons$target)) %>% dplyr::select(ID, logFC:P.Value)
-write.table(REL_R_DEG, "Results/GRN/DEG_REL_R.tsv", row.names = F, sep = "\t", quote = F)
+# Genes_DEG <- NR_R_DEG %>% dplyr::filter(abs(logFC) > 0.75 & P.Value < 0.05) %>% .$ID
+# TF_DA <- ms_NR_R$mrs_table %>% dplyr::filter(pval < 0.05) %>% .$TF
+  
+# REL_R_DEG <- RNAseq_diff_exp$R_OR_NR_B$`R.REL-R.B` %>% dplyr::filter(ID %in% c(ms_REL_R$regulons$tf, ms_REL_R$regulons$target)) %>% dplyr::select(ID, logFC:P.Value)
+# write.table(REL_R_DEG, "Results/GRN_threshold2/DEG_REL_R.tsv", row.names = F, sep = "\t", quote = F)
+```
+
+
+```{r}
+Do_net_features <- function(vip, DEG){
+  igraph <- igraph::graph_from_data_frame(vip$regulons, directed = F)
+  eigen_centrality_result <- eigen_centrality(igraph, directed = F)$vector %>% as.data.frame()
+  page_rank_result <- igraph::page_rank(igraph, directed = F)$vector %>% as.data.frame()
+  res <- merge(DEG, eigen_centrality_result, by.x = "ID", by.y = 0, all.x = T)
+  colnames(res)[8] <- "eigenvalue"
+  res <- merge(res, page_rank_result, by.x = "ID", by.y = 0, all.x = T)
+  colnames(res)[9] <- "Page_Rank"
+  res$eigenvalue <- log(res$eigenvalue)
+  res$Page_Rank <- log(res$Page_Rank)
+  res <- merge(res, vip$mrs_table, by.x = "ID", by.y = "TF", all.x = T, all.y = T)
+  res
+}
+```
+
+```{r}
+Features_NR_R_1E8 <- Do_net_features(ms_NR_R_1E8, NR_R_DEG)
+Features_NR_R_1E2 <- Do_net_features(ms_NR_R_1E2, NR_R_DEG)
+Features_NR_R_1E5 <- Do_net_features(ms_NR_R_1E5, NR_R_DEG)
+write.table(Features_NR_R_1E8, "Results/GRN/DEG_NR_R.tsv", sep = "\t", row.names = F, quote = F)
+```
+
+
+```{r}
+Do_cool_scatterplot <- function(Feature, title, filtered = F){
+  Feature <- dplyr::filter(Feature, eigenvalue > -10.001 & Page_Rank > -9 )#& ((P.Value < 0.05 & abs(logFC) > 1.5) | pval < 0.05))
+  DEG <- sapply(1:nrow(Feature), function(n){
+    res <- "NoSign"
+    if (Feature[n,"P.Value"] < 0.1){
+      if (Feature[n, "logFC"] > 0){
+        res <- "UP"
+      }else{
+        res <- "DOWN"
+      }
+    }
+    if(!is.na(Feature[n, "pval"])){
+      if(Feature[n, "pval"] < 0.1){
+        if (Feature[n, "nes"] > 0){
+          res <- "TF_UP"
+        }else{
+          res <- "TF_DOWN"
+        }
+      }
+    }
+    res
+  })
+  color <-  c("#00FF00", "#888888", "#0000FF", "#FF0000", "#FF00FF")
+  if(filtered){
+    Feature <- Feature[DEG != "NoSign",]
+    DEG <- DEG[DEG != "NoSign"]
+    color =  c("#00FF00", "#0000FF", "#FF0000", "#FF00FF")
+  }
+  ggplot(Feature, aes(x = Page_Rank, y = eigenvalue, label = ID, colour = DEG))+
+    geom_text(check_overlap = T, size = 4, nudge_x = 0.0005, hjust = 0, outlier.size = 0)+
+    geom_point(size = 0.5)+
+    labs(title = paste0("Network-based node prioritization ", title))+
+    xlab("Page Rank (log)")+
+    ylab("Eigen Centrality (log)")+
+    scale_colour_manual(values= color)
+}
+```
+
+```{r}
+png("Results/GRN/Figures/Features_network_filtered.png", width = 720*(1920/1080), height = 720)
+Do_cool_scatterplot(Features_NR_R_1E8, "", filtered = T)
+dev.off()
+png("Results/GRN/Figures/Features_network.png", width = 720*(1920/1080), height = 720)
+Do_cool_scatterplot(Features_NR_R_1E8, "")
+dev.off()
+Do_cool_scatterplot(Features_NR_R_1E2, "test")
+Do_cool_scatterplot(Features_NR_R_1E5, "test")
+```
+
+```{r}
+png("Results/GRN/Figures/TF_activity.png", width = 720*(1920/1080), height = 720)
+plot(ms_NR_R_1E8$mrs, mrs = 50)
+dev.off()
 ```
 
