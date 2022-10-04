@@ -1,0 +1,14 @@
+exp_file:
+  class: File
+  path: /home/alexis/SJARACNe/test_data/inputs/BRCA100.exp
+probe_file:
+  class: File
+  path: /home/alexis/SJARACNe/test_data/inputs/tf.txt
+p_value_consensus: 1.0
+p_value_bootstrap: 1e-07
+depth: 40
+aracne_config_dir:
+  class: Directory
+  path: /home/alexis/mambaforge/lib/python3.9/site-packages/SJARACNe-0.2.1-py3.9.egg/SJARACNe/config
+bootstrap_num: 2
+final_out_dir_name: SJARACNE_out.final
