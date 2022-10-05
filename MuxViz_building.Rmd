@@ -25,20 +25,64 @@ suppressPackageStartupMessages({
   library(muxViz)
   library(grid)
   library(ggraph)
+  library(RColorBrewer)
 })
 
 "%ni%" <- Negate("%in%")
 ```
 
-Preparing the data
-
-The preparation of input files is very easy. MuxViz requires plain text ASCII files to work, with columns separated by some special character (e.g. backspace, “,”, “;”, etc). At least three files are required:
-
-    A configuration file, where path(s) to network(s) data are specified;
-    A layout file, where information about nodes is specified;
-    An edge-list file, where edges are specified (for edge-colored networks, one file is needed for each layer; for interconnected networks an extended edge-list format can be used)
+### Function
 
 ```{r}
-All_samples_network <- read.table("Results/GRN/Network_for_muxviz.tsv", sep = "\t", header = T)
+Add_layer <- function(network_path, separateur = "\t", config_path, title_network, title_multiplex){
+  layer_config <- paste0(getwd(), "/MuxViz_multiplex/Multiplex_", title_network, ".edges;", title_network, ";", getwd(), "/MuxViz_multiplex/Multiplex_", title_multiplex, "_layout.txt")
+  net <- read.table(network_path, sep = separateur, check.names = F, header = T)
+  colnames(net)[1:2] <- c("source", "target")
+  layout <- data.frame(nodeID = c(net$source, net$target) %>% unique())
+  layout$nodeLabel <- layout$nodeID
+  if(!file.exists(config_path)){
+    layer_config_file <- data.frame(V1 = layer_config)
+    layout_file <- layout
+  }else{
+    layer_config <- data.frame(V1 = layer_config)
+    layer_config_file <- read.table(config_path, sep = ",", header = F, check.names = F)
+    layer_config_file <- rbind(layer_config_file, layer_config)
+    layout_file <- read.table(paste0(getwd(), "/MuxViz_multiplex/Multiplex_", title_multiplex, "_layout.txt"), sep = " ", header = T, check.names = F)
+    layout_file <- rbind(layout_file, layout) %>%
+      .[!duplicated(.$nodeID),]
+  }
+  write.table(layer_config_file, config_path, row.names = F, col.names = F, quote = F)
+  write.table(layout_file, paste0(getwd(), "/MuxViz_multiplex/Multiplex_", title_multiplex, "_layout.txt"), sep = " ", row.names = F, col.names = T, quote = F)
+  if(ncol(net) < 3){
+    net$weight <- rep(1, nrow(net))
+  }
+  write.table(net, paste0(getwd(), "/MuxViz_multiplex/Multiplex_", title_network, ".edges"), sep = " ", col.names = F, row.names = F, quote = F)
+}
+```
+
+
+```{r}
+Add_layer("~/GitHub/Multiplex_DNAmet_PPI_Chrom_Coexp/Layers/pchic_network.gr", ",", "~/GitHub/Multiplex_DNAmet_PPI_Chrom_Coexp/MuxViz_multiplex/Multiplex_function_config.txt", "Pchic", "function")
+
+Add_layer("~/GitHub/Multiplex_DNAmet_PPI_Chrom_Coexp/Layers/GRN.gr", "\t", "~/GitHub/Multiplex_DNAmet_PPI_Chrom_Coexp/MuxViz_multiplex/Multiplex_function_config.txt", "GRN", "function")
+
+Add_layer("~/GitHub/Multiplex_DNAmet_PPI_Chrom_Coexp/Layers/PPI_layer.gr", ",", "~/GitHub/Multiplex_DNAmet_PPI_Chrom_Coexp/MuxViz_multiplex/Multiplex_function_config.txt", "fPPI", "function")
+
+Add_layer("~/GitHub/Multiplex_DNAmet_PPI_Chrom_Coexp/Layers/Gene_reaction.gr", ",", "~/GitHub/Multiplex_DNAmet_PPI_Chrom_Coexp/MuxViz_multiplex/Multiplex_function_config.txt", "Gene_reaction", "function")
+
+Add_layer("~/GitHub/Multiplex_DNAmet_PPI_Chrom_Coexp/Layers/Metabo_reactions.gr", "\t", "~/GitHub/Multiplex_DNAmet_PPI_Chrom_Coexp/MuxViz_multiplex/Multiplex_function_config.txt", "Metabo", "function")
+```
+
+
+```{r}
+Multiplex_test <- buildMultilayerNetworkFromMuxvizFiles(config.file = "MuxViz_multiplex/Multiplex_function_config.txt", MultisliceType = "categorical", isWeighted = T, isDirected = T, verbose = T)
+```
+
+```{r}
+layer.colors <- c("#896944", "#FF0000", "#0000FF", "#008800", "#00FF00")
+lay <- layoutMultiplex(Multiplex_test$g.list, layout="fr", ggplot.format=F, box=T)
+plot_multiplex3D(g.list = Multiplex_test$g.list, layer.layout = lay, layer.colors = layer.colors, layer.space = 2, layer.labels.cex = 1.5 , node.size.scale = 0.8, show.aggregate = T)
+
+snapshot3d("Results/multiplex.png", fmt = "png", width = 1024, height = 1024)
 ```
 
