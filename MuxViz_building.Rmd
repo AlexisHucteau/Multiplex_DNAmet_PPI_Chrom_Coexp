@@ -75,7 +75,7 @@ Add_layer("~/GitHub/Multiplex_DNAmet_PPI_Chrom_Coexp/Layers/Metabo_reactions.gr"
 
 
 ```{r}
-Multiplex_test <- buildMultilayerNetworkFromMuxvizFiles(config.file = "MuxViz_multiplex/Multiplex_function_config.txt", MultisliceType = "categorical", isWeighted = T, isDirected = T, verbose = T)
+Multiplex_test <- buildMultilayerNetworkFromMuxvizFiles(config.file = "MuxViz_multiplex/Multiplex_function_config.txt", MultisliceType = "ordinal", isWeighted = T, isDirected = T, verbose = T)
 ```
 
 ```{r}
@@ -84,5 +84,10 @@ lay <- layoutMultiplex(Multiplex_test$g.list, layout="fr", ggplot.format=F, box=
 plot_multiplex3D(g.list = Multiplex_test$g.list, layer.layout = lay, layer.colors = layer.colors, layer.space = 2, layer.labels.cex = 1.5 , node.size.scale = 0.8, show.aggregate = T)
 
 snapshot3d("Results/multiplex.png", fmt = "png", width = 1024, height = 1024)
+```
+
+
+```{r}
+
 ```
 

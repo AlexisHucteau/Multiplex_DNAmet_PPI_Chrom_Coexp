@@ -238,17 +238,16 @@ names(Networks_testing_analysis[[params]]) <- List_of_network
 ```
 
 ```{r}
-shorter = T
+shorter = F
 filter_param = F
 params <- paste("params", "filtered"[filter_param], "shorter"[shorter], sep = "_")
 
 png(file = paste0("Results/GRN/Network_prio", params, ".png"), width = 1920, height = 1080)
 grid.arrange(Networks_testing_analysis[[params]][["Output_all_Samples_TPM"]][["scat"]], 
              Networks_testing_analysis[[params]][["Output_CHEA"]][["scat"]], 
-             Networks_testing_analysis[[params]][["Output_regulons_E"]][["scat"]],
              Networks_testing_analysis[[params]][["Output_regulonAML"]][["scat"]],
              Networks_testing_analysis[[params]][["Output_String_filtered_0.7"]][["scat"]],
-             ncol=3,
+             ncol=2,
              top = textGrob("Network_priorization",
                             just = c('center'),
                             gp = gpar(fontsize = 32)))
@@ -332,7 +331,6 @@ Make_Cytoscape_network <- function(net, feat, title, collection){
     dplyr::filter((abs(logFC) > 0.75 & P.Value < 0.1) | pval < 0.1) %>% 
     unlist(.$ID) %>% 
     unique()
-  head(Genes_n_TFs)
   filtered <- net %>% dplyr::filter(tf %in% Genes_n_TFs | target %in% Genes_n_TFs)
   filtered_feat <- feat %>% 
     dplyr::filter(ID %in% filtered$tf | ID %in% filtered$target)
@@ -350,12 +348,13 @@ Make_Cytoscape_network <- function(net, feat, title, collection){
 
 ```{r}
 List_of_network
+to_analyse <- List_of_network[c(1,2,4,8)]
 
 shorter = F
 filter_param = F
 params <- paste("params", "filtered"[filter_param], "shorter"[shorter], sep = "_")
 
-lapply(names(Networks_testing_analysis$params__), function(net_it){
+lapply(to_analyse, function(net_it){
   Make_Cytoscape_network(Networks_testing_analysis[[params]][[net_it]]$net, 
                                      Networks_testing_analysis[[params]][[net_it]]$features, 
                                      paste(params, net_it, sep = "_"), 
@@ -367,7 +366,7 @@ shorter = T
 filter_param = F
 params <- paste("params", "filtered"[filter_param], "shorter"[shorter], sep = "_")
 
-lapply(names(Networks_testing_analysis$params__), function(net_it){
+lapply(to_analyse, function(net_it){
   Make_Cytoscape_network(Networks_testing_analysis[[params]][[net_it]]$net, 
                                      Networks_testing_analysis[[params]][[net_it]]$features, 
                                      paste(params, net_it, sep = "_"), 
@@ -376,10 +375,10 @@ lapply(names(Networks_testing_analysis$params__), function(net_it){
 })
 
 shorter = F
-filter_param = T
+filter_param = F
 params <- paste("params", "filtered"[filter_param], "shorter"[shorter], sep = "_")
 
-lapply(names(Networks_testing_analysis$params__), function(net_it){
+lapply(to_analyse, function(net_it){
   Make_Cytoscape_network(Networks_testing_analysis[[params]][[net_it]]$net, 
                                      Networks_testing_analysis[[params]][[net_it]]$features, 
                                      paste(params, net_it, sep = "_"), 
@@ -391,7 +390,7 @@ shorter = T
 filter_param = T
 params <- paste("params", "filtered"[filter_param], "shorter"[shorter], sep = "_")
 
-lapply(names(Networks_testing_analysis$params__), function(net_it){
+lapply(to_analyse, function(net_it){
   Make_Cytoscape_network(Networks_testing_analysis[[params]][[net_it]]$net, 
                                      Networks_testing_analysis[[params]][[net_it]]$features, 
                                      paste(params, net_it, sep = "_"), 
@@ -401,14 +400,19 @@ lapply(names(Networks_testing_analysis$params__), function(net_it){
 ```
 
 ```{r}
-Activated_element <- lapply(names(Networks_testing_analysis$params__), function(net){
-  Networks_testing_analysis$params__[[net]]$features %>% 
-    dplyr::filter(pval < 0.1) %>%
-    .$ID
-})
-names(Activated_element) <- names(Networks_testing_analysis$params__) %>% stringr::str_remove(pattern = "Output_")
-ggvenn(Activated_element[c(1,2,4,8)])
+shorter = T
+filter_param = T
+params <- paste("params", "filtered"[filter_param], "shorter"[shorter], sep = "_")
 
+Activated_element <- lapply(names(Networks_testing_analysis[[params]]), function(net){
+  Networks_testing_analysis[[params]][[net]]$ms_vip %>% 
+    dplyr::filter(pval < 0.1) %>%
+    .$TF
+})
+names(Activated_element) <- names(Networks_testing_analysis[[params]]) %>% stringr::str_remove(pattern = "Output_")
+png(paste0("Results/GRN/Venn_", params, ".png"))
+ggvenn(Activated_element[c(1,2,4,8)])
+dev.off()
 ```
 
 ```{r}
