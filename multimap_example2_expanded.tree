@@ -1,4 +1,4 @@
-# 'multimap_example2_infomap.edges /home/alexis/GitHub/Multiplex_DNAmet_PPI_Chrom_Coexp --input-format multilayer --clu --map --tree --expanded --seed 12345 --num-trials 100 -d --include-self-links --two-level -vvv --out-name multimap_example2' -> 103463 nodes and 262505 links partitioned in 13m 5s from codelength 4.220285959 in one level to codelength 1.764316236 in 2 levels.
+# 'multimap_example2_infomap.edges /home/alexis/GitHub/Multiplex_DNAmet_PPI_Chrom_Coexp --input-format multilayer --clu --map --tree --expanded --seed 12345 --num-trials 100 -d --include-self-links --two-level -vvv --out-name multimap_example2' -> 103463 nodes and 262505 links partitioned in 13m 8s from codelength 4.220285959 in one level to codelength 1.764316236 in 2 levels.
 # path flow name layer node:
 1:1 0.0027859 "21593 | 3" 3 21593
 1:2 0.000814197 "21592 | 3" 3 21592
