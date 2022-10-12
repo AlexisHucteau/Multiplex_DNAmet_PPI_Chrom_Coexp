@@ -24,11 +24,86 @@ suppressPackageStartupMessages({
   library(ggplot2)
   library(GenomicRanges)
   library(ChAMP)
+  library(limma)
 })
 
 source("~/Core_scripts/core_functions.R")
 source("~/GitHub/Multiplex_DNAmet_PPI_Chrom_Coexp/Make_koichi_factor.R")
+```
 
+```{r}
+Differential_analysis <- function(Focused_variable, DATA){
+  design.pairs <- function(levels) {
+    n <- length(levels)
+    design <- matrix(0,n,choose(n,2))
+    rownames(design) <- levels
+    colnames(design) <- 1:choose(n,2)
+    k <- 0
+    for (i in 1:(n - 1))
+      for (j in (i + 1):n) {
+        k <- k + 1
+        design[i,k] <- 1
+        design[j,k] <- -1
+        colnames(design)[k] <- paste(levels[i], "-", levels[j],sep = "")
+      }
+    design
+  }
+  design <- model.matrix(~0 + Focused_variable)
+  contr.matrix <- design.pairs(levels(factor(Focused_variable)))
+  colnames(design) <- rownames(contr.matrix)   
+  Fit <- lmFit(DATA, design) %>%
+    contrasts.fit(., contr.matrix) %>%
+    eBayes(., trend = TRUE)
+  
+  FitList <- list()
+  for (i in 1:ncol(contr.matrix)) {
+    FitList[[i]] <- topTable(Fit, coef = i, adjust.method = "BH", number = nrow(DATA)) %>%
+      mutate(ID = rownames(.))
+    
+    message(paste0(i, " done"))
+    
+  }
+  names(FitList) <- colnames(contr.matrix)
+  return(FitList)
+}
+
+
+Make_factor_DNA_meth <- function(samples, Phenotype){
+  res <- sapply(samples, function(s){
+    if(s %in% Phenotype$Baseline_Sample){
+      p <- "B"
+      resp <- Phenotype[which(Phenotype$Baseline_Sample == s), "Best_response"][1]
+      if(resp %in% c("CR", "CRi")){
+        p <- paste(p, "R", sep = "_")
+      }else if(resp %in% c("SD", "PD")){
+        p <- paste(p, "NR", sep = "_")
+      }else{
+        p <- paste(p, "OR", sep = "_")
+      }
+    }else{
+      p <- "PostT"
+      resp <- Phenotype[which(Phenotype$Post_treatment_sample == s), "Best_response"][1]
+      if(resp %in% c("CR", "CRi")){
+        p <- paste(p, "R", sep = "_")
+      }else if(resp %in% c("SD", "PD")){
+        p <- paste(p, "NR", sep = "_")
+      }else{
+        p <- paste(p, "OR", sep = "_")
+      }
+    }
+    p
+  })
+  res <- unname(res)
+  return(res)
+}
+```
+
+
+```{r}
+BMIQ <- readRDS("/media/alexis/DATA/Koichi_methylation_dat/BMIQ_norm_Koichi_samples.Rdata")
+Clinical_patient_data <- read.csv("DATA/Clinical_patient_data.csv")
+NR_R_Factor <- Make_factor_DNA_meth(colnames(BMIQ), Clinical_patient_data)
+DMP_analysis <- Differential_analysis(NR_R_Factor, BMIQ)
 ```
 
 ```{r}
@@ -43,20 +118,40 @@ prepare_pchic <- function(cell_lines = "all", minimum_interaction = 5){
 }
 
 pchic <- prepare_pchic(cell_lines = c("Mon", "Mac1", "Mac0", "Mac2", "MK", "Ery", "EP"))
-
+pchic_bed <- rbind(pchic[,1:5], pchic[,6:10])
 Pchic_edges <- pchic[,c(4,9)]
 colnames(Pchic_edges) <- c("source", "target")
 
-DMP_NR_R_annotated <- readRDS("/media/alexis/DATA/Koichi_methylation_dat/DMP_annotated_analysis.rds")
-DMP_NR_R_annotated$DMP_Good_vs_Bad_Baseline$Good_Responder_to_Bad_Responder$logFC <- DMP_NR_R_annotated$DMP_Good_vs_Bad_Baseline$Good_Responder_to_Bad_Responder$Bad_Responder_AVG - DMP_NR_R_annotated$DMP_Good_vs_Bad_Baseline$Good_Responder_to_Bad_Responder$Good_Responder_AVG
+DMP_NR_R <- DMP_analysis$`B_NR-B_R` %>% dplyr::select(., c(logFC, P.Value, ID))
 
-DMP_NR_R <- DMP_NR_R_annotated$DMP_Good_vs_Bad_Baseline$Good_Responder_to_Bad_Responder %>% dplyr::select(., c(rowname, logFC, P.Value, ID))
-DMP_NR_R <- na.omit(DMP_NR_R)
+Anno_EPIC <- read.table("/media/alexis/DATA/Illumina_manifest/infinium-methylationepic.tsv", sep = "\t", header = T)
 
-pchic_net <- dplyr::filter(Pchic_edges, source %in% DMP_NR_R$ID | target %in% DMP_NR_R$ID)
+DMP_NR_R_annotated <- merge(DMP_NR_R, Anno_EPIC, by.x = "ID", by.y = "Name")
+DMP_NR_R_annotated$Strand <- ifelse(DMP_NR_R_annotated$Strand == "F", "+", "-")
+DMP_GRanges <- GRanges(
+  seqnames = DMP_NR_R_annotated$CHR,
+  ranges = IRanges(DMP_NR_R_annotated$MAPINFO, DMP_NR_R_annotated$MAPINFO +1),
+  strand = DMP_NR_R_annotated$Strand,
+  CpG = DMP_NR_R_annotated$ID
+)
 
-# write.table(pchic_net, "~/GitHub/Multiplex_DNAmet_PPI_Chrom_Coexp/Results/Pchic/pchic_NR_R_network.tsv", sep = "\t", row.names = F, quote = F)
-# write.table(DMP_NR_R,  "~/GitHub/Multiplex_DNAmet_PPI_Chrom_Coexp/Results/Pchic/pchic_NR_R_meth_features.tsv", sep = "\t", row.names = F, quote = F)
+pchic_Granges <- GRanges(seqnames = pchic_bed$chr, 
+                         ranges = IRanges(start = pchic_bed$start, end = pchic_bed$end), 
+                         ID = pchic_bed$ID)
+
+overlaps <- findOverlaps(pchic_Granges, DMP_GRanges)
+DMP_pchic <- data.frame(mcols(pchic_Granges[queryHits(overlaps),]),
+                          data.frame(mcols(DMP_GRanges[subjectHits(overlaps),])))
+
+
+
+pchic_net <- dplyr::filter(Pchic_edges, source %in% DMP_pchic$ID | target %in% DMP_pchic$ID)
+
+DMP_NR_R_annotated <- merge(DMP_NR_R_annotated, DMP_pchic, by.x = "ID", by.y = "CpG")
+colnames(DMP_NR_R_annotated)[7] <- "fragment_ID"
+
+write.table(pchic_net, "~/GitHub/Multiplex_DNAmet_PPI_Chrom_Coexp/Results/Pchic/pchic_dnameth_neighbour_network.tsv", sep = "\t", row.names = F, quote = F)
+write.table(DMP_NR_R_annotated,  "~/GitHub/Multiplex_DNAmet_PPI_Chrom_Coexp/Results/Pchic/pchic_NR_R_meth_features.tsv", sep = "\t", row.names = F, quote = F)
 
 ```
 
@@ -66,12 +161,6 @@ load("/media/alexis/DATA/Session/Methylation_Koichi_analysis.RData")
 
 myGSEA <- champ.GSEA(beta=BMIQ_Koichi, DMP=DMP_Res_vs_NonRes_Koichi$R_to_NR, DMR=DMR_Res_vs_NonRes_Koichi$BumphunterDMR, arraytype="EPIC",adjPval=0.05, method="fisher")
 ```
-
-
-
-
-
-
 
 
 

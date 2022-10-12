@@ -31,7 +31,6 @@ suppressPackageStartupMessages({
   library(gridExtra)
   library(grid)
   library(ggvenn)
-
 })
 
 "%ni%" <- Negate("%in%")
@@ -495,5 +494,9 @@ Binded_rows_TR_high_var <- dplyr::filter(Binded_rows_TR, var > 2)
 png("Results/GRN/Heatmap.png", height = 960, width = 960)
 pheatmap::pheatmap(Binded_rows_TR_high_var[,1:51], main = "All", annotation_col = annotation_heatmap, annotation_colors = ann_color_RNA, labels_row = Binded_rows_TR_high_var$TR)
 dev.off()
+```
+
+```{r}
+
 ```
 

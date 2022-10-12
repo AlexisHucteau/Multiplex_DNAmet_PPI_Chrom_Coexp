@@ -191,6 +191,15 @@ plot_single(dep, proteins = "IDH1", type = "centered") + theme(legend.position =
 df_long <- get_df_long(dep)
 ```
 
+```{r}
+Diff_Prot_exp <- dep@elementMetadata@listData %>% 
+  as.data.frame() %>%
+  dplyr::select(c("name", "Mutations_of_interest_vs_Group_control_diff", "Mutations_of_interest_vs_Group_control_p.val"))
+
+write.table(Diff_Prot_exp, "Results/Proteo/Diff_Prot_exp.tsv", quote = F, row.names = F, sep = "\t")
+```
+
+
 ##### CD34 data 
 
 ```{r}
