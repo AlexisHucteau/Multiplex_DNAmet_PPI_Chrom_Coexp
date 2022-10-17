@@ -1,0 +1,663 @@
+"source"	"target"	"Annotation"	"Direction"	"Score"
+"ABCE1"	"RPS17"	"predicted"	"-"	0.99
+"ABCE1"	"SLC25A4"	"predicted"	"-"	0.64
+"ABCE1"	"VIM"	"predicted"	"-"	0.64
+"ACAD8"	"ACADSB"	"predicted"	"-"	0.98
+"ACAD9"	"NDUFAF7"	"complex; input"	"-"	1
+"ACAD9"	"NDUFB11"	"complex; input"	"-"	1
+"ACAD9"	"NDUFS5"	"complex; input"	"-"	1
+"ACAP1"	"ARHGAP4"	"predicted"	"-"	0.98
+"ACAT2"	"HADHA"	"predicted"	"-"	0.97
+"ACAT2"	"PFDN4"	"predicted"	"-"	0.73
+"ACSL4"	"CPT1A"	"PPrel: compound"	"-"	1
+"ACTR1A"	"ACTR1B"	"input"	"-"	1
+"ACTR1A"	"AKAP9"	"complex"	"-"	1
+"ACTR1A"	"CD59"	"complex; input"	"-"	1
+"ACTR1A"	"CEP250"	"complex"	"-"	1
+"ACTR1A"	"DCTN2"	"complex; input; predicted"	"-"	1
+"ACTR1A"	"DCTN5"	"complex; input"	"-"	1
+"ACTR1A"	"GOLGB1"	"input"	"-"	1
+"ACTR1A"	"HLA-DRA"	"input"	"-"	1
+"ACTR1A"	"HLA-DRB1"	"input"	"-"	1
+"ACTR1A"	"HLA-DRB5"	"input"	"-"	1
+"ACTR1A"	"TMED3"	"complex; input"	"-"	1
+"ACTR1A"	"YWHAE"	"complex"	"-"	1
+"ACTR1B"	"DCTN2"	"input"	"-"	1
+"ACTR1B"	"DCTN5"	"input"	"-"	1
+"ACTR1B"	"HLA-DRA"	"input"	"-"	1
+"ACTR1B"	"HLA-DRB1"	"input"	"-"	1
+"ACTR1B"	"HLA-DRB5"	"input"	"-"	1
+"ADA"	"SP1"	"expression regulated by"	"<-"	1
+"ADH5"	"ALDH3B1"	"ECrel: compound"	"-"	1
+"ADH5"	"ALDH4A1"	"predicted"	"-"	0.64
+"ADH5"	"ESD"	"predicted"	"-"	0.64
+"ADH5"	"PHGDH"	"predicted"	"-"	0.64
+"AIMP1"	"HNRNPK"	"predicted"	"-"	0.97
+"AIMP1"	"HSP90B1"	"predicted"	"-"	0.99
+"AKAP9"	"CEP250"	"complex"	"-"	1
+"AKAP9"	"DCTN2"	"complex"	"-"	1
+"AKAP9"	"PEBP1"	"inhibited by"	"|-"	1
+"AKAP9"	"YWHAE"	"complex"	"-"	1
+"ALDOC"	"GAPDH"	"predicted"	"-"	0.56
+"ALDOC"	"GLO1"	"predicted"	"-"	0.78
+"ALDOC"	"PPIB"	"predicted"	"-"	0.58
+"ALOX5"	"ALOX5AP"	"complex"	"-"	1
+"ALOX5"	"SP1"	"expression regulated by"	"<-"	1
+"ANAPC1"	"EHMT2"	"activate; complex; inhibited by; input"	"|->"	1
+"ANAPC1"	"PPP3CA"	"PPrel: activated by, dephosphorylation"	"<-"	1
+"ANAPC1"	"PSMB2"	"catalyzed by"	"<-"	1
+"ANAPC1"	"PSMD11"	"catalyzed by"	"<-"	1
+"AP1M1"	"AP1S1"	"complex; predicted"	"-"	1
+"AP1M1"	"B2M"	"complex; input"	"-"	1
+"AP1M1"	"HLA-DRA"	"complex; input"	"-"	1
+"AP1M1"	"HLA-DRB1"	"complex; input"	"-"	1
+"AP1M1"	"HLA-DRB5"	"complex; input"	"-"	1
+"AP1M1"	"HLA-E"	"PPrel: binding/association"	"-"	1
+"AP1S1"	"B2M"	"complex; input"	"-"	1
+"AP1S1"	"HLA-DRA"	"complex; input"	"-"	1
+"AP1S1"	"HLA-DRB1"	"complex; input"	"-"	1
+"AP1S1"	"HLA-DRB5"	"complex; input"	"-"	1
+"AP1S1"	"HLA-E"	"PPrel: binding/association"	"-"	1
+"AP1S1"	"RAB10"	"predicted"	"-"	0.64
+"AP1S1"	"SORL1"	"predicted"	"-"	0.54
+"AP5B1"	"AP5Z1"	"predicted"	"-"	0.64
+"APOA1"	"P4HB"	"activated by"	"<-"	1
+"ARHGAP4"	"RHOA"	"activate; catalyze"	"->"	1
+"ARHGEF2"	"RHOA"	"PPrel: activation; activate; catalyze"	"->"	1
+"ARHGEF2"	"TUBB3"	"PPrel: dissociation"	"-"	1
+"ARHGEF2"	"TUBB6"	"PPrel: dissociation"	"-"	1
+"ARL8A"	"GNAI2"	"predicted"	"-"	0.64
+"ARRDC1"	"TSG101"	"predicted"	"-"	0.64
+"ATM"	"CTBP1"	"input"	"-"	1
+"ATM"	"DDB1"	"PPrel: activated, indirect effect"	"<-"	1
+"ATM"	"RFC2"	"complex; input"	"-"	1
+"ATM"	"SQSTM1"	"PPrel: inhibition"	"-|"	1
+"ATM"	"STAT1"	"predicted"	"-"	0.64
+"ATP6V0A1"	"ATP6V0D1"	"complex; predicted"	"-"	1
+"ATP6V0A1"	"ATP6V1H"	"complex"	"-"	1
+"ATP6V0A1"	"STX12"	"predicted"	"-"	0.66
+"ATP6V0A1"	"STX3"	"predicted"	"-"	0.66
+"ATP6V0D1"	"ATP6V1H"	"complex"	"-"	1
+"ATP6V0D1"	"MTOR"	"complex; input"	"-"	1
+"ATP6V1H"	"MTOR"	"complex; input"	"-"	1
+"B2M"	"CALR"	"complex; input"	"-"	1
+"B2M"	"CANX"	"input"	"-"	1
+"B2M"	"CTSS"	"predicted"	"-"	0.59
+"B2M"	"HLA-DRA"	"predicted"	"-"	0.97
+"B2M"	"HLA-E"	"PPrel: binding/association; complex; input"	"-"	1
+"B2M"	"SEC24D"	"catalyzed by; complex; input"	"<-"	1
+"B2M"	"VAMP8"	"input"	"-"	1
+"BCAP31"	"LMAN1"	"predicted"	"-"	0.64
+"BCAP31"	"RER1"	"predicted"	"-"	0.78
+"BCAP31"	"SEC61A1"	"predicted"	"-"	0.73
+"BPGM"	"ENO1"	"predicted"	"-"	0.7
+"BTF3"	"RPL10"	"predicted"	"-"	0.58
+"BTF3"	"RPS17"	"predicted"	"-"	0.59
+"CALR"	"CANX"	"complex; reaction"	"-"	1
+"CALR"	"CCT8"	"predicted"	"-"	0.56
+"CALR"	"EPB41"	"predicted"	"-"	0.64
+"CALR"	"GANAB"	"catalyzed by"	"<-"	1
+"CALR"	"HLA-E"	"PPrel: binding/association; complex; input"	"-"	1
+"CALR"	"HSP90B1"	"predicted"	"-"	1
+"CALR"	"P4HB"	"predicted"	"-"	0.98
+"CALR"	"RPN2"	"predicted"	"-"	0.56
+"CALR"	"SP1"	"expression regulated by"	"<-"	1
+"CALR"	"YWHAE"	"predicted"	"-"	0.98
+"CAND1"	"CANX"	"predicted"	"-"	0.58
+"CAND1"	"CLN3"	"predicted"	"-"	0.64
+"CAND1"	"DDB1"	"complex; input"	"-"	1
+"CAND1"	"DDB2"	"complex; input"	"-"	1
+"CAND1"	"FBXO7"	"complex; input"	"-"	1
+"CAND1"	"PURA"	"predicted"	"-"	0.64
+"CAND1"	"PWP1"	"predicted"	"-"	0.58
+"CAND1"	"STAT1"	"predicted"	"-"	0.77
+"CANX"	"GANAB"	"catalyzed by"	"<-"	1
+"CANX"	"HLA-DRA"	"complex; input"	"-"	1
+"CANX"	"HLA-DRB1"	"complex; input"	"-"	1
+"CANX"	"HLA-DRB5"	"complex; input"	"-"	1
+"CANX"	"HLA-E"	"complex; input"	"-"	1
+"CANX"	"HSP90B1"	"predicted"	"-"	1
+"CANX"	"LMAN1"	"predicted"	"-"	0.64
+"CANX"	"RPN2"	"predicted"	"-"	0.98
+"CANX"	"SEC61A1"	"predicted"	"-"	0.78
+"CANX"	"SSR1"	"predicted"	"-"	0.58
+"CCT8"	"HSP90B1"	"predicted"	"-"	0.66
+"CCT8"	"PFDN4"	"input"	"-"	1
+"CCT8"	"TCEA1"	"predicted"	"-"	0.59
+"CCT8"	"TUBB3"	"complex; input"	"-"	1
+"CCT8"	"TUBB6"	"complex; input"	"-"	1
+"CD59"	"DCTN2"	"complex; input"	"-"	1
+"CD59"	"DCTN5"	"complex; input"	"-"	1
+"CD59"	"GOLGB1"	"complex; input"	"-"	1
+"CD59"	"SEC24D"	"complex; input"	"-"	1
+"CD59"	"TFG"	"complex; input"	"-"	1
+"CD59"	"TMED3"	"complex; input"	"-"	1
+"CD99"	"SP1"	"expression regulated by"	"<-"	1
+"CEP250"	"DCTN2"	"complex"	"-"	1
+"CEP250"	"YWHAE"	"complex"	"-"	1
+"CGGBP1"	"REL"	"predicted"	"-"	0.64
+"CHD1L"	"DDB1"	"complex; input"	"-"	1
+"CHD1L"	"DDB2"	"complex; input"	"-"	1
+"CHD1L"	"POLD1"	"complex; input"	"-"	1
+"CHD1L"	"RFC1"	"complex; input"	"-"	1
+"CHD1L"	"RFC2"	"complex; input"	"-"	1
+"CIT"	"PPP1CB"	"inhibited by"	"|-"	1
+"CIT"	"RHOA"	"activated by; complex; inhibit; input; predicted"	"<-|"	1
+"CLC"	"SP1"	"expression regulated by"	"<-"	1
+"CLN3"	"PHGDH"	"predicted"	"-"	0.64
+"CLN3"	"SBDS"	"predicted"	"-"	0.73
+"CNOT2"	"CNOT3"	"complex; predicted"	"-"	1
+"CNOT3"	"SP1"	"expression regulated by"	"<-"	1
+"COL1A1"	"ITGAL"	"complex; input"	"-"	1
+"COL1A1"	"LIMS1"	"input"	"-"	1
+"COL1A1"	"P4HA1"	"catalyzed by"	"<-"	1
+"COL1A1"	"P4HB"	"catalyzed by; complex; input"	"<-"	1
+"COL1A1"	"PPIB"	"catalyzed by"	"<-"	1
+"COL1A1"	"PTK2B"	"catalyzed by; complex; input"	"<-"	1
+"COL1A1"	"SP1"	"expression regulated by"	"<-"	1
+"COL1A1"	"STAT1"	"GErel: expression by"	"<-"	1
+"COPS7B"	"DDB1"	"catalyze; complex"	"->"	1
+"COPS7B"	"DDB2"	"catalyze; complex"	"->"	1
+"COPS7B"	"FBXO7"	"catalyze"	"->"	1
+"COPS7B"	"GPS1"	"complex"	"-"	1
+"CORO1B"	"CORO1C"	"predicted"	"-"	0.98
+"COX7B"	"SCO1"	"activated by"	"<-"	1
+"CPSF7"	"ELAVL1"	"complex; input"	"-"	1
+"CPSF7"	"FIP1L1"	"catalyze; complex; input"	"->"	1
+"CPSF7"	"HNRNPD"	"complex; input"	"-"	1
+"CPSF7"	"HNRNPK"	"complex; input"	"-"	1
+"CPSF7"	"HNRNPR"	"complex; input"	"-"	1
+"CPSF7"	"LSM2"	"complex; input"	"-"	1
+"CPSF7"	"PABPN1"	"catalyze; complex; input"	"->"	1
+"CPSF7"	"PCBP2"	"complex; input"	"-"	1
+"CPSF7"	"PQBP1"	"complex; input"	"-"	1
+"CPSF7"	"SARNP"	"catalyze; complex; input"	"->"	1
+"CPSF7"	"SNRPB2"	"complex; input"	"-"	1
+"CPSF7"	"SNRPC"	"input"	"-"	1
+"CPSF7"	"SNW1"	"complex; input"	"-"	1
+"CPSF7"	"THOC6"	"catalyze; complex; input"	"->"	1
+"CPSF7"	"WBP11"	"complex; input"	"-"	1
+"CSNK1G1"	"YWHAE"	"activate"	"->"	1
+"CSNK1G1"	"YWHAQ"	"activate"	"->"	1
+"CSNK2A2"	"DDX41"	"predicted"	"-"	0.64
+"CSNK2A2"	"HSP90B1"	"predicted"	"-"	0.73
+"CTBP1"	"CTBP2"	"predicted"	"-"	0.98
+"CTBP1"	"HDGF"	"predicted"	"-"	0.64
+"CTBP1"	"IKZF1"	"predicted"	"-"	0.64
+"CTBP1"	"RUNX1"	"PPrel: activated by"	"<-"	1
+"CTBP2"	"IKZF1"	"predicted"	"-"	0.64
+"CTBP2"	"IKZF2"	"predicted"	"-"	0.64
+"CTBP2"	"RUNX1"	"PPrel: activated by"	"<-"	1
+"CTSS"	"HLA-DRA"	"catalyze"	"->"	1
+"CTSS"	"HLA-DRB1"	"catalyze"	"->"	1
+"CTSS"	"HLA-DRB5"	"catalyze"	"->"	1
+"CYBB"	"NCF4"	"PPrel: dissociation; complex; reaction"	"-"	1
+"CYBB"	"STAT1"	"predicted"	"-"	0.64
+"DCTN2"	"DCTN5"	"complex; input; predicted"	"-"	1
+"DCTN2"	"GOLGB1"	"input"	"-"	1
+"DCTN2"	"HLA-DRA"	"input"	"-"	1
+"DCTN2"	"HLA-DRB1"	"input"	"-"	1
+"DCTN2"	"HLA-DRB5"	"input"	"-"	1
+"DCTN2"	"TMED3"	"complex; input"	"-"	1
+"DCTN2"	"TSG101"	"predicted"	"-"	0.74
+"DCTN2"	"YWHAE"	"complex"	"-"	1
+"DCTN5"	"GOLGB1"	"input"	"-"	1
+"DCTN5"	"HLA-DRA"	"input"	"-"	1
+"DCTN5"	"HLA-DRB1"	"input"	"-"	1
+"DCTN5"	"HLA-DRB5"	"input"	"-"	1
+"DCTN5"	"TMED3"	"complex; input"	"-"	1
+"DDB1"	"DDB2"	"complex"	"-"	1
+"DDB1"	"GPS1"	"catalyzed by; complex"	"<-"	1
+"DDB1"	"LIG1"	"catalyzed by"	"<-"	1
+"DDB1"	"MTOR"	"predicted"	"-"	0.64
+"DDB1"	"POLD1"	"complex; input"	"-"	1
+"DDB1"	"PWP1"	"predicted"	"-"	0.58
+"DDB1"	"RFC1"	"complex; input"	"-"	1
+"DDB1"	"RFC2"	"complex; input"	"-"	1
+"DDB1"	"SAMHD1"	"predicted"	"-"	0.64
+"DDB1"	"SNW1"	"predicted"	"-"	0.73
+"DDB1"	"STAT1"	"predicted"	"-"	0.64
+"DDB1"	"TCEA1"	"complex; input"	"-"	1
+"DDB2"	"GPS1"	"catalyzed by; complex"	"<-"	1
+"DDB2"	"POLD1"	"complex; input"	"-"	1
+"DDB2"	"RFC1"	"complex; input"	"-"	1
+"DDB2"	"RFC2"	"complex; input"	"-"	1
+"DENND1A"	"YWHAE"	"complex; input"	"-"	1
+"DENND4A"	"RAB10"	"catalyze"	"->"	1
+"DEPTOR"	"MTOR"	"PPrel: inhibition; complex"	"-|"	1
+"DEPTOR"	"YWHAE"	"complex; input"	"-"	1
+"DEPTOR"	"YWHAQ"	"complex; input"	"-"	1
+"DNAJA2"	"HSPA5"	"predicted"	"-"	0.98
+"DNAJB11"	"HSPA5"	"predicted"	"-"	0.99
+"DNAJC3"	"HSPA5"	"predicted"	"-"	1
+"DNAJC3"	"RPL10"	"activate"	"->"	1
+"DNAJC3"	"RPS17"	"activate"	"->"	1
+"DNAJC3"	"RPS27"	"activate"	"->"	1
+"DNAJC5"	"SGTA"	"predicted"	"-"	0.54
+"DR1"	"ELF1"	"expression regulated by"	"<-"	1
+"DR1"	"POLE3"	"predicted"	"-"	0.98
+"EDC3"	"LSM2"	"catalyze"	"->"	1
+"EDC3"	"YWHAQ"	"predicted"	"-"	0.77
+"EEA1"	"RAB5B"	"complex"	"-"	1
+"EEA1"	"TOM1"	"predicted"	"-"	0.98
+"EEF1B2"	"EEF1D"	"complex; input"	"-"	1
+"EEF1D"	"HSP90B1"	"predicted"	"-"	0.73
+"EIF2B2"	"EIF5"	"predicted"	"-"	0.99
+"EIF3E"	"EIF5"	"PPrel: binding/association; activated by; input"	"<-"	1
+"EIF3E"	"RPS17"	"complex; input"	"-"	1
+"EIF3E"	"RPS27"	"complex; input"	"-"	1
+"EIF5"	"RPS17"	"activate; input"	"->"	1
+"EIF5"	"RPS27"	"activate; input"	"->"	1
+"ELAVL1"	"FIP1L1"	"complex; input"	"-"	1
+"ELAVL1"	"HNRNPD"	"complex; input"	"-"	1
+"ELAVL1"	"HNRNPK"	"complex; input"	"-"	1
+"ELAVL1"	"HNRNPR"	"complex; input"	"-"	1
+"ELAVL1"	"LSM2"	"complex; input"	"-"	1
+"ELAVL1"	"PABPN1"	"complex; input"	"-"	1
+"ELAVL1"	"PCBP2"	"complex; input"	"-"	1
+"ELAVL1"	"PQBP1"	"complex; input"	"-"	1
+"ELAVL1"	"SNRPB2"	"complex; input"	"-"	1
+"ELAVL1"	"SNRPC"	"complex; input"	"-"	1
+"ELAVL1"	"SNW1"	"complex; input"	"-"	1
+"ELAVL1"	"WBP11"	"complex; input"	"-"	1
+"ELF1"	"RBM45"	"expression regulates"	"->"	1
+"ELF1"	"REL"	"predicted"	"-"	0.64
+"ELF1"	"RUNX1"	"complex; input"	"-"	1
+"ELF1"	"SP1"	"predicted"	"-"	0.64
+"EMSY"	"SMARCB1"	"predicted"	"-"	0.56
+"ENO1"	"FHL1"	"predicted"	"-"	0.64
+"ENO1"	"GAPDH"	"predicted"	"-"	1
+"ENO1"	"TSG101"	"predicted"	"-"	0.64
+"ENO1"	"YWHAE"	"predicted"	"-"	0.99
+"ENO1"	"YWHAQ"	"predicted"	"-"	0.99
+"ERP29"	"HSPA5"	"predicted"	"-"	0.77
+"EXOC4"	"RAB10"	"activated by"	"<-"	1
+"EXOC4"	"RALA"	"PPrel: activated by; catalyzed by; complex; input"	"<-"	1
+"F11R"	"ITGAL"	"PPrel: binding/association; complex; input"	"-"	1
+"F11R"	"RHOA"	"complex"	"-"	1
+"FBXO7"	"GPS1"	"catalyzed by"	"<-"	1
+"FEN1"	"LIG1"	"reaction"	"-"	1
+"FEN1"	"POLD1"	"catalyze; complex; input"	"->"	1
+"FEN1"	"RFC1"	"complex; input"	"-"	1
+"FEN1"	"RFC2"	"complex; input"	"-"	1
+"FHL1"	"STAT1"	"PPrel: ubiquitination"	"-"	1
+"FHL1"	"STAT2"	"PPrel: ubiquitination"	"-"	1
+"FIP1L1"	"HNRNPD"	"complex; input"	"-"	1
+"FIP1L1"	"HNRNPK"	"complex; input"	"-"	1
+"FIP1L1"	"HNRNPR"	"complex; input"	"-"	1
+"FIP1L1"	"LSM2"	"complex; input"	"-"	1
+"FIP1L1"	"PABPN1"	"complex; input"	"-"	1
+"FIP1L1"	"PCBP2"	"complex; input"	"-"	1
+"FIP1L1"	"PPP1CB"	"PPrel: binding/association"	"-"	1
+"FIP1L1"	"PQBP1"	"complex; input"	"-"	1
+"FIP1L1"	"SARNP"	"complex; input"	"-"	1
+"FIP1L1"	"SNRPB2"	"complex; input"	"-"	1
+"FIP1L1"	"SNRPC"	"input"	"-"	1
+"FIP1L1"	"SNW1"	"complex; input"	"-"	1
+"FIP1L1"	"THOC6"	"complex; input"	"-"	1
+"FIP1L1"	"WBP11"	"complex; input"	"-"	1
+"FKBP5"	"PYGL"	"predicted"	"-"	0.64
+"FLOT1"	"FLOT2"	"predicted"	"-"	1
+"FNBP1"	"IGF2R"	"complex; input"	"-"	1
+"FNBP1"	"M6PR"	"complex; input"	"-"	1
+"FNBP1"	"PICALM"	"complex; input"	"-"	1
+"FNBP1"	"SQSTM1"	"PPrel: inhibition"	"-|"	1
+"FNBP1"	"TGOLN2"	"complex; input"	"-"	1
+"FNBP1"	"TSG101"	"predicted"	"-"	0.66
+"FNBP1"	"VAMP4"	"complex; input"	"-"	1
+"FNBP1"	"VAMP8"	"complex; input"	"-"	1
+"GALNS"	"SP1"	"expression regulated by"	"<-"	1
+"GANAB"	"MLEC"	"catalyze"	"->"	1
+"GAPDH"	"PPIB"	"predicted"	"-"	0.64
+"GAPDH"	"YWHAE"	"predicted"	"-"	0.77
+"GAPDH"	"YWHAQ"	"predicted"	"-"	0.77
+"GBP2"	"STAT1"	"predicted"	"-"	0.98
+"GCLC"	"SP1"	"expression regulated by"	"<-"	1
+"GLS"	"GLUD1"	"ECrel: compound"	"-"	1
+"GLUD1"	"SP1"	"expression regulated by"	"<-"	1
+"GNAI2"	"GNAI3"	"catalyze; catalyzed by; input"	"<->"	1
+"GNAI2"	"HEBP1"	"complex; input"	"-"	1
+"GNAI2"	"HLA-DRA"	"inhibite"	"-|"	1
+"GNAI2"	"HLA-DRB1"	"inhibite"	"-|"	1
+"GNAI2"	"RHOA"	"activate; reaction"	"->"	1
+"GNAI3"	"HEBP1"	"complex; input"	"-"	1
+"GNAI3"	"HLA-DRA"	"inhibite"	"-|"	1
+"GNAI3"	"HLA-DRB1"	"inhibite"	"-|"	1
+"GNAI3"	"NUCB1"	"predicted"	"-"	0.77
+"GNAI3"	"RHOA"	"activate; reaction"	"->"	1
+"GOLGB1"	"TMED3"	"complex; input"	"-"	1
+"GPS1"	"PSMB2"	"predicted"	"-"	0.66
+"GPS1"	"PSMD11"	"predicted"	"-"	1
+"GTF2B"	"INTS3"	"catalyze; complex; input"	"->"	1
+"GTF2B"	"INTS4"	"catalyze; complex; input"	"->"	1
+"GTF2B"	"INTS5"	"catalyze; complex; input"	"->"	1
+"GTF2B"	"PSMB2"	"expression regulates"	"->"	1
+"GTF2B"	"RPRD1B"	"complex; input"	"-"	1
+"GTF2B"	"SMARCE1"	"complex; reaction"	"-"	1
+"GTF2B"	"SP1"	"complex; input"	"-"	1
+"GTF2B"	"SUPT4H1"	"activated by"	"<-"	1
+"GTF2B"	"TAF6"	"complex; input"	"-"	1
+"GTF2B"	"YWHAE"	"predicted"	"-"	0.64
+"GYPC"	"SP1"	"expression regulated by"	"<-"	1
+"HAX1"	"HSPA5"	"predicted"	"-"	0.64
+"HAX1"	"STAT1"	"predicted"	"-"	0.54
+"HAX1"	"STAT2"	"predicted"	"-"	0.54
+"HDAC4"	"IKZF1"	"predicted"	"-"	0.64
+"HDAC4"	"SMARCB1"	"predicted"	"-"	0.64
+"HDAC4"	"SP1"	"predicted"	"-"	0.64
+"HDAC4"	"STAT1"	"predicted"	"-"	0.64
+"HDAC4"	"YWHAE"	"complex; input"	"-"	1
+"HDAC4"	"YWHAQ"	"predicted"	"-"	0.99
+"HEATR1"	"RPS27"	"reaction"	"-"	1
+"HEATR1"	"WDR46"	"activate; complex; input"	"->"	1
+"HEATR1"	"WDR75"	"complex; input"	"-"	1
+"HIRA"	"SMARCB1"	"expression regulated by"	"<-"	1
+"HIRA"	"SP1"	"expression regulated by"	"<-"	1
+"HIRA"	"STAT2"	"expression regulated by"	"<-"	1
+"HLA-DRA"	"HLA-DRB1"	"catalyze; catalyzed by; complex; input; predicted"	"<->"	1
+"HLA-DRA"	"HLA-DRB5"	"catalyze; catalyzed by; complex; input; predicted"	"<->"	1
+"HLA-DRA"	"HLA-E"	"predicted"	"-"	0.92
+"HLA-DRA"	"MAP4K1"	"activate"	"->"	1
+"HLA-DRA"	"PTPRC"	"activated by; catalyzed by; inhibited by"	"-"	1
+"HLA-DRA"	"SEC24D"	"complex; input"	"-"	1
+"HLA-DRA"	"SP1"	"expression regulated by"	"<-"	1
+"HLA-DRA"	"STAT1"	"GErel: expression by"	"<-"	1
+"HLA-DRB1"	"HLA-DRB5"	"catalyze; catalyzed by; input"	"<->"	1
+"HLA-DRB1"	"HLA-E"	"predicted"	"-"	0.98
+"HLA-DRB1"	"MAP4K1"	"activate"	"->"	1
+"HLA-DRB1"	"PTPRC"	"activated by; catalyzed by; inhibited by"	"-"	1
+"HLA-DRB1"	"SEC24D"	"complex; input"	"-"	1
+"HLA-DRB1"	"STAT1"	"GErel: expression by"	"<-"	1
+"HLA-DRB5"	"PTPRC"	"catalyzed by; inhibited by"	"-"	1
+"HLA-DRB5"	"SEC24D"	"complex; input"	"-"	1
+"HLA-DRB5"	"STAT1"	"GErel: expression by"	"<-"	1
+"HLA-E"	"SEC24D"	"catalyzed by; complex; input"	"<-"	1
+"HLA-E"	"STAT1"	"expression regulated by"	"<-"	1
+"HLA-E"	"VAMP8"	"input"	"-"	1
+"HMGB3"	"STAT1"	"predicted"	"-"	0.56
+"HMGB3"	"STAT2"	"predicted"	"-"	0.56
+"HNRNPD"	"HNRNPK"	"complex; input"	"-"	1
+"HNRNPD"	"HNRNPR"	"complex; input"	"-"	1
+"HNRNPD"	"LSM2"	"complex; input"	"-"	1
+"HNRNPD"	"PABPN1"	"complex; input"	"-"	1
+"HNRNPD"	"PCBP2"	"complex; input"	"-"	1
+"HNRNPD"	"PQBP1"	"complex; input"	"-"	1
+"HNRNPD"	"PSMB2"	"catalyzed by"	"<-"	1
+"HNRNPD"	"PSMD11"	"catalyzed by"	"<-"	1
+"HNRNPD"	"SNRPB2"	"complex; input"	"-"	1
+"HNRNPD"	"SNRPC"	"complex; input"	"-"	1
+"HNRNPD"	"SNW1"	"complex; input"	"-"	1
+"HNRNPD"	"WBP11"	"complex; input"	"-"	1
+"HNRNPK"	"HNRNPR"	"complex; input"	"-"	1
+"HNRNPK"	"LSM2"	"complex; input"	"-"	1
+"HNRNPK"	"PABPN1"	"complex; input"	"-"	1
+"HNRNPK"	"PCBP2"	"complex; input"	"-"	1
+"HNRNPK"	"PQBP1"	"complex; input"	"-"	1
+"HNRNPK"	"SNRPB2"	"complex; input"	"-"	1
+"HNRNPK"	"SNRPC"	"complex; input"	"-"	1
+"HNRNPK"	"SNW1"	"complex; input"	"-"	1
+"HNRNPK"	"WBP11"	"complex; input"	"-"	1
+"HNRNPR"	"LSM2"	"complex; input"	"-"	1
+"HNRNPR"	"PABPN1"	"complex; input"	"-"	1
+"HNRNPR"	"PCBP2"	"complex; input"	"-"	1
+"HNRNPR"	"PQBP1"	"complex; input"	"-"	1
+"HNRNPR"	"SNRPB2"	"complex; input"	"-"	1
+"HNRNPR"	"SNRPC"	"complex; input"	"-"	1
+"HNRNPR"	"SNW1"	"complex; input"	"-"	1
+"HNRNPR"	"WBP11"	"complex; input"	"-"	1
+"HPRT1"	"PPAT"	"predicted"	"-"	0.98
+"HPRT1"	"PRPS2"	"predicted"	"-"	0.92
+"HSP90B1"	"HSPA5"	"predicted"	"-"	1
+"HSP90B1"	"P4HB"	"predicted"	"-"	0.98
+"HSP90B1"	"SNW1"	"predicted"	"-"	0.73
+"HSP90B1"	"TECR"	"predicted"	"-"	0.66
+"HSP90B1"	"YWHAE"	"predicted"	"-"	0.98
+"HSP90B1"	"YWHAQ"	"predicted"	"-"	0.64
+"HSPA5"	"NCK1"	"predicted"	"-"	0.64
+"HSPA5"	"P4HB"	"predicted"	"-"	0.58
+"HSPA5"	"PPIB"	"predicted"	"-"	0.64
+"HSPA5"	"SEC61A1"	"predicted"	"-"	0.64
+"HSPA5"	"SEC63"	"predicted"	"-"	0.98
+"HSPA5"	"SNCA"	"inhibit"	"-|"	1
+"HSPA5"	"YWHAE"	"predicted"	"-"	0.54
+"HSPA5"	"YWHAQ"	"predicted"	"-"	0.54
+"IKZF1"	"IKZF2"	"predicted"	"-"	0.97
+"IKZF1"	"SMARCE1"	"predicted"	"-"	0.64
+"IKZF1"	"SNW1"	"predicted"	"-"	0.64
+"INIP"	"INTS3"	"predicted"	"-"	0.64
+"INTS3"	"INTS4"	"complex"	"-"	1
+"INTS3"	"INTS5"	"complex"	"-"	1
+"INTS3"	"RPRD1B"	"catalyzed by; complex; input"	"<-"	1
+"INTS3"	"SP1"	"catalyzed by; complex; input"	"<-"	1
+"INTS3"	"SUPT4H1"	"activated by"	"<-"	1
+"INTS3"	"TAF6"	"catalyzed by; complex; input"	"<-"	1
+"INTS4"	"INTS5"	"complex"	"-"	1
+"INTS4"	"RPRD1B"	"catalyzed by; complex; input"	"<-"	1
+"INTS4"	"SP1"	"catalyzed by; complex; input"	"<-"	1
+"INTS4"	"SUPT4H1"	"activated by"	"<-"	1
+"INTS4"	"TAF6"	"catalyzed by; complex; input"	"<-"	1
+"INTS5"	"RPRD1B"	"catalyzed by; complex; input"	"<-"	1
+"INTS5"	"SP1"	"catalyzed by; complex; input"	"<-"	1
+"INTS5"	"SUPT4H1"	"activated by"	"<-"	1
+"INTS5"	"TAF6"	"catalyzed by; complex; input"	"<-"	1
+"ITGAL"	"LIMS1"	"input"	"-"	1
+"ITGAL"	"PTK2B"	"PPrel: activation; PPrel: indirect effect; catalyzed by; complex; input"	"<->"	1
+"ITGAL"	"PTPRC"	"predicted"	"-"	0.98
+"ITGAL"	"SP1"	"expression regulated by"	"<-"	1
+"LIG1"	"POLD1"	"catalyze; complex; input"	"->"	1
+"LIG1"	"RFC1"	"catalyze; complex; input"	"->"	1
+"LIG1"	"RFC2"	"catalyze; complex; input"	"->"	1
+"LIG1"	"TCEA1"	"catalyze"	"->"	1
+"LIMS1"	"PTK2B"	"input"	"-"	1
+"LMAN1"	"P4HB"	"predicted"	"-"	0.64
+"LMAN1"	"SEC24D"	"complex; input"	"-"	1
+"LMAN1"	"TFG"	"complex; input"	"-"	1
+"LMAN1"	"TMED5"	"predicted"	"-"	0.64
+"LSM2"	"PABPN1"	"complex; input"	"-"	1
+"LSM2"	"PCBP2"	"complex; input"	"-"	1
+"LSM2"	"PQBP1"	"complex; input"	"-"	1
+"LSM2"	"SNRPB2"	"complex; input"	"-"	1
+"LSM2"	"SNRPC"	"complex; input"	"-"	1
+"LSM2"	"SNW1"	"complex; input"	"-"	1
+"LSM2"	"WBP11"	"complex; input"	"-"	1
+"LSM2"	"ZCRB1"	"complex; input"	"-"	1
+"MAP2K3"	"TAB1"	"PPrel: activated by, phosphorylation; activated by; catalyzed by"	"<-"	1
+"MAP4K1"	"NCK1"	"predicted"	"-"	0.77
+"MED14"	"NCK1"	"predicted"	"-"	0.64
+"MED14"	"SMARCB1"	"predicted"	"-"	0.56
+"MED14"	"STAT2"	"predicted"	"-"	0.64
+"METAP2"	"PCNP"	"predicted"	"-"	0.59
+"METAP2"	"TCEA1"	"predicted"	"-"	0.59
+"MMS19"	"POLD1"	"catalyze"	"->"	1
+"MOB3A"	"VPS39"	"predicted"	"-"	0.66
+"MRPL34"	"MRPS10"	"catalyzed by; complex; input"	"<-"	1
+"MRPL34"	"MRPS16"	"catalyzed by; complex; input"	"<-"	1
+"MRPL34"	"MRPS18B"	"catalyzed by; complex; input"	"<-"	1
+"MRPL34"	"MRPS2"	"catalyzed by; complex; input"	"<-"	1
+"MRPL34"	"MRPS34"	"catalyzed by; complex; input"	"<-"	1
+"MRPL34"	"MRPS7"	"catalyzed by; complex; input"	"<-"	1
+"MRPS10"	"MRPS16"	"complex"	"-"	1
+"MRPS10"	"MRPS18B"	"complex"	"-"	1
+"MRPS10"	"MRPS2"	"complex"	"-"	1
+"MRPS10"	"MRPS34"	"complex"	"-"	1
+"MRPS10"	"MRPS7"	"complex"	"-"	1
+"MRPS16"	"MRPS18B"	"complex"	"-"	1
+"MRPS16"	"MRPS2"	"complex"	"-"	1
+"MRPS16"	"MRPS34"	"complex"	"-"	1
+"MRPS16"	"MRPS7"	"complex"	"-"	1
+"MRPS18B"	"MRPS2"	"complex"	"-"	1
+"MRPS18B"	"MRPS34"	"complex"	"-"	1
+"MRPS18B"	"MRPS7"	"complex"	"-"	1
+"MRPS2"	"MRPS34"	"complex"	"-"	1
+"MRPS2"	"MRPS7"	"complex"	"-"	1
+"MRPS34"	"MRPS7"	"complex"	"-"	1
+"MTOR"	"RHOA"	"PPrel: activation, phosphorylation"	"->"	1
+"MTOR"	"SP1"	"expression regulated by"	"<-"	1
+"MTOR"	"STAT1"	"predicted"	"-"	0.64
+"MTOR"	"YWHAE"	"complex; input"	"-"	1
+"MTOR"	"YWHAQ"	"complex; input"	"-"	1
+"MX1"	"STAT1"	"GErel: expression by; expression regulated by"	"<-"	1
+"MX1"	"STAT2"	"GErel: expression by; expression regulated by"	"<-"	1
+"NAE1"	"UBA3"	"complex; predicted"	"-"	1
+"NCK1"	"SP1"	"predicted"	"-"	0.64
+"NDUFAF7"	"NDUFB11"	"complex; input"	"-"	1
+"NDUFAF7"	"NDUFS5"	"complex; input"	"-"	1
+"NDUFB11"	"NDUFS5"	"complex; input"	"-"	1
+"NUCKS1"	"SP1"	"expression regulated by"	"<-"	1
+"NUDT1"	"SMARCB1"	"expression regulated by"	"<-"	1
+"OBSCN"	"RHOA"	"activate; catalyze"	"->"	1
+"P4HA1"	"P4HB"	"catalyze; complex"	"->"	1
+"P4HB"	"PPIB"	"predicted"	"-"	0.58
+"PABPN1"	"PCBP2"	"complex; input"	"-"	1
+"PABPN1"	"PQBP1"	"complex; input"	"-"	1
+"PABPN1"	"SARNP"	"complex; input"	"-"	1
+"PABPN1"	"SNRPB2"	"complex; input"	"-"	1
+"PABPN1"	"SNRPC"	"input"	"-"	1
+"PABPN1"	"SNW1"	"complex; input"	"-"	1
+"PABPN1"	"THOC6"	"complex; input"	"-"	1
+"PABPN1"	"WBP11"	"complex; input"	"-"	1
+"PAXBP1"	"RFC1"	"predicted"	"-"	0.65
+"PAXBP1"	"SNW1"	"predicted"	"-"	0.56
+"PCBP2"	"PQBP1"	"complex; input"	"-"	1
+"PCBP2"	"SNRPB2"	"complex; input"	"-"	1
+"PCBP2"	"SNRPC"	"complex; input"	"-"	1
+"PCBP2"	"SNW1"	"complex; input"	"-"	1
+"PCBP2"	"WBP11"	"complex; input"	"-"	1
+"PCNP"	"SSB"	"predicted"	"-"	0.59
+"PDK1"	"PDK2"	"inhibited by"	"|-"	1
+"PDK1"	"YWHAQ"	"predicted"	"-"	0.73
+"PEBP1"	"YWHAE"	"reaction"	"-"	1
+"PEBP1"	"YWHAQ"	"reaction"	"-"	1
+"PFDN4"	"TUBB3"	"complex; input"	"-"	1
+"PFDN4"	"TUBB6"	"complex; input"	"-"	1
+"PICALM"	"SP1"	"expression regulated by"	"<-"	1
+"PICALM"	"VAMP8"	"complex; input"	"-"	1
+"POLD1"	"RFC1"	"complex; input"	"-"	1
+"POLD1"	"RFC2"	"complex; input"	"-"	1
+"POLD1"	"TCEA1"	"complex; input"	"-"	1
+"PPAT"	"PRPS2"	"predicted"	"-"	0.98
+"PPIB"	"SGTA"	"predicted"	"-"	0.64
+"PPP1CB"	"PYGL"	"PPrel: inhibition, dephosphorylation, indirect effect"	"-|"	1
+"PPP1CB"	"RHOA"	"catalyzed by; inhibite"	"<-|"	1
+"PPP1CB"	"SDE2"	"predicted"	"-"	0.56
+"PPP2R2A"	"RPL10"	"complex; input"	"-"	1
+"PPP2R2A"	"RPS17"	"complex; input"	"-"	1
+"PPP2R2A"	"RPS27"	"complex; input"	"-"	1
+"PPP2R2A"	"STAT1"	"PPrel: inhibition, indirect effect"	"-|"	1
+"PPP2R2A"	"STAT2"	"PPrel: inhibition, indirect effect"	"-|"	1
+"PPP2R2A"	"VPS39"	"predicted"	"-"	0.6
+"PPP2R2A"	"YWHAE"	"activate"	"->"	1
+"PPP2R2A"	"YWHAQ"	"activate"	"->"	1
+"PPP3CA"	"SSH3"	"PPrel: activation"	"->"	1
+"PQBP1"	"SNRPB2"	"complex; input"	"-"	1
+"PQBP1"	"SNRPC"	"complex; input"	"-"	1
+"PQBP1"	"SNW1"	"complex; input"	"-"	1
+"PQBP1"	"TSG101"	"predicted"	"-"	0.56
+"PQBP1"	"WBP11"	"complex"	"-"	1
+"PRDX2"	"PRDX6"	"predicted"	"-"	0.98
+"PSMB2"	"PSMD11"	"complex; predicted"	"-"	1
+"PSMB2"	"PSMG2"	"predicted"	"-"	1
+"PSMB2"	"RAD23A"	"predicted"	"-"	0.99
+"PSMB2"	"REL"	"catalyze"	"->"	1
+"PSMB2"	"VIM"	"predicted"	"-"	0.64
+"PSMB2"	"YWHAE"	"predicted"	"-"	0.99
+"PSMD11"	"RAD23A"	"predicted"	"-"	0.73
+"PSMD11"	"REL"	"catalyze"	"->"	1
+"PSMD11"	"RPN2"	"complex; input"	"-"	1
+"PTK2B"	"RHOA"	"PPrel: activation"	"->"	1
+"PTK2B"	"SIRPA"	"complex; input"	"-"	1
+"PURA"	"PURB"	"predicted"	"-"	1
+"PURA"	"STAT1"	"predicted"	"-"	0.54
+"PURB"	"STAT1"	"predicted"	"-"	0.54
+"PYGL"	"VPS39"	"predicted"	"-"	0.6
+"RAB10"	"RALA"	"activate"	"->"	1
+"RAD23A"	"UBQLN4"	"predicted"	"-"	0.98
+"RAD23A"	"VIM"	"predicted"	"-"	0.64
+"RALA"	"RALBP1"	"PPrel: activation"	"->"	1
+"RALA"	"RHOA"	"PPrel: activation"	"->"	1
+"RALBP1"	"RHOA"	"catalyze"	"->"	1
+"RER1"	"STX12"	"predicted"	"-"	0.73
+"RFC1"	"RFC2"	"complex"	"-"	1
+"RFC1"	"TCEA1"	"complex; input"	"-"	1
+"RFC2"	"SMARCAL1"	"complex; input"	"-"	1
+"RFC2"	"TCEA1"	"complex; input"	"-"	1
+"RPL10"	"RPN2"	"complex; input"	"-"	1
+"RPL10"	"RPS17"	"catalyze; catalyzed by; complex; input"	"<->"	1
+"RPL10"	"RPS27"	"catalyze; catalyzed by; complex; input"	"<->"	1
+"RPL10"	"SP1"	"expression regulated by"	"<-"	1
+"RPL10"	"SPCS2"	"catalyzed by"	"<-"	1
+"RPL10"	"SPCS3"	"catalyzed by"	"<-"	1
+"RPL10"	"SSR1"	"complex; input"	"-"	1
+"RPN2"	"RPS17"	"complex; input"	"-"	1
+"RPN2"	"RPS27"	"complex; input"	"-"	1
+"RPN2"	"SPCS2"	"catalyzed by"	"<-"	1
+"RPN2"	"SPCS3"	"catalyzed by"	"<-"	1
+"RPN2"	"SSR1"	"complex"	"-"	1
+"RPN2"	"STT3A"	"complex"	"-"	1
+"RPRD1B"	"SP1"	"complex; input"	"-"	1
+"RPRD1B"	"SUPT4H1"	"activated by"	"<-"	1
+"RPRD1B"	"TAF6"	"complex; input"	"-"	1
+"RPS17"	"RPS27"	"catalyze; catalyzed by; complex; input"	"<->"	1
+"RPS17"	"SPCS2"	"catalyzed by"	"<-"	1
+"RPS17"	"SPCS3"	"catalyzed by"	"<-"	1
+"RPS17"	"SSR1"	"complex; input"	"-"	1
+"RPS27"	"SPCS2"	"catalyzed by"	"<-"	1
+"RPS27"	"SPCS3"	"catalyzed by"	"<-"	1
+"RPS27"	"SSR1"	"complex; input"	"-"	1
+"RPS27"	"WDR46"	"activate"	"->"	1
+"RPS27"	"WDR75"	"reaction"	"-"	1
+"RTF1"	"STAT1"	"predicted"	"-"	0.64
+"RTF1"	"SUPT4H1"	"complex; input"	"-"	1
+"RTF1"	"TCEA1"	"complex; input"	"-"	1
+"RUNX1"	"SMARCB1"	"complex; input"	"-"	1
+"RUNX1"	"SP1"	"expression regulated by"	"<-"	1
+"RUNX1"	"STAT1"	"expression regulated by"	"<-"	1
+"SARNP"	"THOC6"	"complex; input"	"-"	1
+"SDE2"	"SMARCB1"	"expression regulated by"	"<-"	1
+"SDF2L1"	"STAT1"	"expression regulated by"	"<-"	1
+"SEC24D"	"STX12"	"predicted"	"-"	0.99
+"SEC24D"	"STX3"	"predicted"	"-"	0.99
+"SEC24D"	"TFG"	"complex; input"	"-"	1
+"SEC61A1"	"SEC63"	"predicted"	"-"	0.99
+"SMARCB1"	"SMARCE1"	"PPrel: binding/association; complex; predicted"	"-"	1
+"SMARCB1"	"UBQLN4"	"predicted"	"-"	0.64
+"SMARCE1"	"SNW1"	"activated by"	"<-"	1
+"SMARCE1"	"SP1"	"expression regulated by"	"<-"	1
+"SNCA"	"STX3"	"predicted"	"-"	0.54
+"SNCA"	"YWHAE"	"complex; input; predicted"	"-"	1
+"SNCA"	"YWHAQ"	"complex; input"	"-"	1
+"SNRPB2"	"SNRPC"	"complex; input"	"-"	1
+"SNRPB2"	"SNW1"	"complex; input"	"-"	1
+"SNRPB2"	"SSB"	"predicted"	"-"	0.97
+"SNRPB2"	"WBP11"	"complex; input"	"-"	1
+"SNRPC"	"SNW1"	"complex; input"	"-"	1
+"SNRPC"	"WBP11"	"complex; input"	"-"	1
+"SNW1"	"WBP11"	"complex; input"	"-"	1
+"SP1"	"SUPT4H1"	"activated by"	"<-"	1
+"SP1"	"TAF6"	"complex; input"	"-"	1
+"SPCS2"	"SPCS3"	"complex"	"-"	1
+"SPCS2"	"SSR1"	"catalyze"	"->"	1
+"SPCS3"	"SSR1"	"catalyze"	"->"	1
+"SPTLC1"	"SPTLC2"	"complex"	"-"	1
+"SPTLC1"	"TECR"	"predicted"	"-"	0.56
+"SQSTM1"	"USP15"	"predicted"	"-"	0.64
+"STAT1"	"STAT2"	"PPrel: binding/association; PPrel: state change; catalyzed by; complex; expression regulated by; expression regulates; input"	"<->"	1
+"STAT1"	"TYMP"	"expression regulates"	"->"	1
+"STAT1"	"UHRF1"	"predicted"	"-"	0.54
+"STAT2"	"UHRF1"	"predicted"	"-"	0.54
+"STX12"	"STX3"	"predicted"	"-"	1
+"STX12"	"VAMP8"	"predicted"	"-"	1
+"STX12"	"VPS18"	"predicted"	"-"	0.99
+"STX3"	"VAMP4"	"PPrel: activated by"	"<-"	1
+"STX3"	"VAMP8"	"predicted"	"-"	1
+"STX3"	"VPS18"	"predicted"	"-"	0.99
+"SUPT4H1"	"TAF6"	"activate"	"->"	1
+"SUPT4H1"	"TCEA1"	"complex; input"	"-"	1
+"TSG101"	"VPS37A"	"complex; predicted"	"-"	1
+"VAMP8"	"VPS18"	"predicted"	"-"	0.54
+"VIM"	"YWHAE"	"predicted"	"-"	0.99
+"VIM"	"YWHAQ"	"predicted"	"-"	0.77
+"VPS18"	"VPS33A"	"predicted"	"-"	0.99
+"VPS18"	"VPS39"	"predicted"	"-"	0.99
+"WDR46"	"WDR75"	"activated by; complex; input"	"<-"	1
+"YWHAE"	"YWHAQ"	"input; predicted"	"-"	1

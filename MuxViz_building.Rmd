@@ -36,7 +36,7 @@ suppressPackageStartupMessages({
 
 ```{r}
 Add_layer <- function(network_path, separateur = "\t", features_path, separateur_feat = "\t", config_path, title_network, title_multiplex){
-  layer_config <- paste0(getwd(), "/MuxViz_multiplex/Multiplex_", title_network, ".edges;", title_network, ";", getwd(), "/MuxViz_multiplex/Multiplex_", title_multiplex, "_layout.txt")
+  layer_config <- paste0(getwd(), "/MuxViz_multiplex/Multiplex_", title_network,  "_", title_multiplex, ".edges;", title_network, ";", getwd(), "/MuxViz_multiplex/Multiplex_", title_multiplex, "_layout.txt")
   net <- read.table(network_path, sep = separateur, check.names = F, header = T)
   colnames(net)[1:2] <- c("source", "target")
   layout <- data.frame(nodeID = c(net$source, net$target) %>% unique())
@@ -68,8 +68,11 @@ Add_layer <- function(network_path, separateur = "\t", features_path, separateur
   write.table(layout_file, paste0(getwd(), "/MuxViz_multiplex/Multiplex_", title_multiplex, "_layout.txt"), sep = " ", row.names = F, col.names = T, quote = F)
   if(ncol(net) < 3){
     net$weight <- rep(1, nrow(net))
+  }else{
+    net <- net[,1:3]
+    net[[3]] <- abs(as.numeric(net[[3]]))
   }
-  write.table(net, paste0(getwd(), "/MuxViz_multiplex/Multiplex_", title_network, ".edges"), sep = " ", col.names = F, row.names = F, quote = F)
+  write.table(net, paste0(getwd(), "/MuxViz_multiplex/Multiplex_", title_network, "_", title_multiplex, ".edges"), sep = " ", col.names = F, row.names = F, quote = F)
 }
 
 Clean_missing_values <- function(feature_data_path, column2correct, final_value){
@@ -128,6 +131,8 @@ Transform_nodeLabelID2nodeID <- function(config_path){
 ```
 
 
+### First Multilayer
+
 ```{r}
 Add_layer(network_path = "~/GitHub/Multiplex_DNAmet_PPI_Chrom_Coexp/Layers/pchic_network.gr", 
           separateur = ",", 
@@ -176,9 +181,60 @@ Clean_missing_values("MuxViz_multiplex/Multiplex_function_layout.txt", c("GRN_ei
 Transform_nodeLabelID2nodeID("~/GitHub/Multiplex_DNAmet_PPI_Chrom_Coexp/MuxViz_multiplex/Multiplex_function_config.txt")
 ```
 
+### Second MultiLayer
 
 ```{r}
-Multiplex_test <- buildMultilayerNetworkFromMuxvizFiles(config.file = "MuxViz_multiplex/Multiplex_function_config.txt", MultisliceType = "categorical", isWeighted = T, isDirected = T, verbose = T)
+Add_layer(network_path = "Layer_filtered/Pchic_filtered.tsv", 
+          separateur = "\t", 
+          features_path = "Results/Pchic/pchic_NR_R_meth_features_promoter_fragments_features.tsv",
+          separateur_feat = "\t",
+          config_path = "~/GitHub/Multiplex_DNAmet_PPI_Chrom_Coexp/MuxViz_multiplex/Multiplex_filtered_config.txt",
+          title_network = "DNA_methylation",
+          title_multiplex = "Filtered_multilayer")
+
+Add_layer(network_path = "Layer_filtered/GRN_filtered.tsv", 
+          separateur = "\t", 
+          features_path = "Results/GRN/Network_All_samples_features_for_muxviz.tsv",
+          separateur_feat = "\t",
+          config_path = "~/GitHub/Multiplex_DNAmet_PPI_Chrom_Coexp/MuxViz_multiplex/Multiplex_filtered_config.txt",
+          title_network = "GRN",
+          title_multiplex = "Filtered_multilayer")
+
+Add_layer(network_path = "Layer_filtered/fPPI_network_filtered.tsv", 
+          separateur = "\t", 
+          features_path = "Results/Proteo/Diff_Prot_exp.tsv",
+          separateur_feat = "\t",
+          config_path = "~/GitHub/Multiplex_DNAmet_PPI_Chrom_Coexp/MuxViz_multiplex/Multiplex_filtered_config.txt",
+          title_network = "fPPI",
+          title_multiplex = "Filtered_multilayer")
+
+Add_layer(network_path = "Layer_filtered/Gene_reactions_network_filtered.tsv", 
+          separateur = "\t", 
+          features_path = NA,
+          separateur_feat = NA,
+          config_path = "~/GitHub/Multiplex_DNAmet_PPI_Chrom_Coexp/MuxViz_multiplex/Multiplex_filtered_config.txt",
+          title_network = "Gene_reaction",
+          title_multiplex = "Filtered_multilayer")
+
+Add_layer(network_path = "Layer_filtered/Metabolic_network_clean_filtered_NR_R.tsv", 
+          separateur = "\t", 
+          features_path = "Results/Metabolic_network/NR_R_T_test.tsv",
+          separateur_feat = "\t",
+          config_path = "~/GitHub/Multiplex_DNAmet_PPI_Chrom_Coexp/MuxViz_multiplex/Multiplex_filtered_config.txt",
+          title_network = "Metabo",
+          title_multiplex = "Filtered_multilayer")
+
+Clean_missing_values("MuxViz_multiplex/Multiplex_Filtered_multilayer_layout.txt", c("DNA_methylation_logFC", "GRN_logFC", "GRN_size", "GRN_nes", "fPPI_Mutations_of_interest_vs_Group_control_diff", "Metabo_mean.diff"), 0)
+Clean_missing_values("MuxViz_multiplex/Multiplex_Filtered_multilayer_layout.txt", c("DNA_methylation_P.Value", "GRN_P.Value", "GRN_pval", "fPPI_Mutations_of_interest_vs_Group_control_p.val", "Metabo_pvalue"), 1)
+Clean_missing_values("MuxViz_multiplex/Multiplex_Filtered_multilayer_layout.txt", c("GRN_eigenvalue", "GRN_Page_Rank"), "mini")
+
+Transform_nodeLabelID2nodeID("~/GitHub/Multiplex_DNAmet_PPI_Chrom_Coexp/MuxViz_multiplex/Multiplex_filtered_config.txt")
+```
+
+
+
+```{r}
+Multiplex_test <- buildMultilayerNetworkFromMuxvizFiles(config.file = "MuxViz_multiplex/Multiplex_filtered_config.txt", MultisliceType = "categorical", isWeighted = T, isDirected = T, verbose = T)
 ```
 
 ```{r}
@@ -190,7 +246,7 @@ lay <- layoutMultiplex(Multiplex_test$g.list, layout="fr", ggplot.format=F, box=
 ```{r}
 plot_multiplex3D(g.list = Multiplex_test$g.list, layer.layout = lay, layer.colors = layer.colors, layer.space = 2, layer.labels.cex = 1.5 , node.size.scale = 2, show.aggregate = T, edge.size.scale = 0.1)
 
-rgl::snapshot3d("Results/multiplex.png", fmt = "png", width = 1024, height = 1024)
+rgl::snapshot3d("Results/Multiplex_filtered.png", fmt = "png", width = 1024, height = 1024)
 ```
 
 
@@ -208,7 +264,7 @@ commResult <- GetMultiplexCommunities_Infomap(Multiplex_test$g.list,
                                               addMissingPhysicalNodes=F,
                                               hardPartitions=F,
                                               verbose=T,
-                                              addAggregateAnalysis=T,
+                                              addAggregateAnalysis=F,
                                               multilayerRelaxRate=0.5,
                                               multilayerJSRelaxRate=NA,
                                               outputPrefix="multimap")
@@ -224,7 +280,7 @@ commResult.hp <- GetMultiplexCommunities_Infomap(Multiplex_test$g.list,
                                               addMissingPhysicalNodes=F,
                                               hardPartitions=T,
                                               verbose=T,
-                                              addAggregateAnalysis=T,
+                                              addAggregateAnalysis=F,
                                               multilayerRelaxRate=0.5,
                                               multilayerJSRelaxRate=NA,
                                               outputPrefix="multimap_hp")
@@ -239,26 +295,23 @@ ARI <- igraph::compare(commResult$membership.multi$module, commResult.hp$members
 
 ```{r}
 pal.mux <- sample(viridis(commResult$modules.multi))
-pal.aggr <- sample(viridis(commResult$modules.aggr))
 
-png("Results/multi_sbm_infomap_table.png", width = 1024, height = 728 / 2,
+png("Results/multi_filtered_sbm_infomap_table.png", width = 1024, height = 728 / 2,
     res = 100)
-gplt <- plot_multimodules(commResult, module.colors = pal.mux,
-                          show.aggregate = T)
+gplt
 dev.off()
 #> agg_png 
 #>       2
-png("Results/multi_sbm_infomap_hp_table.png", width = 1024,
+png("Results/multi_filtered_sbm_infomap_hp_table.png", width = 1024,
     height = 728 / 2, res = 100)
-gplt.hp <- plot_multimodules(commResult.hp, module.colors = pal.mux,
-                             show.aggregate = T)
+gplt.hp
 dev.off()
 ```
 
 ```{r}
 # coloring state nodes
-Nodes <- 26327
-Layers <- 5
+Nodes <- Multiplex_test$Nodes
+Layers <- Multiplex_test$Layers
 node.colors.matrix <- matrix("#dadada", Nodes, Layers)
 for (l in 1:Layers) {
     dftmp <- commResult$membership.multi[commResult$membership.multi$layer==l,]
@@ -266,18 +319,13 @@ for (l in 1:Layers) {
     node.colors.matrix[idxs,l] <- pal.mux[dftmp$module]
 }
 
-# coloring physical nodes in the aggregate
-node.colors.aggr <- rep("#dadada", Nodes)
-node.colors.aggr[commResult$membership.aggr$node] <- pal.aggr[commResult$membership.aggr$module]
-
 plot_multiplex3D(Multiplex_test$g.list, layer.layout=lay, layer.colors=layer.colors,
                          layer.shift.x=0.5, layer.space=2,
                          layer.labels="auto", layer.labels.cex=1.5,
                          node.size.values="auto", node.size.scale=0.8,
                          node.colors=node.colors.matrix, edge.colors="#dadada",
-                         node.colors.aggr=node.colors.aggr,
-                         show.aggregate=T)
-rgl::snapshot3d("Results/multi_sbm_infomap.png", fmt = "png", width = 1024, height = 1024)
+                         show.aggregate=F)
+rgl::snapshot3d("Results/multi_filtered_sbm_infomap.png", fmt = "png", width = 1024, height = 1024)
 #> Warning in snapshot3d("man/figures/multi_sbm_infomap.png", fmt = "png", :
 #> webshot = TRUE requires the webshot2 package; using rgl.snapshot() instead
 #> Warning in rgl.snapshot(filename, fmt, top): RGL: Pixmap save: unable to open
@@ -286,7 +334,7 @@ rgl::snapshot3d("Results/multi_sbm_infomap.png", fmt = "png", width = 1024, heig
 ```
 
 ```{r}
-M <- BuildSupraAdjacencyMatrixFromEdgeColoredMatrices(Multiplex_test$nodeTensor, Multiplex_test$layerTensor, Layers, Nodes)
+M <- BuildSupraAdjacencyMatrixFromEdgeColoredMatrices(Multiplex_test$nodeTensor, Multiplex_test$layerTensor, Multiplex_test$Layers, Multiplex_test$Nodes)
 ```
 
 
@@ -570,7 +618,7 @@ commResult2 <-
     addMissingPhysicalNodes = F,
     hardPartitions = F,
     verbose = T,
-    addAggregateAnalysis = T,
+    addAggregateAnalysis = F,
     outputPrefix = "multimap_example2"
   )
 ```
@@ -584,30 +632,52 @@ for(l in 1:Layers){
     node.colors.matrix2[idxs,l] <- pal.mux[dftmp$module]
 }
 
-# coloring physical nodes in the aggregate
-node.colors.aggr2 <- rep("#dadada", Nodes)
-node.colors.aggr2[commResult2$membership.aggr$node] <- pal.aggr[commResult2$membership.aggr$module]
 
 plot_multiplex3D(Multiplex_test$g.list, layer.layout=lay, layer.colors=layer.colors,
                          layer.shift.x=0.5, layer.space=2,
                          layer.labels="auto", layer.labels.cex=1.5,
                          node.size.values="auto", node.size.scale=0.8,
                          node.colors=node.colors.matrix2, edge.colors="#dadada",
-                         node.colors.aggr=node.colors.aggr2,
-                         show.aggregate=T)
-rgl::snapshot3d("Results/multi_sbm_infomap2.png", fmt="png", width = 1024, height = 1024)
+                         show.aggregate=F)
+rgl::snapshot3d("Results/multi_filtered_sbm_infomap2.png", fmt="png", width = 1024, height = 1024)
 #> Warning in snapshot3d("../man/figures/multi_sbm_infomap2.png", fmt = "png", :
 #> webshot = TRUE requires the webshot2 package; using rgl.snapshot() instead
 ```
 
 ```{r}
 pal.mux <- sample(viridis(commResult2$modules.multi))
-pal.aggr <- sample(viridis(commResult2$modules.aggr))
 
-png("Results/multi_sbm_infomap_table2.png", width = 1024, height = 728 / 2,
+png("Results/multi_filtered_sbm_infomap_table2.png", width = 1024, height = 728 / 2,
     res = 100)
-gplt <- plot_multimodules(commResult2, module.colors = pal.mux,
-                          show.aggregate = T)
+gplt
 dev.off()
+```
+
+```{r}
+Eigen <- GetMultiEigenvectorCentrality(M, Layers, Nodes)
+
+```
+
+##### Multilayer motifs
+
+
+```{r}
+pathFanmod <- "/media/alexis/DATA/Fanmod/Network-Motif/fanmod/FANMOD-command_line-source/executables/fanmod_command_line_linux"
+
+motifsTable <- GetMultilayerMotifsFromNetworkList(
+  Multiplex_test$g.list,
+  bin.path = pathFanmod,
+  motifSize = 3,
+  motifSamples = 100000,
+  isDirected = FALSE,
+  motifNullModel = "Local const",
+  randomNetworks = 1000,
+  randomExchangePerEdges =
+    3,
+  randomExchangeAttempts =
+    3
+)
+
+
 ```
 

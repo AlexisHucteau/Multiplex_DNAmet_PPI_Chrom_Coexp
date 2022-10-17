@@ -277,4 +277,13 @@ Fragments_methylation_features_pchic_gene_network <- Fragments_methylation_featu
 Fragments_methylation_features_pchic_gene_network %>% write.table("Results/Pchic/Fragments_methylation_features_pchic_gene_network.tsv", sep = "\t", row.names = F, quote = F)
 ```
 
+```{r}
+Pchic_all_network <- read.table("Results/Pchic/Promoter_fragment_all_pchic.tsv", sep = "\t", header = T)
+
+pchic_features <- read.table("Results/Pchic/pchic_NR_R_meth_features_promoter_fragments_features.tsv", sep = "\t", header = T)
+
+Pchic_filtered <- dplyr::filter(Pchic_all_network, source %in% pchic_features$name & target %in% pchic_features$name)
+
+write.table(Pchic_filtered, "Layer_filtered/Pchic_filtered.tsv", sep = "\t", quote = F, row.names = F)
+```
 

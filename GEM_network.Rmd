@@ -132,7 +132,7 @@ t_test_pheno_comp <- function(pheno_df, phenoA, phenoB, df){
   colnames(res) <- stringr::str_remove(colnames(res), pattern = "_pos")
   colnames(res) <- stringr::str_remove(colnames(res), pattern = "_neg")
   
-  res[,!duplicated(colnames(res))] %>% t()
+  res[,!duplicated(colnames(res))] %>% t() %>% data.frame()
 }
 ```
 
@@ -190,11 +190,15 @@ Gene_reactions_network_cleaned <- dplyr::filter(Gene_reactions_network_cleaned, 
 
 Gene_reactions_network_cleaned_filtered <- Gene_reactions_network_cleaned[Gene_reactions_network_cleaned$A %in% rownames(NR_R_T_test),]
 
-write.table(Gene_reactions_network_cleaned_filtered, "Results/Metabolic_network/Gene_reactions_network.tsv", sep = "\t", row.names = F, quote = F)
-write.table(NR_R_T_test, "Results/Metabolic_network/Metabolic_features.tsv", sep = "\t", quote = F)
+write.table(Gene_reactions_network_cleaned, "Results/Metabolic_network/Gene_reactions_network.tsv", sep = "\t", row.names = F, quote = F)
+write.table(Gene_reactions_network_cleaned_filtered, "Results/Metabolic_network/Gene_reactions_network_filtered.tsv", sep = "\t", row.names = F, quote = F)
+NR_R_T_test$name <- rownames(NR_R_T_test)
+NR_R_T_test[,c("name", "pvalue", "mean.diff")] %>% write.table("Results/Metabolic_network/Metabolic_features_filtered.tsv", sep = "\t", quote = F, row.names = F)
 
-Metabolic_network_clean_NR_R <- dplyr::filter(Metabolic_network_clean, A %in% rownames(NR_R_T_test))
-write.table(Metabolic_network_clean_NR_R, "Results/Metabolic_network/Metabolic_network_clean_NR_R.tsv", sep = "\t", row.names = F, quote = F)
+Metabolic_network_clean_NR_R <- dplyr::filter(Metabolic_network_clean, A %in% NR_R_T_test$name)
+Metabolic_network_clean_filtered_NR_R <- Metabolic_network_clean_NR_R 
+Metabolic_network_clean_filtered_NR_R$B <- str_replace_all(Metabolic_network_clean_filtered_NR_R$B, pattern = " ", replacement = ",")
+write.table(Metabolic_network_clean_filtered_NR_R, "Results/Metabolic_network/Metabolic_network_clean_filtered_NR_R.tsv", sep = "\t", row.names = F, quote = F)
 ```
 
 

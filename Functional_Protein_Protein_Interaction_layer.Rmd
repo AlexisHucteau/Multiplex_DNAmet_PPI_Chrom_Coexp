@@ -30,16 +30,16 @@ suppressPackageStartupMessages({
 ```{r}
 Diff_Prot_exp <- read.csv("Results/Proteo/Diff_Prot_exp.tsv", sep = "\t", check.names = F)
 
-Diff_Prot_exp_filtered_Mut_vs_CD34 <- dplyr::filter(Diff_Prot_exp, Mutations_of_interest_vs_CD34_significant) %>% dplyr::select(c("name":"ID", "Mutations_of_interest_vs_CD34_CI.L":"Mutations_of_interest_vs_CD34_p.val", "Mutations_of_interest_vs_CD34_significant"))
+Diff_Prot_exp_filtered_Mut_vs_group_control <- dplyr::filter(Diff_Prot_exp, Mutations_of_interest_vs_Group_control_p.val < 0.1) 
 
 PPI_base <- read.csv("~/Documents/List_genes_from_transcriptome/FIsInGene_020720_with_annotations.tsv", sep = "\t")
 
 colnames(PPI_base) <- c("source", "target", "Annotation", "Direction", "Score")
 
-PPI_filtered <- dplyr::filter(PPI_base, source %in% Diff_Prot_exp_filtered_Mut_vs_CD34$name | target %in% Diff_Prot_exp_filtered_Mut_vs_CD34$name)
+PPI_filtered <- dplyr::filter(PPI_base, source %in% Diff_Prot_exp_filtered_Mut_vs_group_control$name & target %in% Diff_Prot_exp_filtered_Mut_vs_group_control$name)
 ```
 
 ```{r}
-write.table(PPI_filtered, "Results/Proteo/fPPI_network.tsv", sep = "\t", row.names = F)
+write.table(PPI_filtered, "Results/Proteo/fPPI_filtered_network.tsv", sep = "\t", row.names = F)
 ```
 
