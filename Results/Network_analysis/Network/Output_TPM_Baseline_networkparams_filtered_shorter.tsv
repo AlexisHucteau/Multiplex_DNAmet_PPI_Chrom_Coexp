@@ -1,0 +1,5 @@
+tf	target	mor	likelihood	state
+1	MTA3	WFS1	-0.00103598261723811	1	inhibition
+2	MYC	SDC4	-0.00116945433215939	1	inhibition
+3	SIRT6	HOXA1	0.902035222683167	1	activation
+4	SIX5	SDC4	-0.601240902356933	1	inhibition

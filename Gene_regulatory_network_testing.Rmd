@@ -31,9 +31,11 @@ suppressPackageStartupMessages({
   library(gridExtra)
   library(grid)
   library(ggvenn)
+  library(FactoMineR)
 })
 
 "%ni%" <- Negate("%in%")
+wd <- "~/GitHub/Multiplex_DNAmet_PPI_Chrom_Coexp/"
 ```
 
 ```{r}
@@ -66,7 +68,7 @@ Do_net_features <- function(vip, DEG, filtered = F, short = F){
     .$ID
   TF_of_interest <- dplyr::filter(vip$mrs_table, pval < 0.1) %>% 
     .$TF
-  if (filtered){
+  if (filtered | short){
     element_of_interest <- unlist(genes_of_interest, TF_of_interest) %>% unique()
   }else{
     element_of_interest <- unique(unlist(DEG$ID, vip$mrs_table$TF))
@@ -81,11 +83,20 @@ Do_net_features <- function(vip, DEG, filtered = F, short = F){
   igraph <- igraph::graph_from_data_frame(reg, directed = F)
   eigen_centrality_result <- eigen_centrality(igraph, directed = F)$vector %>% as.data.frame()
   page_rank_result <- igraph::page_rank(igraph, directed = F)$vector %>% as.data.frame()
+  degree_result <- igraph::degree(igraph) %>% as.data.frame()
+  closenessness_result <- igraph::closeness(igraph) %>% as.data.frame()
+  betweenness_result <- igraph::betweenness(igraph, directed = F) %>% as.data.frame()
   res <- merge(DEG, eigen_centrality_result, by.x = "ID", by.y = 0, all.x = T)
   colnames(res)[8] <- "eigenvalue"
   res <- merge(res, page_rank_result, by.x = "ID", by.y = 0, all.x = T)
   colnames(res)[9] <- "Page_Rank"
-  min_eigen <- min(res$eigenvalue)
+  res <- merge(res, degree_result, by.x = "ID", by.y = 0, all.x = T)
+  colnames(res)[10] <- "degree"
+  res <- merge(res, closenessness_result, by.x = "ID", by.y = 0, all.x = T)
+  colnames(res)[11] <- "closeness"
+  res <- merge(res, betweenness_result, by.x = "ID", by.y = 0, all.x = T)
+  colnames(res)[12] <- "betweenness"
+  min_eigen <- min(res$eigenvalue) %>% log()
   res$eigenvalue <- log(res$eigenvalue)
 
   res <- merge(res, vip$mrs_table, by.x = "ID", by.y = "TF", all.x = T)
@@ -155,14 +166,24 @@ Do_msvip <- function(net_folder){
 ```{r}
 List_of_network <- list.dirs(recursive = F)[list.dirs(recursive = F) %>% stringr::str_detect("utput")] %>% stringr::str_remove("./")
 
-mv_vip_list <- lapply(List_of_network, function(a) {
-  Do_msvip(a)
-})
-names(mv_vip_list) <- List_of_network
+# mv_vip_list <- lapply(List_of_network, function(a) {
+#   Do_msvip(a)
+# })
+# names(mv_vip_list) <- List_of_network
 ```
 
 ```{r}
-saveRDS(mv_vip_list, "/media/alexis/DATA/mv_vip_list.rds")
+# saveRDS(mv_vip_list, "/media/alexis/DATA/mv_vip_list.rds")
+mv_vip_list <- readRDS("/media/alexis/DATA/mv_vip_list.rds")
+```
+
+```{r}
+Results_TF_dir <- paste0(wd, "Results/Viper_results/")
+
+names(mv_vip_list) %>% lapply(., function(network){
+  write.table(mv_vip_list[[network]]$mrs_table, paste0(Results_TF_dir, "TF_diff_activity/", network, "_diff_act.tsv"), sep = "\t", quote = F)
+  write.table(mv_vip_list[[network]]$regulons, paste0(Results_TF_dir, "TF_networks/", network, "_network.tsv"), sep = "\t", quote = F)
+})
 ```
 
 
@@ -215,16 +236,6 @@ Networks_testing_analysis[[params]] <- lapply(List_of_network, function(a) {
 })
 names(Networks_testing_analysis[[params]]) <- List_of_network
 
-shorter = T
-filter_param = F
-params <- paste("params", "filtered"[filter_param], "shorter"[shorter], sep = "_")
-List_of_network <- list.dirs(recursive = F)[list.dirs(recursive = F) %>% stringr::str_detect("utput")] %>% stringr::str_remove("./")
-
-Networks_testing_analysis[[params]] <- lapply(List_of_network, function(a) {
-  From_network_to_TF_activity(a, filter_param, shorter)
-})
-names(Networks_testing_analysis[[params]]) <- List_of_network
-
 shorter = F
 filter_param = F
 params <- paste("params", "filtered"[filter_param], "shorter"[shorter], sep = "_")
@@ -235,6 +246,20 @@ Networks_testing_analysis[[params]] <- lapply(List_of_network, function(a) {
 })
 names(Networks_testing_analysis[[params]]) <- List_of_network
 ```
+
+```{r}
+Results_Network_dir <- paste0(wd, "Results/Network_analysis/")
+dir.create(paste0(Results_Network_dir, "Features/"), showWarnings = F)
+dir.create(paste0(Results_Network_dir, "Network/"), showWarnings = F)
+
+lapply(names(Networks_testing_analysis), function(parameters){
+  lapply(names(Networks_testing_analysis[[parameters]]), function(network){
+    write.table(Networks_testing_analysis[[parameters]][[network]]$features, paste0(Results_Network_dir, "Features/", network, "_features_" , parameters, ".tsv"), sep = "\t", quote = F)
+    write.table(Networks_testing_analysis[[parameters]][[network]]$net, paste0(Results_Network_dir, "Network/", network, "_network_" , parameters, ".tsv"), sep = "\t", quote = F)
+  })
+})
+```
+
 
 ```{r}
 shorter = F
@@ -497,6 +522,138 @@ dev.off()
 ```
 
 ```{r}
+Networks_of_interest <- names(Networks_testing_analysis$params__)[c(1,2,4)]
 
+Network_correlation_function <- function(metrix){
+  Networks_correlations <- lapply(names(Networks_testing_analysis), function(parameters){
+  all_net <- Networks_testing_analysis[[parameters]][[Networks_of_interest[1]]]$features %>% 
+    dplyr::filter(nes != 0) %>%
+    dplyr::select(ID, metrix)
+  CHeA_net <- Networks_testing_analysis[[parameters]][[Networks_of_interest[2]]]$features %>% 
+    dplyr::filter(nes != 0) %>%
+    dplyr::select(ID, metrix)
+  RegulonAML_net <- Networks_testing_analysis[[parameters]][[Networks_of_interest[3]]]$features %>% 
+    dplyr::filter(nes != 0) %>%
+    dplyr::select(ID, metrix)
+  
+  all_CHeA <- merge(all_net, CHeA_net, by.x = "ID", by.y = "ID")
+  colnames(all_CHeA) <- c("ID", paste0(metrix, "_all"), paste0(metrix, "_CHeA"))
+  all_Regulon <- merge(all_net, RegulonAML_net, by.x = "ID", by.y = "ID")
+  colnames(all_Regulon) <- c("ID", paste0(metrix, "_all"), paste0(metrix, "_Regulon"))
+  CHeA_Regulon <- merge(CHeA_net, RegulonAML_net, by.x = "ID", by.y = "ID")
+  colnames(CHeA_Regulon) <- c("ID", paste0(metrix, "_CHeA"), paste0(metrix, "_Regulon"))
+  
+  list(
+    all_CHeA = ggplot(all_CHeA, mapping = aes(x = .data[[colnames(all_CHeA)[2]]], y = .data[[colnames(all_CHeA)[3]]], label = ID)) + 
+      geom_point(size=0.5) +
+      geom_text(check_overlap = F, size = 4, hjust = 0, outlier.size = 0)+
+      xlab(paste0(metrix, "_all")) + ylab(paste0(metrix, "_CHeA")),
+    
+    all_Regulon = ggplot(all_Regulon, mapping = aes(x = .data[[colnames(all_Regulon)[2]]], y = .data[[colnames(all_Regulon)[3]]], label = ID)) + 
+      geom_point(size=0.5) +
+      geom_text(check_overlap = F, size = 4, hjust = 0, outlier.size = 0)+
+      xlab(paste0(metrix, "_all")) + ylab(paste0(metrix, "_Regulon")),
+
+    CHeA_Regulon = ggplot(CHeA_Regulon, mapping = aes(x = .data[[colnames(CHeA_Regulon)[2]]], y = .data[[colnames(CHeA_Regulon)[3]]], label = ID)) + 
+      geom_point(size=0.5) +
+      geom_text(check_overlap = F, size = 4, hjust = 0, outlier.size = 0)+
+      xlab(paste0(metrix, "_CHeA")) + ylab(paste0(metrix, "_Regulon"))
+  )
+  })
+}
 ```
+
+ggplot(Feature, aes(x = Page_Rank, y = eigenvalue, label = ID, colour = DEG))+
+    geom_text(check_overlap = T, size = 4, nudge_x = 0.0005, hjust = 0, outlier.size = 0)+
+    geom_point(size = 0.5)+
+    labs(title = paste0("Network-based node prioritization ", title))+
+    xlab("Page Rank (log)")+
+    ylab("Eigen Centrality (log)")+
+    scale_colour_manual(values= color)
+
+```{r}
+Centrality_metrix <- c("closenessness", "eigenvalue", "Page_Rank", "degree", "betweenness")
+lapply(Centrality_metrix, function(metrix){
+  Networks_correlation <- Network_correlation_function(metrix)
+  names(Networks_correlation) <- names(Networks_testing_analysis)
+  lapply(names(Networks_correlation), function(parameters){
+    png(file = paste0(Results_Network_dir, metrix, "_metrix_", parameters, ".png"), width = 1920, height = 1080)
+      grid.arrange(Networks_correlation[[parameters]][["all_CHeA"]], 
+                 Networks_correlation[[parameters]][["all_Regulon"]], 
+                 Networks_correlation[[parameters]][["CHeA_Regulon"]],
+                 ncol=2,
+                 top = textGrob(paste0("Network_prioritization_", metrix),
+                                just = c('center'),
+                                gp = gpar(fontsize = 32)))
+      dev.off()
+  })
+  
+})
+```
+
+```{r}
+merge_specific_function <- function(l1, l2){
+  merge(l1, l2, by="ID", all = T)
+}
+
+data_metrix <- lapply(Centrality_metrix, function(metrix){
+  res <- lapply(names(Networks_testing_analysis), function(parameters){
+    lapply(Networks_of_interest, function(network){
+      df <- Networks_testing_analysis[[parameters]][[network]]$features[,c("ID", metrix)]
+    }) %>% purrr::reduce(., merge_specific_function)
+  }) %>% purrr::reduce(., merge_specific_function)
+  rownames(res) <- res$ID
+  res[,-1]
+})
+names(data_metrix) <- Centrality_metrix
+```
+
+```{r}
+data_metrix_PCA <- lapply(Centrality_metrix, function(metrix){
+  PCA(data_metrix[[metrix]])
+})
+names(data_metrix_PCA) <- Centrality_metrix
+
+png(file = paste0(Results_Network_dir, "metrix_PCA.png"), width = 1920, height = 1080)
+      grid.arrange(plot(data_metrix_PCA[["closenessness"]]),
+                   plot(data_metrix_PCA[["eigenvalue"]]),
+                   plot(data_metrix_PCA[["Page_Rank"]]),
+                   plot(data_metrix_PCA[["degree"]]),
+                   plot(data_metrix_PCA[["betweenness"]]),
+                 ncol=2,
+                 top = textGrob("Metrix_PCA",
+                                just = c('center'),
+                                gp = gpar(fontsize = 32)))
+dev.off()
+```
+
+```{r}
+plot(data_metrix_PCA[["closenessness"]])
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
