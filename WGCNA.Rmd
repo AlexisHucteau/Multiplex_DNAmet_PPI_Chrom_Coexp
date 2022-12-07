@@ -44,6 +44,14 @@ sampleTree = hclust(dist(NR_RNAseq), method = "average")
 enableWGCNAThreads()
 powers = c(c(1:10), seq(from = 12, to=20, by=2))
 sft = pickSoftThreshold(NR_RNAseq, powerVector = powers, verbose = 5)
+1:nrow(sft[["fitIndices"]]) %>% sapply(function(test){
+    tmp <- sft[["fitIndices"]][test+1,3]-sft[["fitIndices"]][test,3]
+    if(tmp > 0 & !is.na(tmp)){
+      test-1
+    }else{
+      100
+    }
+}) %>% min
 ```
 
 ```{r}
@@ -56,7 +64,7 @@ plot(sft$fitIndices[,1], -sign(sft$fitIndices[,3])*sft$fitIndices[,2],
 )
 text(sft$fitIndices[,1], -sign(sft$fitIndices[,3])*sft$fitIndices[,2],
 labels=powers,cex=cex1,col="red")
-abline(h=0.3,col="red")
+abline(h=0.9,col="red")
 plot(sft$fitIndices[,1], sft$fitIndices[,5],
 xlab="Soft Threshold (power)",ylab="Mean Connectivity", type="n",
 main = paste("Mean connectivity"))
@@ -67,12 +75,12 @@ scaleFreePlot()
 
 ```{r}
 net = blockwiseModules(NR_RNAseq, power = 6,
-TOMType = "unsigned", minModuleSize = 30,
-reassignThreshold = 0, mergeCutHeight = 0.25,
-numericLabels = TRUE, pamRespectsDendro = FALSE,
-saveTOMs = TRUE,
-saveTOMFileBase = "NR_TOM",
-verbose = 3)
+  TOMType = "unsigned", minModuleSize = 30,
+  reassignThreshold = 0, mergeCutHeight = 0.25,
+  numericLabels = TRUE, pamRespectsDendro = FALSE,
+  saveTOMs = TRUE,
+  saveTOMFileBase = "NR_TOM",
+  verbose = 3)
 ```
 
 ```{r}
